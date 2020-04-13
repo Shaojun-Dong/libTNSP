@@ -36,7 +36,7 @@ libTNSP INSTALLATION:
    
 
                  make : installed the package with the configuration
-                        in the filemake.inc
+                        in the file make.inc
 
 
            make clean : clean the files of *.o and *.mod according 
