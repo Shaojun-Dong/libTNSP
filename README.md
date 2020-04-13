@@ -116,40 +116,32 @@ libTNSP Project
 developer:
 
 
-   Shaojun Dong
+     Shaojun Dong
+
+     Key Laboratory of Quantum Information,
+     University of Science and Technology of China.
+     Hefei, Anhui, 230026, China.
+     Tel: +86-18715010074,
+     Email: sj.dong@outlook.com or dsj2010@mail.ustc.edu.cn
    
-   Key Laboratory of Quantum Information
    
-   University of Science and Technology of China
-   
-   Hefei, Anhui, 230026, China
-   
-   Tel: +86-18715010074
-   
-   Email: sj.dong@outlook.com or dsj2010@mail.ustc.edu.cn
-   
+-------------------------------------
 
 Group leader:
 
 
-   Lixin He, Professor of Physics
-   
-   Key Laboratory of Quantum Information
-   
-   University of Science and Technology of China
-   
-   Hefei, Anhui, 230026, China
-   
-   Email: helx@ustc.edu.cn
+     Lixin He, Professor of Physics
 
+     Key Laboratory of Quantum Information,
+     University of Science and Technology of China.
+     Hefei, Anhui, 230026, China.
+     Email: helx@ustc.edu.cn.
+-----------------------------------
 
-   Yong-Jian Han, Professor of Physics
-   
-   Key Laboratory of Quantum Information
-   
-   University of Science and Technology of China
-   
-   Hefei, Anhui, 230026, China
-   
-   Email: smhan@ustc.edu.cn
+     Yong-Jian Han, Professor of Physics
+
+     Key Laboratory of Quantum Information,
+     University of Science and Technology of China.
+     Hefei, Anhui, 230026, China.
+     Email: smhan@ustc.edu.cn
 
