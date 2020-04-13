@@ -97,16 +97,12 @@ libTNSP directories
 
       src
       Help
-      PEPS
       make.inc
       makefile
       README
       manual.pdf
       Tensorlib.pdf
   
-      where the directory src contains all the files of libTNSP, and PEPS
-  is an example code of PEPS with simple update. One should change the
-  Configuration in make.inc to build the libTNSP.
 
 
 
