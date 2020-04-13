@@ -124,7 +124,7 @@ developer:
      Email: sj.dong@outlook.com or dsj2010@mail.ustc.edu.cn
 
 
-Group leader:
+Group leaders:
 
 
      Lixin He, Professor of Physics
