@@ -1,0 +1,30 @@
+aimag
+   over write aimag in fortran for Tensor. Output the imag part of Tensor.
+      
+SYNOPSIS   
+    type(Tensor) function           aimag(T)
+    
+    type(Tensor)                    T
+    
+PURPOSE
+
+   over write aimag in fortran for Tensor. Output the imag part of Tensor. output in a real*4 Tensor.
+
+PARAMETERS
+   T            - type(Tensor)-
+                input Tensor
+EXAMPLT
+
+  type(Tensor)::T
+  T=generate((/2,2/),(/-10,10/),'integer')
+  call T%print("T is integer Tensor")
+  call TMprint(aimag(T),"aimag for integer Tensor,there is no imag part")
+  T=generate((/2,2/),(/-10,10/),'complex*8')
+  call T%print("T is complex Tensor")
+  call TMprint(aimag(T),"aimag for complex Tensor")
+
+
+
+
+
+

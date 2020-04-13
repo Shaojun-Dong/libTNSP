@@ -1,0 +1,21 @@
+getRank
+    return the rank of the Tensor
+    
+SYNOPSIS   
+    
+    integer function getRank()
+    
+PURPOSE
+	return the rank of the Tensor
+
+PARAMETERS
+	 
+
+EXAMPLT
+
+---1------
+  type(Tensor)::T
+  integer::rank
+  T=generate((/2,2/),'real*4') !generate a 2*2 random number Tensor of type real*4
+  rank=T%getRank()
+  

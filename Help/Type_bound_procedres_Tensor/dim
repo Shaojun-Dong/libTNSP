@@ -1,0 +1,45 @@
+dim
+    output the one of, or all, the dimension of a Tensor
+    
+SYNOPSIS   
+    integer function dim(index)
+    
+    integer function dim(name)
+    
+    integer function dim( )
+    
+    integer              index
+    character(len=*)     name
+    
+PURPOSE
+	output the one of, or all, the dimension of a Tensor.
+
+PARAMETERS
+	index         - integer -
+	              sepcify which dimension to be output
+   name          - character(len=*) -
+                 sepcify which dimension to be output
+
+EXAMPLT
+
+---1------
+  type(Tensor)::T
+  integer::n
+  T=generate((/2,3,4,5,6/),'real*4') !generate a 2*3*4*5*6 random number Tensor of type real*4
+  n=T%dim(2)  !output the second dimension, that is n will be equal to 3
+  
+---2------
+  type(Tensor)::T
+  integer::n(5)
+  T=generate((/2,3,4,5,6/),'real*4') !generate a 2*3*4*5*6 random number Tensor of type real*4
+  n=T%dim()  !output the dimension of Tensor, n will be a array of [2,3,4,5,6]
+  
+---3------
+  type(Tensor)::T
+  integer::n
+  T=generate((/2,3,4/),'real*4') !generate a 2*3*4 random number Tensor of type real*4
+  call T%setName(1,'Tensor.first') !call the first dimension as 'Tensor.first'
+  call T%setName(2,'Tensor.2') !call the second dimension as 'Tensor.2'
+  call T%setName(3,'T.3')!call the third dimension as 'T.3'
+  n=T%dim('T.3')  !output the dimension whose name is 'T.3' , that is n will be equal to 3
+ 

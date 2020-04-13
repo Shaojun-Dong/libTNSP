@@ -1,0 +1,85 @@
+minval, imin, smin, dmin, cmin, zmin
+    There function can output the min element of a Tensor.
+    
+SYNOPSIS   
+
+    complex(kind=8)   function     minval(T)
+    integer           function     imin(T)
+    real(kin=4)       function     smin(T)
+    real(kin=8)       function     dmin(T)
+    complex(kind=4)   function     cmin(T)
+    complex(kind=8)   function     zmin(T)
+    
+    complex(kind=8)   function     minval(T,char)
+    integer           function     imin(T,char)
+    real(kin=4)       function     smin(T,char)
+    real(kin=8)       function     dmin(T,char)
+    complex(kind=4)   function     cmin(T,char)
+    complex(kind=8)   function     zmin(T,char)
+    
+    character(len=4)              char
+    type(Tensor)                  T
+    
+    
+    
+PURPOSE
+
+   There function can output the min element of a Tensor. xmin() output the 
+   element of index of the Tensor,where x stand for "i","s","d","c",z", which 
+   means that the output is integer,real(kin=4),real(kind=4),complex(kind=4),
+   complex(kind=8).
+	
+	    imin=imin(T), output the min element as a integer.
+	    smin=smin(T), output the min element as a real(kin=4).
+	    dmin=dmin(T), output the min element as a real(kind=4).
+	    cmin=cmin(T), output the min real part element as a complex(kind=4).
+	    zmin=zmin(T), output the min real part element as a complex(kind=8).
+	    min=minval(T)  , output the min real part element as a complex(kind=8).
+	    
+	if intput char, where char can be:
+	   'maxa': max or max abs (complex data)
+		'mina': min or min abs (complex data)
+		'maxr': max real
+		'minr': min real
+		'maxi': 0(not complex data) or max imag
+		'mini': 0(not complex data) or min imag
+	    
+   It is the same as T%xman()
+   
+PARAMETERS
+ 
+   char     - character(len=4)  -
+            'maxa': max or max abs (complex data)
+				'mina': min or min abs (complex data)
+				'maxr': max real
+				'minr': min real
+				'maxi': 0(not complex data) or max imag
+				'mini': 0(not complex data) or min imag
+
+   T        -type(Tensor) -
+            input Tensor
+
+EXAMPLT
+
+----- integer Tensor -----
+  type(Tensor)::T
+  integer::i_min
+  real*4::s_min
+  real*8::d_min
+  complex*8::c_min
+  complex*16::z_min
+  T=generate((/3,3/),(/-10,10/),'integer') !generate a  random number Tensor of integer
+  call T%print("integer Tensor")
+  i_min=imin(T)! output the min element as a integer.
+  s_min=smin(T)! output the min element as a real(kin=4).
+  d_min=dmin(T)! output the min element as a real(kind=4).
+  c_min=cmin(T)! output the min element as a complex(kind=4).
+  z_min=zmin(T)! output the min element as a complex(kind=8).
+  write(*,*)"i_min:",i_min
+  write(*,*)"s_min:",s_min
+  write(*,*)"d_min:",d_min
+  write(*,*)"c_min:",c_min
+  write(*,*)"z_min:",z_min
+  
+  
+

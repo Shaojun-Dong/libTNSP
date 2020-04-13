@@ -1,0 +1,21 @@
+empty
+    regard the Tensor as a empty Tensor, but do not deallocate memery
+    
+SYNOPSIS   
+    subroutine empty()
+     
+    
+PURPOSE
+	regard the Tensor as a empty Tensor, but do not deallocate memery. 
+
+PARAMETERS
+
+EXAMPLT
+
+---1------
+  type(Tensor)::T
+  T=generate((/2,2/),'real*4') !generate a 2*2 random number Tensor of type real*4
+  call T%print()!There is data in Tensor
+  call T%empty()
+  call T%print()!There is no data in Tensor
+  

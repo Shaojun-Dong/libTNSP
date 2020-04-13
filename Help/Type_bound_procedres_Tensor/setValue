@@ -1,0 +1,207 @@
+setValue
+    Set the value to the Tensor.
+    
+SYNOPSIS   
+    subroutine      setValue(index,iValue)
+    subroutine      setValue(index,sValue)
+    subroutine      setValue(index,dValue)
+    subroutine      setValue(index,cValue)
+    subroutine      setValue(index,zValue)
+    subroutine      setValue(index,lValue)
+    subroutine      setValue(index,aValue)
+    subroutine      setValue(index,inputT)
+    
+    subroutine      setValue(ith,iValue)
+    subroutine      setValue(ith,sValue)
+    subroutine      setValue(ith,dValue)
+    subroutine      setValue(ith,cValue)
+    subroutine      setValue(ith,zValue)
+    subroutine      setValue(ith,lValue)
+    subroutine      setValue(ith,aValue)
+    subroutine      setValue(ith,inputT)
+    
+    subroutine      setValue(iValue)
+    subroutine      setValue(sValue)
+    subroutine      setValue(dValue)
+    subroutine      setValue(cValue)
+    subroutine      setValue(zValue)
+    subroutine      setValue(lValue)
+    subroutine      setValue(aValue)
+    
+    subroutine      setValue(iValueArray)
+    subroutine      setValue(sValueArray)
+    subroutine      setValue(dValueArray)
+    subroutine      setValue(cValuArray))
+    subroutine      setValue(zValueArray)
+    subroutine      setValue(lValueArray)
+    subroutine      setValue(aValueArray)
+    
+    subroutine      setValue(i1,i2,iValueArray)
+    subroutine      setValue(i1,i2,sValueArray)
+    subroutine      setValue(i1,i2,dValueArray)
+    subroutine      setValue(i1,i2,cValuArray))
+    subroutine      setValue(i1,i2,zValueArray)
+    subroutine      setValue(i1,i2,lValueArray)
+    subroutine      setValue(i1,i2,aValueArray)
+    subroutine      setValue(i1,i2,inputT)
+    
+    
+    subroutine     setValue(is1,xArray1,is2)
+    subroutine     setValue(is1,inputT,is2)
+    subroutine     setValue(is1,js1,xArray2,is2,js2)
+    subroutine     setValue(is1,js1,inputT,is2,js2)
+    
+    integer             index(:),ith,i1,i2
+    integer             iValue,iValueArray(*)
+    real*4              sValue,sValueArray(*)
+    real*8              dValue,dValueArray(*)
+    complex*8           cValue,cValueArray(*)
+    complex*16          zValue,zValueArray(*)
+    logical             lValue,lValueArray(*)
+    character(len=*)    aValue,aValueArray(*)
+    class(Tensor)       inputT
+    integer             is1(2),is2(2),js1(2),js2(2)
+    *                   xArray1(:),xArray2(:,:)
+    
+    
+    xArray1,xArray2 can be integer,real*4,real*8,complex*8,complex*16,logical,character(len=*)
+PURPOSE
+
+  Set the value to the Tensor. No matter what the type of the input is, it will change to the type of
+  the Tesnor. For example, T is a Tensor of character, call T%setValue(T,1,1.5). input sValue is type
+  real*4, it will change to character and then store in T.
+  
+  call T%setValue(index,value): index is the length of the rank of the Tensor, set the value to the Tensor
+                                at the index. value can be any type, it will change to the type of Tensor.
+  
+  call T%setValue(ith,value): ith is scalar, the Tensor will regard as one-dimensional. and the element of
+                              ith will be set the value. value can be any type, it will change to the type
+                              of Tensor.
+  
+  call T%setValue(value): all the element will be equal to value, value can be any type, it will change 
+                          to the type of Tensor.
+                          
+  call T%setValue(valueArray): valueArray is array of any shape, the Tensor and the valueArray will be
+                               regard as one-dimensional and then set the value. valueArray can be any 
+                               type, it will change to the type of Tensor.
+
+  call T%setValue(i1,i2,valueArray): valueArray is array of any shape, the Tensor and the valueArray will be
+                               regard as one-dimensional and then set the value to locate at i1 to i2 of T, which
+                               means that T%element(i1:i2)=valueArray supposing that element is the data of Tensor.
+                               valueArray can be any type, it will change to the type of Tensor. 
+  call T%setValue(i1,i2,inputT): inputT is a Tensor, the T and the inputT will be
+                               regard as one-dimensional and then set the value to locate at i1 to i2 of T, which
+                               means that T%element(i1:i2)=inputT%element(:) supposing that element is the data of Tensor.
+                               valueArray can be any type, it will change to the type of Tensor. 
+  
+
+PARAMETERS
+   index          - integer,array -
+                      the loction of the value to be set at.
+   ith                - integer -
+                      the loction of the value to be set at. If the Tensor is not one-dimensional, it
+                      will regards as one-dimensinonal Tensor and set value  
+   i1                - integer -
+                      see the PURPOSE
+   i2                - integer -
+                      see the PURPOSE  
+   iValue             - integer -
+                      the value to be set to the Tensor.
+   sValue             - real(kind=4) -
+                      the value to be set to the Tensor.                      
+   dValue             - real(kind=8) -
+                      the value to be set to the Tensor.                     
+   cValue             - complex(kind=4) -
+                      the value to be set to the Tensor.                      
+   zValue             - complex(kind=8) -
+                      the value to be set to the Tensor.                     
+   lValue             - logical -
+                      the value to be set to the Tensor.                      
+   aValue             - character(len=*) -
+                      the value to be set to the Tensor.        
+   inputT             - class(Tensor) -
+                      the value to be set to the Tensor.     
+                                   
+   iValueArray        - integer,array of any shape -
+                      the value to be set to the Tensor. The Tensor and the input will regar as one dimension and
+                      then copy
+   sValueArray        - real(kind=4),array of any shape -
+                      the value to be set to the Tensor. The Tensor and the input will regar as one dimension and
+                      then copy                     
+   dValueArray        - real(kind=8),array of any shape -
+                      the value to be set to the Tensor. The Tensor and the input will regar as one dimension and
+                      then copy                   
+   cValueArray        - complex(kind=4),array of any shape -
+                      the value to be set to the Tensor.    The Tensor and the input will regar as one dimension and
+                      then copy                  
+   zValueArray        - complex(kind=8),array of any shape -
+                      the value to be set to the Tensor. The Tensor and the input will regar as one dimension and
+                      then copy                
+   lValueArray        - logical -
+                      the value to be set to the Tensor. The Tensor and the input will regar as one dimension and
+                      then copy                 
+   aValueArray        - character(len=*),array of any shape -
+                      the value to be set to the Tensor. The Tensor and the input will regar as one dimension and
+                      then copy               
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+                                    
+                      
+EXAMPLT
+
+
+-----1-------------
+  type(Tensor)::T
+  call T%setType('integer')
+  call T%allocate((/2,2/))
+  call T%setValue((/1,1/),1)
+  call T%setValue((/1,2/),2.234)
+  call T%setValue((/2,1/),cmplx(3,3))
+  call T%setValue((/2,2/),5d0)
+  call T%print("T is integer,setValue will change the value to the Type of Tensor even T is Dynamic")
+ 
+-----2-------------
+  type(Tensor)::T
+  call T%setType('real*4')
+  call T%allocate((/2,2/))
+  call T%setValue(2)
+  call T%print("T%setValue(2)")
+
+-----3-------------
+  type(Tensor)::T
+  call T%setType('character')
+  call T%allocate((/2,2/))
+  call T%setValue(1,1)
+  call T%setValue(2,'false')
+  call T%setValue(3,cmplx(3,3))
+  call T%setValue(4,'test')
+  call T%print("T is character,setValue will change the value to the Type of Tensor even T is Dynamic")
+
+
+-----4-------------
+  type(Tensor)::T
+  inetger::indata(4)
+  call T%setType('complex*8')
+  call T%allocate((/2,2/))
+  indata(1)=1
+  indata(2)=2
+  indata(3)=3
+  indata(4)=4
+  call T%setValue(indata)
+  call T%print("T is complex*8,setValue will change the value to the Type of Tensor even T is Dynamic")
+
+----5-------------
+	type(Tensor)::A,B
+   B=(/1,2,3,4,5,6,7/)
+   A=B
+   call B%setValue(1,2,A%sub((/-3,5,6/)))
+   call B%setValue(5,6,A%sub((/-3,2,3/)))
+   call B%setValue(3,4,(/11,12/))
+   call B%print()
+ 

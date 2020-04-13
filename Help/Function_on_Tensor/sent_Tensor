@@ -1,0 +1,49 @@
+sent_Tensor
+    send Tensor in some CPU 1  to CPU 2
+    
+SYNOPSIS 
+  
+    subroutine sent_Tensor(Ten1,Ten2,ID1,ID2,ierr,MPI_COMM)
+    subroutine sent_Tensor(Ten1,Ten2,ID1,ID2,ierr)
+    
+    class(Tensor)          Ten1,Ten2
+    integer                ID1,ID2ierr,MPI_COMM
+    
+PURPOSE
+	BCAST Tensor in some CPU to every CPU.
+	
+	  1. sent_Tensor(Ten1,Ten2,ID1,ID2,ierr): Send the Tensor of Ten1 in CPU of ID1 to Ten2 in CPU of ID2 in MPI_COMM_WORLD
+	                                          
+     2. BCAST_Tensor(Ten1,Ten2,ID1,ID2,ierr,MPI_COMM): Send the Tensor of Ten1 in CPU of ID1 to Ten2 in CPU of ID2 in MPI_COMM
+      
+     
+     
+PARAMETERS
+	Ten1        - class(Tensor) -
+	            Tensor to be send
+	            
+   Ten1        - class(Tensor) -
+	            Tensor to store the data from ID1	            
+	          
+	ID1         -integer-
+	            The Tensor send from ID1 to ID2
+
+   ID2         -integer-
+	            The Tensor send from ID1 to ID2
+	            	          
+	ierr        -integer-
+	            mpi ierr
+	          
+	MPI_COMM   -integer-
+	           MPI_COMM,if no input, it will be de default MPI_COMM_WORLD       
+	        
+
+EXAMPLT
+
+
+   integer::ierr,proID,proNum
+   type(Tensor)::T1,T2
+   call initial_output_cpu_info(proID,proNum,ierr)
+   call sent_Tensor(T1,T2,0,1,ierr)  !T1 in cpu0 sent to cpu2 and store in T2
+   call BCAST_Tensor(T1,0,ierr) 		 !T1 in cpu 0 send to every cpus,store in T1 in other cpus
+   call stop_program()

@@ -1,0 +1,39 @@
+maxelement
+    There function can output the max element of a Tensor.
+    
+SYNOPSIS   
+
+    complex(kind=8)   function     maxelement(T)
+    
+    class(Tensor)               T
+    
+    
+    
+PURPOSE
+
+   There function can output the max element of a Tensor. If the Tensor is not complex*16.
+   the maxelement will change to complex*16
+	    
+
+PARAMETERS
+ 
+   T       - class(Tensor)  -
+           The Tensor to find the max element on.
+
+EXAMPLT
+
+----- 1-----
+  type(Tensor)::T
+  complex*16::z_max
+  T=generate((/3,3/),(/-10,10/),'integer') !generate a  random number Tensor of integer
+  call T%print("integer Tensor")
+  z_max=maxelement(T)! output the max element as a complex(kind=8).
+  write(*,*)"z_max:",z_max
+  
+  
+
+ 
+ 
+ 
+ 
+

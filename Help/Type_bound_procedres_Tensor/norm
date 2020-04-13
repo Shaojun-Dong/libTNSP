@@ -1,0 +1,38 @@
+norm, inorm, snorm, dnorm, cnorm, znorm
+    There function can output the norm of a Tensor. norm is sqrt(<phi|phi>).
+    
+SYNOPSIS   
+
+    complex(kind=8)   function     norm()
+    integer           function     inorm()
+    real(kin=4)       function     snorm()
+    real(kin=8)       function     dnorm()
+    complex(kind=4)   function     cnorm()
+    complex(kind=8)   function     znorm()
+    
+    
+    
+PURPOSE
+	There function can output the norm of a Tensor. norm is sqrt(<phi|phi>)=sqrt(sum_{i}a_{i}^2).
+	The Tensor will regard as one-dimensional Tensor no metter what the rank is.
+	xnorm, where x stands for
+	     i: integer
+	     s: real*4
+	     d: real*8
+	     c: complex*8
+	     z: complex*16
+
+PARAMETERS
+
+EXAMPLT
+
+ 
+  type(Tensor):: T,TT
+  real*4::norm
+  T=generate((/10/),'real*4')
+  norm=T%snorm()
+  T=T/norm
+  TT=T*T
+  call TT%print('T*T')
+  
+

@@ -1,0 +1,46 @@
+LQroutine
+    LQ decompsion of a Tensor.
+    
+SYNOPSIS   
+    subroutine      LQroutine(L,Q)
+    
+    type(Tensor)    L,Q	
+    
+PURPOSE
+	LQroutine decompsion of a Tensor.
+	
+	    call T%LQroutine(L,Q):  rewrite L and Q, they are LQroutine of T. The input T should be a two-dimensional Tensor.
+	                    the relation is T=L*Q.
+	                        
+	                        
+	                        
+PARAMETERS
+
+   L            - type(Tensor) -
+                output
+                L of LQ decompose of matrix
+   Q            - type(Tensor) -
+                output
+                Q of LQ decompose of matrix
+                                               
+EXAMPLT
+
+----- 1 --------
+  type(Tensor)::T,T2,L,Q
+  T=generate((/3,3/),'real*4')
+  call T%LQroutine(L,Q)
+  call L%print("L")
+  call Q%print("Q")
+  T2=L*Q
+  call T2%print('L*Q')
+  call T%print("T")
+
+  
+
+
+
+
+
+
+
+ 

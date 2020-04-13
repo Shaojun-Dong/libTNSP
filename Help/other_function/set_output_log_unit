@@ -1,0 +1,22 @@
+set_output_log_unit
+    specify the the unit of output file of "writemess"
+    
+SYNOPSIS   
+    subroutine set_output_log_unit(logunit)
+    
+    integer logunit
+    
+PURPOSE
+	specify the the unit of output file of "writemess". By default it will be set 9999.
+
+PARAMETERS
+	logunit            - integer -
+	               the number using in write(logunit,format)
+
+EXAMPLT
+
+	call set_output_log_address('./logFile') !set the log file
+	call set_output_log_unit(123) !set the log file
+   call writemess('Holle')!the default cpu print 'Holle' on the screen and ./logFile
+   
+   

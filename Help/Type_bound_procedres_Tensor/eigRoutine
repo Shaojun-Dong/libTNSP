@@ -1,0 +1,43 @@
+eigRoutine
+  output the eigen value and eigen vecter of a matrix. output a type(Tensorlink) with length=2(or 1 if no 
+  eigenvecter)
+    
+SYNOPSIS   
+
+    subroutine              eigRoutine(value)
+    subroutine              eigRoutine(value,vector)
+    
+    type(Tensor)                value,vector
+    
+PURPOSE
+
+	output the eigen value and eigen vecter of a matrix. output a type(Tensorlink) with length=2(or 1 if no 
+   eigenvecter). suppose link is type(Tensorlink)::link
+	
+	    call T%eigRoutine(value):  output a Only the eigenvalue of T,return in value
+	    
+	    call T%eigRoutine(value,vector):  output  the eigenvalue and the eigenvecter of T 
+	                              T=vector*eye(value)*(.h.vector)
+	Note: T should be rank-2 Tensor and should be symmetric.
+	                        
+PARAMETERS
+
+   value       - type(Tensor) -
+               output
+               eigenvalue.
+   vector       - type(Tensor) -
+               output
+               eigenvector                       
+EXAMPLT
+
+----- 1 --------
+  type(Tensor)::T,T2,val,vec
+  T=generate((/3,3/),'real*4')
+  T=(.H.T)*T
+  call T%eigRoutine(val,vec)
+  call val%print("eigenvalue")
+  call vec%print("eigenvector")
+  T2=vec*eye(val)*(.h.vec)
+  call T2%print('rebuild T',1,'(F12.8)')
+  call T%print("T",'(F12.8)')
+

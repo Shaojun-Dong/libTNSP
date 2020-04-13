@@ -1,0 +1,41 @@
+LQlink
+    LQlink decompsion of a Tensor, output a type(Tensorlink).
+    
+SYNOPSIS   
+    type(Tensorlink) function      LQlink()	
+    
+PURPOSE
+	LLQlink decompsion of a Tensor, output a type(Tensorlink). suppose link is type(Tensorlink)::link
+	
+	    link=T%LQlink():  output a array of [L]->[Q], they are LQlink of T. The input T should be a two-dimensional Tensor.
+	                    the relation is T=L*Q. Or T=link%i(1)*link%i(2).
+	                        
+	                        
+	                        
+PARAMETERS
+
+                               
+EXAMPLT
+
+----- 1 --------
+  type(Tensor)::T,T2,L,Q
+  type(Tensorlink)::link
+  T=generate((/3,3/),'real*4')
+  link=T%LQlink()
+  L=link%i(1)
+  Q=link%i(2)
+  call L%print("L")
+  call Q%print("Q")
+  T2=L*Q
+  call T2%print('L*Q')
+  call T%print("T")
+
+  
+
+
+
+
+
+
+
+ 

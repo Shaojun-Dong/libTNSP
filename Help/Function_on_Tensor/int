@@ -1,0 +1,30 @@
+int
+   over write int in fortran for Tensor. Change the Tensor to a integer Tensor.
+      
+SYNOPSIS   
+    type(Tensor) function           int(T)
+    
+    type(Tensor)                    T
+    
+PURPOSE
+
+   over write int in fortran for Tensor. Change the Tensor to a integer Tensor.
+
+PARAMETERS
+   T            - type(Tensor)-
+                input Tensor
+EXAMPLT
+
+  type(Tensor)::T
+  T=generate((/2,2/),(/-10,10/),'real*4')
+  call T%print("T is real Tensor")
+  call TMprint(int(T),"int for real Tensor")
+  T=generate((/2,2/),(/-10,10/),'complex*8')
+  call T%print("T is complex Tensor")
+  call TMprint(int(T),"int for complex Tensor")
+
+
+
+
+
+

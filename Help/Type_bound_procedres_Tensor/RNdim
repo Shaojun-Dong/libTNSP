@@ -1,0 +1,25 @@
+RNdim
+    delete the dimension whose value is 1
+    
+SYNOPSIS   
+    subroutine RNdim()
+    
+    
+PURPOSE
+	delete the dimension whose value is 1. For example if the dimension is [1,1,2,1,3,1,1,4,1].
+	After RNdim, all the indices whsoe is 1 will be remove, so the result will be [2,3,4].
+
+PARAMETERS
+
+
+EXAMPLT
+
+  type(Tensor)::T
+  integer::I
+  T=generate((/1,1,2,1,3,1,1,4,1/),'real*4') !generate a 2*3*4 random number Tensor of type real*4
+  do i=1,9
+  	call T%setName(i,'Ten.dim'+i)
+  end do
+  call T%diminfo('before RNdim')
+  call T%RNdim()
+  call T%diminfo('After RNdim')

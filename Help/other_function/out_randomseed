@@ -1,0 +1,17 @@
+out_randomseed
+    output the random seed of the cpu
+    
+SYNOPSIS   
+    integer function out_randomseed()
+    
+PURPOSE
+	output the random seed of the cpu. Use at the beginning of the program.
+
+PARAMETERS
+	
+
+EXAMPLT
+
+
+   integer::seed
+   seed=out_randomseed()

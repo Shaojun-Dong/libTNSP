@@ -1,0 +1,51 @@
+linequ
+    linear equation of A*X=B, when B can ba a matrix(rank-2 Tensor).
+    
+SYNOPSIS   
+    type(Tensor) function      linequ(B)
+    type(Tensor) function      linequ(B,RCOND)
+    
+    type(Tensor)	             B 
+    RCOND can be real*8 or real*4
+    
+PURPOSE
+	linear equation of A*X=B, when B can ba a matrix(rank-2 Tensor).Suppose A is a rank-2 Tensor
+	and B is a Tensor with rank<=2. X=A%linequ(B) output the solution of A*X=B
+	
+	if A^{-1} may not exit,input RCOND,perform SVD on A, Only keep  singular values S(i) <= RCOND*S(1) 
+   if RCONDM<0 keep the S(i)>0
+	                        
+	                        
+	                        
+PARAMETERS
+
+   B         -type(Tensor)-
+             A*X=B, the rank of B should less then or equal to 2.
+   
+   RCOND     - real*4 or real*8 -
+             RCOND is used to determine the effective rank of A.
+             Singular values S(i) <= RCOND*S(1) are treated as
+             zero.  If RCOND $<$ 0, machine precision is used
+             instead.
+                               
+EXAMPLT
+
+----- 1 --------
+  type(Tensor)::A,B,X,AX
+  A=generate((/3,3/),'real*4')
+  B=generate((/3,4/),'real*4')
+  X=A%linequ(B)
+  call X%print("X")
+  AX=A*X
+  call AX%print("A*X")
+  call B%print("B")
+
+  
+
+
+
+
+
+
+
+ 

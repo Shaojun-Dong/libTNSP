@@ -1,0 +1,47 @@
+addRow  
+    combine two Tensor.  modify at 2015.5.31, it is a subroutine
+    
+SYNOPSIS   
+    type(Tensor) function           addcol(T)
+    
+    type(Tensor)                    T
+    
+PURPOSE
+
+   combine two Tensor. If two Tensor are the same rank. Then the output Tensor
+   will has rank=rank+1, and there is one more leng oedered at the beginning of
+   dimension. For example T1 is a [l,m,n,...] matrix and T2 is a [l,m,n,...] 
+   matrix. calling T1%addRow(T2) result a Tensor of [2,l,m,n,...], where
+   [1,l,m,n,...] is the data of T1, and [2,l,m,n,...] are the data of T2.
+	
+   If the Tensor are not the same rank. Then the last leg will add one more diemnsion.
+   For example T1 is a [l,m,n,...] and T2 is a [m,n,...]. calling T1%addRow(T2) 
+   result a Tensor of [l+1,m,n,...], where [l,m,n,...] is the data of T1, and 
+   [l+1,m,n,...] are the data of T2.
+
+PARAMETERS
+   T            - type(Tensor)-
+                The Tensor to be add as Row.
+EXAMPLT
+
+  type(Tensor)::T1,T2,T3,T
+  T1=(/1,2,3,4/)
+  T2=(/5,6,7,8/)
+  T3=(/9,10,11,12/)
+  call T1%resetdim((/2,2/))
+  call T2%resetdim((/2,2/))
+  call T3%resetdim((/2,2/))
+  T=T1%addRow(T2)
+  call T%print("add a Row")
+  T=T%addRow(T3)
+  call T%print("add one more Row")
+ 
+
+
+
+
+
+
+
+
+ 

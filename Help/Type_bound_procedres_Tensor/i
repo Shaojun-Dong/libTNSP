@@ -1,0 +1,226 @@
+i, ii, si, di, ci, zi, li, ai
+    There function can output the element of a Tensor.
+    
+SYNOPSIS   
+
+    type(Tensor)      function     i(index)
+    integer           function     ii(index)
+    real(kin=4)       function     si(index)
+    real(kin=8)       function     di(index)
+    complex(kind=4)   function     ci(index)
+    complex(kind=8)   function     zi(index)
+    logical           function     li(index)
+    character(len=*)  function     ai(index)
+    
+    type(Tensor)      function     i(ith)
+    integer           function     ii(ith)
+    real(kin=4)       function     si(ith)
+    real(kin=8)       function     di(ith)
+    complex(kind=4)   function     ci(ith)
+    complex(kind=8)   function     zi(ith)
+    logical           function     li(ith)
+    character(len=*)  function     ai(ith)
+    
+    integer,array           function     ii( )
+    real(kin=4),array       function     si( )
+    real(kin=8),array       function     di( )
+    complex(kind=4),array   function     ci( )
+    complex(kind=8),array   function     zi( )
+    logical,array           function     li( )
+    character(len=*),array  function     ai( )
+    
+    
+    integer                    ith
+    integer                    index(:)
+    
+PURPOSE
+	output the element of a Tensor. xi(index) output the element of index of
+	the Tensor,where x stand for "i","s","d","c",z","l","a" which means
+	that the output is integer,real(kin=4),real(kind=4),complex(kind=4),
+	complex(kind=8),logical,character(len=*), and index is the location of the
+	element. For example there is a Tensor of 2*3*4 named T. 
+	
+	    i_element=T%ii(1,2,3), output the element of (1,2,3) as a integer.
+	    s_element=T%si(1,2,3), output the element of (1,2,3) as a real(kin=4).
+	    d_element=T%di(1,2,3), output the element of (1,2,3) as a real(kind=4).
+	    c_element=T%ci(1,2,3), output the element of (1,2,3) as a complex(kind=4).
+	    z_element=T%zi(1,2,3), output the element of (1,2,3) as a complex(kind=8).
+	    l_element=T%li(1,2,3), output the element of (1,2,3) as a logical.
+	    a_element=T%zi(1,2,3), output the element of (1,2,3) as a character(len=*).
+	    element=T%i(1,2,3), output the element of (1,2,3) as a type(Tensor).
+	    
+	If input is not a array but a scalar, the Tensor will regard as one-dimsnional
+	Tensor and output the element.
+	
+       T%ii() output the element of the Tensor as a array of integer.
+       T%si() output the element of the Tensor as a array of real(kin=4).
+       T%di() output the element of the Tensor as a array of real(kin=8).
+       T%ci() output the element of the Tensor as a array of complex(kind=4).
+       T%zi() output the element of the Tensor as a array of complex(kind=8).
+       T%li() output the element of the Tensor as a array of logical.
+       T%ai() output the element of the Tensor as a array of character(len=*).
+	
+
+PARAMETERS
+	index         - integer,array -
+	              the location of the output element.
+   ith           - integer -
+                 the location of the output element. The Tensor will regard as 
+                 one-dimensional TEnsor
+
+EXAMPLT
+
+----- integer Tensor -----
+  type(Tensor)::T
+  integer::i_element
+  real*4::s_element
+  real*8::d_element
+  complex*8::c_element
+  complex*16::z_element
+  logical::l_element
+  character*100::a_element
+  T=generate((/2,2/),(/-10,10/),'integer') !generate a  random number Tensor of integer
+  call T%print("integer Tensor")
+  i_element=T%ii((/1,2/))
+  s_element=T%si((/1,2/)) !the element T is integer,it change to real*4
+  d_element=T%di((/1,2/)) !the element T is integer,it change to real*8
+  c_element=T%ci((/1,2/)) !the element T is integer,it change to complex*8
+  z_element=T%zi((/1,2/)) !the element T is integer,it change to complex*16
+  a_element=T%ai((/1,2/)) !the element T is integer,it change to character
+  write(*,*)"i_element:",i_element
+  write(*,*)"s_element:",s_element
+  write(*,*)"d_element:",d_element
+  write(*,*)"c_element:",c_element
+  write(*,*)"z_element:",z_element
+  write(*,*)"a_element:",a_element
+  
+----- real*4 Tensor -----
+  type(Tensor)::T
+  integer::i_element
+  real*4::s_element
+  real*8::d_element
+  complex*8::c_element
+  complex*16::z_element
+  logical::l_element
+  character*100::a_element
+  T=generate((/2,2/),(/-10,10/),'real*4') !generate a  random number Tensor of real*4
+  call T%print("real*4 Tensor")
+  i_element=T%ii((/1,2/))
+  s_element=T%si((/1,2/)) !the element T is real*4,it change to real*4
+  d_element=T%di((/1,2/)) !the element T is real*4,it change to real*8
+  c_element=T%ci((/1,2/)) !the element T is real*4,it change to complex*8
+  z_element=T%zi((/1,2/)) !the element T is real*4,it change to complex*16
+  a_element=T%ai((/1,2/)) !the element T is real*4,it change to character
+  write(*,*)"i_element:",i_element
+  write(*,*)"s_element:",s_element
+  write(*,*)"d_element:",d_element
+  write(*,*)"c_element:",c_element
+  write(*,*)"z_element:",z_element
+  write(*,*)"a_element:",a_element
+
+----- real*8 Tensor -----
+  type(Tensor)::T
+  integer::i_element
+  real*4::s_element
+  real*8::d_element
+  complex*8::c_element
+  complex*16::z_element
+  logical::l_element
+  character*100::a_element
+  T=generate((/2,2/),(/-10,10/),'real*8') !generate a  random number Tensor of real*8
+  call T%print("real*8 Tensor")
+  i_element=T%ii((/1,2/)) !the element T is real*8,it change to integer
+  s_element=T%si((/1,2/)) !the element T is real*8,it change to real*4
+  d_element=T%di((/1,2/)) !the element T is real*8,it change to real*8
+  c_element=T%ci((/1,2/)) !the element T is real*8,it change to complex*8
+  z_element=T%zi((/1,2/)) !the element T is real*8,it change to complex*16
+  a_element=T%ai((/1,2/)) !the element T is real*8,it change to character
+  write(*,*)"i_element:",i_element
+  write(*,*)"s_element:",s_element
+  write(*,*)"d_element:",d_element
+  write(*,*)"c_element:",c_element
+  write(*,*)"z_element:",z_element
+  write(*,*)"a_element:",a_element
+
+----- complex*8 Tensor -----
+  type(Tensor)::T
+  integer::i_element
+  real*4::s_element
+  real*8::d_element
+  complex*8::c_element
+  complex*16::z_element
+  logical::l_element
+  character*100::a_element
+  T=generate((/2,2/),(/-10,10/),'complex*8') !generate a  random number Tensor of complex*8
+  call T%print("complex*8 Tensor")
+  i_element=T%ii((/1,2/)) !the element T is complex*8,it change to integer
+  s_element=T%si((/1,2/)) !the element T is complex*8,it change to real*4
+  d_element=T%di((/1,2/)) !the element T is complex*8,it change to real*8
+  c_element=T%ci((/1,2/)) !the element T is complex*8,it change to complex*8
+  z_element=T%zi((/1,2/)) !the element T is complex*8,it change to complex*16
+  a_element=T%ai((/1,2/)) !the element T is complex*8,it change to character
+  write(*,*)"i_element:",i_element
+  write(*,*)"s_element:",s_element
+  write(*,*)"d_element:",d_element
+  write(*,*)"c_element:",c_element
+  write(*,*)"z_element:",z_element
+  write(*,*)"a_element:",a_element
+
+----- complex*16 Tensor -----
+  type(Tensor)::T
+  integer::i_element
+  real*4::s_element
+  real*8::d_element
+  complex*8::c_element
+  complex*16::z_element
+  logical::l_element
+  character*100::a_element
+  T=generate((/2,2/),(/-10,10/),'complex*16') !generate a  random number Tensor of complex*16
+  call T%print("complex*16 Tensor")
+  i_element=T%ii((/1,2/)) !the element T is complex*16,it change to integer
+  s_element=T%si((/1,2/)) !the element T is complex*16,it change to real*4
+  d_element=T%di((/1,2/)) !the element T is complex*16,it change to real*8
+  c_element=T%ci((/1,2/)) !the element T is complex*16,it change to complex*8
+  z_element=T%zi((/1,2/)) !the element T is complex*16,it change to complex*16
+  a_element=T%ai((/1,2/)) !the element T is complex*16,it change to character
+  write(*,*)"i_element:",i_element
+  write(*,*)"s_element:",s_element
+  write(*,*)"d_element:",d_element
+  write(*,*)"c_element:",c_element
+  write(*,*)"z_element:",z_element
+  write(*,*)"a_element:",a_element
+
+
+----- logical Tensor -----
+  type(Tensor)::T
+  integer::i_element
+  real*4::s_element
+  real*8::d_element
+  complex*8::c_element
+  complex*16::z_element
+  logical::l_element
+  character*100::a_element
+  T=generate((/2,2/),'logical') !generate a  random number Tensor of logical
+  call T%print("logical Tensor")
+  l_element=T%li((/1,2/)) 
+  a_element=T%ai((/1,2/)) !the element T is real*8,it change to character
+  write(*,*)"l_element:",l_element
+  write(*,*)"a_element:",a_element
+
+----- character Tensor -----
+  type(Tensor)::T
+  integer::i_element
+  real*4::s_element
+  real*8::d_element
+  complex*8::c_element
+  complex*16::z_element
+  logical::l_element
+  character*100::a_element
+  T=generate((/2,2/),'character') !generate a  random number Tensor of character
+  call T%print("character Tensor")
+  a_element=T%ai((/1,2/)) 
+  write(*,*)"a_element:",a_element
+ 
+ 
+ 
+

@@ -1,0 +1,49 @@
+dcmplx
+   over write dcmplx in fortran for Tensor. Change the Tensor to a complex*16 Tensor or combine 
+   two Tensor to a complex*16 Tensor
+      
+SYNOPSIS   
+    type(Tensor) function           dcmplx(T)
+    type(Tensor) function           dcmplx(T,imagT)
+    
+    type(Tensor)                    T,imagT
+    
+PURPOSE
+
+   over write dcmplx in fortran for Tensor. Change the Tensor to a complex*16 Tensor or combine 
+   two Tensor to a complex*16 Tensor.
+   
+       1.dcmplx(T): output a complex*16 Tensor, T will be the real part.
+       2.dcmplx(T,imagT): output a complex*16 Tensor, T will be the real part and imagT will be 
+         the imag part
+
+PARAMETERS
+   T            - type(Tensor)-
+                input Tensor as real part
+   imagT            - type(Tensor)-
+                input Tensor as imag part
+EXAMPLT
+
+
+----- 1-----
+  type(Tensor)::T
+  T=generate((/2,2/),(/-10,10/),'integer')
+  call T%print("T is integer Tensor")
+  call TMprint(dcmplx(T),"dcmplx for integer Tensor")
+  T=generate((/2,2/),(/-10,10/),'complex*8')
+  call T%print("T is complex*8 Tensor")
+  call TMprint(dcmplx(T),"dcmplx make complex*8 to complex*16")
+  
+ ----- 2----- 
+  type(Tensor)::T,imagT
+  T=generate((/2,2/),(/-10,10/),'real*4')
+  imagT=generate((/2,2/),(/-10,10/),'integer')
+  call T%print("T is real*4 Tensor")
+  call imagT%print("imagT is integer Tensor")
+  call TMprint(dcmplx(T,imagT),"dcmplx(T,imagT) for integer Tensor")
+
+
+
+
+
+

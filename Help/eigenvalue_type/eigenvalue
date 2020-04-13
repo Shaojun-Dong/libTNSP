@@ -1,0 +1,62 @@
+eigenvalue
+    inital the paramerter of eigenvalue.The default parameter in eigenvalue are
+      maxitr=300
+		ncv=-1
+		maxnvc=100
+		tol=0
+    if ncv<0, the number of lonzcos vector will calculate by cpu:ncv=min((2+num_of_eig+n)/2,eiger%maxnvc),
+    where n is the size of the eigenvalue problem.
+    
+SYNOPSIS
+
+    type(eigenvalue) function eigenvalue(tol,ncv,maxitr,maxnvc)
+    type(eigenvalue) function eigenvalue(tol,ncv,maxitr)
+    type(eigenvalue) function eigenvalue(tol,ncv)
+    type(eigenvalue) function eigenvalue(tol)
+    
+    integer           ncv,maxitr,maxnvc
+    class(*)          tol
+    tol can be integer, real*4, real*8
+    
+PURPOSE
+
+   reset the parameter in eigenvalue, these values are used be arpack.
+
+PARAMETERS
+ 
+   ncv          - integer -
+                 the number of lonzcos vector. if ncv<0, the number of lonzcos vector 
+                 will calculate by cpu:ncv=min((2+num_of_eig+n)/2,eiger%maxnvc), where
+                 n is the size of the eigenvalue problem.
+                 
+   tol          - real*4 or real*8 or integer -
+                 Stopping criteria: the relative accuracy of the Ritz value 
+                 is considered acceptable if BOUNDS(I) .LE. TOL*ABS(RITZ(I))
+                 where ABS(RITZ(I)) is the magnitude when RITZ(I) is complex.
+                 DEFAULT = dlamch('EPS')  (machine precision as computed
+                 by the LAPACK auxiliary subroutine dlamch).
+                 
+   maxitr        - integer -
+                 maximum number of Arnoldi update iterations allowed
+                 
+   maxnvc        - complex*8,array -
+                 maximum number of ncv allowed
+                 
+                                                  
+
+EXAMPLT
+
+
+----- 1 --------
+  type(Tensor)::T,eig(2)
+  type(eigenvalue)::eiger
+  
+  T=generate((/4,4/),'real*4')
+  T=(.H.T)*T
+  eig=eiger%eig(T,'LR',1)
+  call eig(1)%print("largest real part eigenvalue")
+  eig=T%eig()
+  call eig(1)%print("all eigenvalue,exact")
+  eiger=eigenvalue(0.1)
+   eig=eiger%eig(T,'LR',1)
+  call eig(1)%print("largest real part eigenvalue,tot=0.1")

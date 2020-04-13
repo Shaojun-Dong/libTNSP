@@ -1,0 +1,30 @@
+.h.
+   short for Hermitian
+   return a Hermitian matrix
+
+
+SYNOPSIS
+    
+    Result=.H.T
+    
+    type(Tensor)          Result,T
+
+
+Note:
+
+   1. If T is integer,real*4,real*8, return a transpose matrix
+   2. if
+      rank=1: return a conjugate Tensor. R=A^{\dag}
+      rank=2: return a conjugate transpose Tensor. R=A^{\dag}
+      rank>2: return a conjugate reorder Tensor, the new order are [rank,rank-1,...,3,2,1]
+
+
+
+EXAMPLE
+
+
+   type(Tensor)::HT,T
+   T=generate((/2,3/),'complex*8')
+   HT=.H.T
+   call T%print("T")
+   call HT%print(".H.T")

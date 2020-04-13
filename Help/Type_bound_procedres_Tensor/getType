@@ -1,0 +1,38 @@
+getType
+    return the type of the Tensor. return a integer.
+    
+SYNOPSIS   
+    
+    integer function getType()
+    
+PURPOSE
+	return the type of Tensor. return a integer. On return, their meanning are
+	      1: integer
+	      2: real(kind=4)
+	      3: real(kind=8)
+	      4: complex(kind=8)
+	      5: complex(kind=8)
+	      6: logical
+	      7: character(len=*)
+	      
+
+PARAMETERS
+	 
+
+EXAMPLT
+
+---1------
+  type(Tensor)::T
+  integer::classType
+  T=generate((/2,2/),'real*4') !generate a 2*2 random number Tensor of type real*4
+  classType=T%getType()
+  write(*,*)classType
+  
+  T=generate((/2,2/),'complex*8') !generate a 2*2 random number Tensor of type complex*8
+  classType=T%getType()
+  write(*,*)classType
+  
+  T=generate((/2,2/),'character') !generate a 2*2 random number Tensor of type complex*8
+  classType=T%getType()
+  write(*,*)classType
+  

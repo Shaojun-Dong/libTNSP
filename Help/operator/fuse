@@ -1,0 +1,16 @@
+fuse
+   fuse legs of a Tensor.
+
+SYNOPSIS
+
+   Result=T.fuse.ith
+   Result=T.fuse.(/i1,i2/)
+   
+   type(Tensor)     Result,T
+   integer          ith,i1,i2
+
+
+NOTE
+
+   T.fuse.ith is the same as T%fuse(ith) and T.fuse.(/i1,i2/) is the same as T%fuse(i1,i2), see the example in 
+   Type bound procedres of fuse

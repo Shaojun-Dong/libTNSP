@@ -1,0 +1,42 @@
+set_ncv
+	reset the parameter of set_ncv in eigenvalue.The default parameter in eigenvalue are
+      maxitr=300
+		ncv=-1
+		maxnvc=100
+		tol=0
+    if ncv<0, the number of lonzcos vector will calculate by cpu:ncv=min((2+num_of_eig+n)/2,eiger%maxnvc),
+    where n is the size of the eigenvalue problem.
+    
+SYNOPSIS
+
+    surbroutine set_ncv(ncv)
+    
+    integer           ncv
+    
+PURPOSE
+
+   reset the parameter of ncv in eigenvalue, these values are used be arpack.
+
+PARAMETERS
+ 
+                 
+   ncv          - integer -
+                 the number of lonzcos vector. if ncv<0, the number of lonzcos vector 
+                 will calculate by cpu:ncv=min((2+num_of_eig+n)/2,eiger%maxnvc), where
+                 n is the size of the eigenvalue problem.
+                 
+                                                  
+
+EXAMPLT
+
+
+----- 1 --------
+  type(Tensor)::T,eig(2)
+  type(eigenvalue)::eiger
+  
+  T=generate((/4,4/),'real*4')
+  T=(.H.T)*T
+  call eiger%set_ncv(3)
+  eig=eiger%eig(T,'LR',1)
+  call eig(1)%print("largest real part eigenvalue")
+  eig=T%eig()

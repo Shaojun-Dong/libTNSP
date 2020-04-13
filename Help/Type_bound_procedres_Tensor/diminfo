@@ -1,0 +1,49 @@
+diminfo
+    print the dimension of the Tensor
+    
+SYNOPSIS   
+    subroutine diminfo()
+    
+    subroutine diminfo(words,uni)
+    
+    subroutine diminfo(words)
+    
+    subroutine diminfo(uni)
+    
+    character(len=*)           words
+    integer                    uni
+    
+PURPOSE
+	print the dimension of the Tensor
+
+PARAMETERS
+	uni           - integer -
+	              print on a external file, specify the unit of the file pointer
+   words         - character(len=*),optional -
+                 the character print befor print the data of Tensor
+
+EXAMPLT
+
+---1------
+  type(Tensor)::T
+  T=generate((/2,2/),'real*4') !generate a 2*2 random number Tensor of type real*4
+  call T%diminfo()
+  
+---2------
+  type(Tensor)::T
+  T=generate((/2,2/),'real*4') !generate a 2*2 random number Tensor of type real*4
+  call T%diminfo("print the dimension of Tensor")
+  
+---3------
+  type(Tensor)::T
+  open(unit=123,file="./outputdimension")!open a file named "outputdimension"
+  T=generate((/2,2/),'real*4') !generate a 2*2 random number Tensor of type real*4
+  call T%diminfo("print the dimension of Tensor",123) ! print the dimension in the file of "outputdimension"
+  close(123)
+ 
+---4------
+  type(Tensor)::T
+  open(unit=123,file="./outputdimension")!open a file named "outputdimension"
+  T=generate((/2,2/),'real*4') !generate a 2*2 random number Tensor of type real*4
+  call T%diminfo(123) ! print the dimension in the file of "outputdimension"
+  close(123)

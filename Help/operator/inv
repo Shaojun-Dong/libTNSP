@@ -1,0 +1,30 @@
+.inv.
+   short for inverse
+   output a inversion of a matrix
+
+
+
+SYNOPSIS
+    
+    Result=.inv.T
+    
+    type(Tensor)          Result,T
+
+NOTE
+
+   output the inverse of a Tensor(rank=2). Suppose A is a rank-2 Tensor X=.inv.A 
+	output the inversion of A^-1. The same as X=A%inv()
+
+
+
+EXAMPLT
+
+----- 1 --------
+  type(Tensor)::A,invA,AinvA
+  A=generate((/3,3/),'real*4')
+  invA=.inv.A
+  call invA%print("A^-1")
+  AinvA=A*invA
+  call AinvA%print("A*A^-1")
+  call A%print("A")
+    

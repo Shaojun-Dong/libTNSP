@@ -1,0 +1,49 @@
+.dim.
+   Short for dimension
+   output ith dimension or all the dimension as array of integer or as type(Dimension).
+
+SYNOPSIS
+
+   inum=T.dim.ith
+   inum=T.dim.ithChar
+   inumArray=.dim.T
+   
+   
+   integer             inum,inumArray(:)
+   integer             ith
+   character(len=*)    ithChar
+
+NOTE
+
+   1. inum=T.dim.ith: output the ith dimension. For example the dimension of T is 
+      [2,3,4,5], inum=T.dim.3, then inum=4
+   2. inum=T.dim.ithChar: output the ith dimension. For example the dimension of T is 
+      [2,3,4,5] and name are ['A.a','B.a','A.b','B.b'], inum=T.dim.'B.a', then inum=3
+   3. inumArray=.dim.T : output all the dimenison. The length of inumArray should larger
+       than or equal to the rank of T. For example the dimension of T is  [2,3,4,5]
+      , inumArray=.dim.T, then inumArray=[2,3,4,5]
+  
+  
+  5. It is the same as T%dim()
+
+
+
+EXAMPLE
+
+
+  type(Tensor)::T,ResultT
+  integer::dimen(5)
+  T=generate((/2,3,4,5,6/),'complex*16') !generate a 2*3*4*5 random number Tensor of type complex*16
+  call T%setName(1,'Tensor.1st')
+  call T%setName(2,'Tensor.2nd')
+  call T%setName(3,'Tensor.3rd')
+  call T%setName(4,'Tensor.4th')
+  call T%setName(5,'Tensor.5th')
+  write(*,*)T.dim.3
+  write(*,*)T.dim.'Tensor.5th'
+  dimen=.dim.T
+  write(*,*)dimen
+  
+  
+  
+  

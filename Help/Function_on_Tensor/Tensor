@@ -1,0 +1,108 @@
+Tensor
+    Build a Tensor.
+    
+SYNOPSIS   
+
+    type(Tensor) function    Tensor(iArray)
+    type(Tensor) function    Tensor(iArray,dimension)
+    type(Tensor) function    Tensor(sArray)
+    type(Tensor) function    Tensor(sArray,dimension)
+    type(Tensor) function    Tensor(dArray)
+    type(Tensor) function    Tensor(dArray,dimension)
+    type(Tensor) function    Tensor(cArray)
+    type(Tensor) function    Tensor(cArray,dimension)
+    type(Tensor) function    Tensor(zArray)
+    type(Tensor) function    Tensor(zArray,dimension)
+    type(Tensor) function    Tensor(lArray)
+    type(Tensor) function    Tensor(lArray,dimension)
+    type(Tensor) function    Tensor(aArray)
+    type(Tensor) function    Tensor(aArray,dimension)
+    
+    
+    
+    integer              iArray(:),iArray(:,:),iArray(:,:,:),iArray(:,:,:,:)
+    real*4               sArray(:),sArray(:,:),sArray(:,:,:),sArray(:,:,:,:)
+    real*8               dArray(:),dArray(:,:),dArray(:,:,:),dArray(:,:,:,:)
+    complex*8            cArray(:),cArray(:,:),cArray(:,:,:),cArray(:,:,:,:)
+    complex*16           zArray(:),zArray(:,:),zArray(:,:,:),zArray(:,:,:,:)
+    logical              lArray(:),lArray(:,:),lArray(:,:,:),lArray(:,:,:,:)
+    character(len=*)     aArray(:),aArray(:,:),aArray(:,:,:),aArray(:,:,:,:)
+    
+    integer              dimension
+     
+    
+    
+PURPOSE
+
+   Build a Tensor. XArray can be any shape(less than or euqal to 4), where X can be
+        i : integer
+        s : real*4
+        d : real*8
+        c : complex*8
+        z : complex*16
+        l : logical
+        a : character(len=*)
+   
+   If do not input dimension, the dimension of the returnning Tensor will be the shape of 
+   the array
+
+PARAMETERS
+ 
+   iArray        - integer,array -
+                 can be any shape(less than or euqal to 4. it will be the Tensor data.
+                 
+   sArray        - real*4,array -
+                 can be any shape(less than or euqal to 4. it will be the Tensor data.
+                 
+   dArray        - real*8,array -
+                 can be any shape(less than or euqal to 4. it will be the Tensor data.
+                 
+   cArray        - complex*8,array -
+                 can be any shape(less than or euqal to 4. it will be the Tensor data.
+                 
+   zArray        - complex*16,array -
+                 can be any shape(less than or euqal to 4. it will be the Tensor data.
+                 
+   lArray        - logical,array -
+                 can be any shape(less than or euqal to 4. it will be the Tensor data.  
+                               
+   aArray        - character(len=*),array -
+                 can be any shape(less than or euqal to 4. it will be the Tensor data.    
+                                              
+   dimension     - integer,array -
+                 it will be the dimension of the Tensor no matter  what the shape the in
+                 put array is.
+                                                  
+
+EXAMPLT
+
+----- 1-----
+  type(Tensor)::T1,T2
+  integer::idata(2,2)
+  idata(1,1)=1
+  idata(2,1)=2
+  idata(1,2)=3
+  idata(2,2)=4
+  T1=Tensor(idata)! It is the same as T1=idata
+  call T1%print()
+  T2=Tensor((/5,6,7,8/),(/2,2/))
+  call T2%print()
+  
+----- 2-----
+  type(Tensor)::T1,T2
+  integer::idata(2,2)
+  T1=Tensor((/5,6,7,8/),(/2,2/))
+  T2=T1+Tensor((/'a','b','c','d'/),(/2,2/))
+  call T2%print()
+----- 3-----
+  type(Tensor)::T1,T2
+  integer::idata(2,2)
+  T1=Tensor((/5,6,7,8/),(/2,2/))
+  T2=T1-Tensor((/0.1,0.2,0.3,0.4/),(/2,2/))
+  call T2%print()
+
+ 
+ 
+ 
+ 
+

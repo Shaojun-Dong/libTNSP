@@ -1,0 +1,35 @@
+print
+    write the data of the Tensor in the external file. The Tensor will regrad as one
+    dimensional array
+    
+SYNOPSIS   
+    
+    subroutine print(uni)
+    subroutine print(uni,realflag)
+    subroutine print(uni,realflag,printType)
+    
+    
+    character(len=*)           printType
+    integer                    uni,realflag
+    
+PURPOSE
+	 write the data of the Tensor in the external file. The Tensor will regrad as one
+    dimensional array
+
+PARAMETERS
+	uni           - integer -
+	              print on a external file, specify the unit of the file pointer
+   printType     - character(len=*),optional -
+                 specify the output format
+   realpart      - integer -
+	              Use when the Tensor is type of complex. If realpart=1, print the real part of the data of Tensor.
+	              If realpart=2, print the imag part of the data of Tensor. If realpart=0, print both the real and 
+	              the imag part of the data of Tensor.
+
+EXAMPLT
+
+  type(Tensor)::T
+  open(unit=123,file="./outputtest")!open a file named "outputdimension"
+  T=generate((/2,2/),'real*4') !generate a 2*2 random number Tensor of type real*4
+  call T%writedata(123,0,'(F10.3)') ! print the Tensor in the file of "outputdimension"
+  close(123)

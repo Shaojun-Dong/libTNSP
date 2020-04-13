@@ -1,0 +1,39 @@
+minelement
+    There function can output the min element of a Tensor.
+    
+SYNOPSIS   
+
+    complex(kind=8)   function     minelement(T)
+    
+    class(Tensor)               T
+    
+    
+    
+PURPOSE
+
+   There function can output the min element of a Tensor. If the Tensor is not complex*16.
+   the minelement will change to complex*16
+	    
+
+PARAMETERS
+ 
+   T       - class(Tensor)  -
+           The Tensor to find the min element on.
+
+EXAMPLT
+
+----- 1-----
+  type(Tensor)::T
+  complex*16::z_min
+  T=generate((/3,3/),(/-10,10/),'integer') !generate a  random number Tensor of integer
+  call T%print("integer Tensor")
+  z_min=minelement(T)! output the min element as a complex(kind=8).
+  write(*,*)"z_min:",z_min
+  
+  
+
+ 
+ 
+ 
+ 
+

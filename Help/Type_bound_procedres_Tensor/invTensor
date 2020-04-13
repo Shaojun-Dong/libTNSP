@@ -1,0 +1,37 @@
+invTensor   (NOT FINISH)
+    output the inverse of a Tensor(rank=2).
+    
+SYNOPSIS   
+    type(Tensor) function      invTensor()
+    type(Tensor) function      invTensor(RCONDM)
+    
+    
+PURPOSE
+	output the inverse of a Tensor(rank=2). Suppose A is a rank-2 Tensor X=A%invTensor() 
+	output the inversion of A^-1
+	                        
+	                        
+	                        
+PARAMETERS
+
+                               
+EXAMPLT
+
+----- 1 --------
+  type(Tensor)::A,invA,AinvA
+  A=generate((/3,3/),'real*4')
+  invA=A%invTensor()
+  call invA%print("A^-1")
+  AinvA=A*invA
+  call AinvA%print("A*A^-1")
+  call A%print("A")
+
+  
+
+
+
+
+
+
+
+ 

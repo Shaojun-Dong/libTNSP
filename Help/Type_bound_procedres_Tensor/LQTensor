@@ -1,0 +1,38 @@
+LQ
+    LQ decompsion of a Tensor, output a array of type(Tensor) with length 2.
+    
+SYNOPSIS   
+    type(Tensor) function      LQTensor()	
+    
+PURPOSE
+	LQ of a Tensor, output a array of type(Tensor) with length 2. suppose Tarray is type(Tensor)::Tarray(2)
+	
+	    Tarray=T%LQTensor():  output a array of [L]->[Q], they are LQ of T. The input T should be a two-dimensional Tensor.
+	                    the relation is T=L*Q. Or T=Tarray(1)*Tarray(2).
+	                        
+	                        
+	                        
+PARAMETERS
+
+                               
+EXAMPLT
+
+----- 1 --------
+  type(Tensor)::T,LQTensor(2),T2
+  T=generate((/3,3/),'real*4')
+  LQ=T%LQTensor()
+  call LQTensor(1)%print("L")
+  call LQTensor(2)%print("Q")
+  T2=LQTensor(1)*LQTensor(2)
+  call T2%print('L*Q')
+  call T%print("T")
+
+  
+
+
+
+
+
+
+
+ 

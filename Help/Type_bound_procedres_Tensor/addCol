@@ -1,0 +1,47 @@
+addcol
+    combine two Tensor.  modify at 2015.5.31, it is a subroutine
+    
+SYNOPSIS   
+    type(Tensor) function           addcol(T)
+    
+    type(Tensor)                    T
+    
+PURPOSE
+
+   combine two Tensor. If two Tensor are the same rank. Then the output Tensor
+   will has rank=rank+1, and there is one more leng oedered at the end of
+   dimension. For example T1 is a [...,m,n,l] matrix and T2 is a [...,m,n,l] 
+   matrix. calling T1%addcol(T2) result a Tensor of [...,m,n,l,2], where [...,m,n,l,1]
+   is the data of T1, and [...,m,n,l,2] are the data of T2.
+	
+   If the Tensor are not the same rank. Then the last leg will add one more diemnsion.
+   For example T1 is a [...,m,n,l] and T2 is a [...,m,n]. calling T1%addcol(T2) 
+   result a Tensor of [...,m,n,l+1], where [...,m,n,l] is the data of T1, and 
+   [...,m,n,l+1] are the data of T2.
+
+PARAMETERS
+   T            - type(Tensor)-
+                The Tensor to be add as col.
+EXAMPLT
+
+  type(Tensor)::T1,T2,T3,T
+  T1=(/1,2,3,4/)
+  T2=(/5,6,7,8/)
+  T3=(/9,10,11,12/)
+  call T1%resetdim((/2,2/))
+  call T2%resetdim((/2,2/))
+  call T3%resetdim((/2,2/))
+  T=T1%addCol(T2)
+  call T%print("add a Col")
+  T=T%addCol(T3)
+  call T%print("add one more Col")
+ 
+
+
+
+
+
+
+
+
+ 

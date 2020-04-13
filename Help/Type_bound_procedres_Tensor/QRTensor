@@ -1,0 +1,38 @@
+QR
+    QR decompsion of a Tensor, output a array of type(Tensor) with length 2.
+    
+SYNOPSIS   
+    type(Tensor) function      QRTensor()	
+    
+PURPOSE
+	QR of a Tensor, output a array of type(Tensor) with length 2. suppose Tarray is type(Tensor)::Tarray(2)
+	
+	    Tarray=T%QRTensor():  output a array of [Q]->[R], they are QR of T. The input T should be a two-dimensional Tensor.
+	                    the relation is T=Q*R. Or T=Tarray(1)*Tarray(3).
+	                        
+	                        
+	                        
+PARAMETERS
+
+                               
+EXAMPLT
+
+----- 1 --------
+  type(Tensor)::T,QRTensor(2),T2
+  T=generate((/3,3/),'real*4')
+  QR=T%QRTensor()
+  call QRTensor(1)%print("Q")
+  call QRTensor(2)%print("R")
+  T2=QRTensor(1)*QRTensor(2)
+  call T2%print('Q*R')
+  call T%print("T")
+
+  
+
+
+
+
+
+
+
+ 

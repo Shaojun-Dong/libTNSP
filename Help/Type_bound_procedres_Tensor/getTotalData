@@ -1,0 +1,22 @@
+getTotalData
+    return the total Data of the Tensor.
+    
+SYNOPSIS   
+    
+    integer function getTotalData()
+    
+PURPOSE
+	return the total Data of the Tensor.
+
+PARAMETERS
+	 
+
+EXAMPLT
+
+---1------
+  type(Tensor)::T
+  integer::totaldata
+  T=generate((/2,3/),'real*4') !generate a 2*2 random number Tensor of type real*4
+  totaldata=T%getTotalData()
+  write(*,*)totaldata
+  

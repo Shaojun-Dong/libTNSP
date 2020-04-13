@@ -1,0 +1,57 @@
+zeroTen
+    generate a  Tensor with all elements being 0.
+    
+SYNOPSIS   
+    type(Tensor) function zeroTen(dimension,classtype)
+    type(Tensor) function zeroTen(TypeDimension,classtype)
+    
+    integer                    dimension(:)
+    type(Dimension)            TypeDimension
+    character(len=*)           classtype
+    
+PURPOSE
+	generate a  Tensor with all elements being 0. classtype is character(len=*)
+	it can be
+        _________________________________________________________
+        | meanning          |      character       | intClassType |       
+        |==========================================|==============|
+	     | integer:          |    'integer'         |      1       |
+	     |==========================================|==============|
+	     | real*4:           |    'real'            |              |
+	     |                   |    'real*4'          |      2       |
+	     |                   |    'real(kind=4)'    |              |
+	     |==========================================|==============|
+	     | real*8:           |    'dble'            |              |
+	     |                   |    'real*8'          |      3       |
+	     |                   |    'real(kind=8)'    |              |
+	     |==========================================|==============|
+	     | complex*8:        |    'complex'         |              |
+	     |                   |    'complex*8'       |      4       |
+	     |                   |    'complex(kind=4)' |              |
+	     |==========================================|==============|
+	     | complex*16:       |    'complex*16'      |      5       |
+	     |                   |    'complex(kind=8)' |              |
+	     |==========================================|==============|
+	     | logical:          |    'logical'         |      6       |
+	     |==========================================|==============|
+	     | character(len=*)  |    'character'       |      7       |
+	     |___________________|______________________|______________|
+
+PARAMETERS
+
+   dimension        - integer,array -
+                    specify the dimension of Tensor
+                    
+   Typedimension    - type(Dimension) -
+                    specify the dimension of Tensor
+                    
+	classtype       - character(len=*) -             
+	                specify the type of Tensor.                   
+EXAMPLT
+
+  type(Tensor)::T
+  T=zeroTen((/2,3,4/),'integer') 
+  call T%print()
+  
+  
+  

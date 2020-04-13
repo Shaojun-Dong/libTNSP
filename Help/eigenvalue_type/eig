@@ -1,0 +1,222 @@
+eig       (NOT FINIFSHED)
+  output the (some or one) eigen value and eigen vecter of a matrix using arpack. If is the function of type(eigenvalue)
+    
+SYNOPSIS   
+
+    type(eigenvalue) function eig(Mat,outVecFlag)
+    type(eigenvalue) function eig(Mat,WHICH,num_of_eig,outVecFlag)
+    type(eigenvalue) function eig(H_phi,WHICH,num_of_eig,outVecFlag)
+    type(eigenvalue) function eig(Mat,s0,num_of_eig,outVecFlag)
+    type(eigenvalue) function eig(H_phi,WHICH,num_of_eig,outvector)
+    type(eigenvalue) function eig(H_phi,parameter,WHICH,num_of_eig,outVecFlag)
+    type(eigenvalue) function eig(H_phi,parameterArray,WHICH,num_of_eig,outVecFlag)
+    type(eigenvalue) function eig(H_phi,parameterLink,WHICH,num_of_eig,outVecFlag)
+    type(eigenvalue) function eig(H_phi,parameterArray,info,WHICH,num_of_eig,outVecFlag)
+    
+                    eig(H_phi,s1,num_of_eig)
+                    eig(H_phi,parameter,s1,num_of_eig)
+                    eig(H_phi,parameterArray,s1,num_of_eig)
+                    eig(H_phi,parameterArray,info,s1,num_of_eig)
+    
+    type(Tensor)           Mat
+    character*2            WHICH
+    logical                outVecFlag
+    integer                num_of_eig
+    external subroutine    H_phi
+    class(*)               s0
+    type(Tensor)           parameter
+    type(Tensor)           parameterArray(:)
+    type(Tensorlink)       parameterLink
+    type(Tensor)           info
+    s0 can be integer, real*4, real*8, complex*8, complex*16
+    s1 can be real*4 real*8
+    
+    see update.log for 
+    
+                    eig(H_phi,s1,num_of_eig)
+                    eig(H_phi,parameter,s1,num_of_eig)
+                    eig(H_phi,parameterArray,s1,num_of_eig)
+                    eig(H_phi,parameterArray,info,s1,num_of_eig)
+    
+PURPOSE
+
+    Output all the eigenvalues and eigenvecters(optional). Or some eigenvalues and eigenvecters(optional) specifying by 'WHICH'.
+    Or some eigenvalues and eigenvecters(optional) near the value s0. Suppose A is a array of Tensor with length equal to 2, Mat
+    is a matrix and eiger is type(eigenvalue)
+       
+         1. A=eiger%eig(Mat): output all the eigenvalues of Mat, return in A(1)
+         
+         2. A=eiger%eig(Mat,.true.): output all the eigenvalues of Mat, return in A(1),and all the eigenvectors return in A(2)
+         
+         3. A=eiger%eig(Mat,WHICH,num_of_eig): output some eigenvalues of Mat, return in A(1)
+                           WHICH: specify the eigenvalue to be calculate, it is character*2:
+                                'LM' -> want the NEV eigenvalues of largest magnitude.
+                                'SM' -> want the NEV eigenvalues of smallest magnitude.
+                                'LR' -> want the NEV eigenvalues of largest real part.
+                                'SR' -> want the NEV eigenvalues of smallest real part.
+                                'LI' -> want the NEV eigenvalues of largest imaginary part.
+                                'SI' -> want the NEV eigenvalues of smallest imaginary part.
+                          num_of_eig: specify the number of eigenvalue to calculate.
+                          
+	      4. A=eiger%eig(Mat,WHICH,num_of_eig,outVecFlag): output some eigenvalues of Mat, return in A(1). If outVecFlag=.true.
+	            output the the eigenvectors return in A(2).
+	            
+	      5. A=eiger%eig(Mat,s0,num_of_eig): output some eigenvalues of Mat, return in A(1)
+                           s0: find the eigenvalue neay s0.s0 can be integer,
+                               real*4, real*8, complex*8, complex*16
+                               
+         6. A=eiger%eig(Mat,s0,num_of_eig,outVecFlag): output some eigenvalues of Mat, return in A(1). If outVecFlag=.true.
+	            output the the eigenvectors return in A(2).
+	            
+	      7. A=eiger%eig(H_phi,WHICH,num_of_eig): output some eigenvalues return in A(1). H_phi is a extenal subroutine that
+	            return H*phi, where H is the eigenvalues problem matrix and phi is a vector. The H_phi should be look like:
+	            
+	               subroutine H_phi(state)
+	                 type(Tensor),intent(inout)::state
+	                 if(.not.state%getflag())Then
+	                   call state%setType(classType)
+	                   call state%allocate(dimension)
+	                     !*** do something else ***
+	                    return
+	                 end if
+	                !*** below is the code for state=H*state ***
+	                 return
+	              end subroutine
+	            It contain two part, if there is no data in the input state,initial it. Else write the code of H*phi
+	      8. A=eiger%eig(H_phi,WHICH,num_of_eig,outVecFlag): output some eigenvalues return in A(1).H_phi is a 
+	            extenal subroutine that return H*phi, where H is the eigenvalues problem matrix and phi is a vector.
+	            If outVecFlag=.true.output the the eigenvectors return in A(2).
+	            
+	      9. A=eiger%eig(H_phi,parameter,WHICH,num_of_eig): output some eigenvalues return in A(1). H_phi is a extenal subroutine that
+	            return H*phi, where H is the eigenvalues problem matrix and phi is a vector. and the parameter is type(Tensor), it will
+	            be used in the subroutine H_phi.
+	            
+	               subroutine H_phi(parameter,state)
+	                 type(Tensor),intent(in)::parameter
+	                 type(Tensor),intent(inout)::state
+	                 if(.not.state%getflag())Then
+	                   call state%setType(classType)
+	                   call state%allocate(dimension)
+	                     !*** do something else ***
+	                    return
+	                 end if
+	                !*** below is the code for state=H*state ***
+	                 return
+	              end subroutine
+	            It contain two part, if there is no data in the input state,initial it. Else write the code of H*phi. The parameter is the
+	            input of H_phi. 
+	            
+	      10. A=eiger%eig(H_phi,parameter,WHICH,num_of_eig,outVecFlag): output some eigenvalues return in A(1).H_phi is a 
+	            extenal subroutine that return H*phi, where H is the eigenvalues problem matrix and phi is a vector.
+	            If outVecFlag=.true.output the the eigenvectors return in A(2).
+	            
+	      11. A=eiger%eig(H_phi,parameterArray,WHICH,num_of_eig): output some eigenvalues return in A(1). H_phi is a extenal subroutine that
+	            return H*phi, where H is the eigenvalues problem matrix and phi is a vector. and the parameterArray is array of type(Tensor), 
+	           it will  be used in the subroutine H_phi.
+	            
+	               subroutine H_phi(parameterArray,state)
+	                 type(Tensor),intent(in)::parameterArray(2)! NOTE HERE, can not be parameterArray(:)
+	                 type(Tensor),intent(inout)::state
+	                 if(.not.state%getflag())Then
+	                   call state%setType(classType)
+	                   call state%allocate(dimension)
+	                     !*** do something else ***
+	                    return
+	                 end if
+	                !*** below is the code for state=H*state ***
+	                 return
+	              end subroutine
+	            It contain two part, if there is no data in the input state,initial it. Else write the code of H*phi. The parameterArray is the
+	            input of H_phi. In the line of "type(Tensor),intent(in)::parameterArray(2)", one should be specify the length of parameterArray.
+	            "type(Tensor),intent(in)::parameterArray(:)" will gose wrong.
+	            
+	        12. A=eiger%eig(H_phi,parameterArray,WHICH,num_of_eig,outVecFlag): output some eigenvalues return in A(1). H_phi is a extenal subroutine that
+	            return H*phi, where H is the eigenvalues problem matrix and phi is a vector. and the parameterArray is array of type(Tensor), 
+	           it will  be used in the subroutine H_phi. If outVecFlag=.true.output the the eigenvectors return in A(2).
+	           
+	        13. A=eiger%eig(H_phi,parameterlink,WHICH,num_of_eig): output some eigenvalues return in A(1). H_phi is a extenal subroutine that
+	            return H*phi, where H is the eigenvalues problem matrix and phi is a vector. and the parameterlink is of type(Tensorlink), 
+	           it will  be used in the subroutine H_phi.
+	            
+	               subroutine H_phi(parameterlink,state)
+	                 type(Tensorlink),intent(in)::parameterlink
+	                 type(Tensor),intent(inout)::state
+	                 if(.not.state%getflag())Then
+	                   call state%setType(classType)
+	                   call state%allocate(dimension)
+	                     !*** do something else ***
+	                    return
+	                 end if
+	                !*** below is the code for state=H*state ***
+	                 return
+	              end subroutine
+	        14. A=eiger%eig(H_phi,parameterArray,info,WHICH,num_of_eig,outVecFlag): output some eigenvalues return in A(1). H_phi is a extenal subroutine that
+	            return H*phi, where H is the eigenvalues problem matrix and phi is a vector. and the parameterArray is is of type(Tensorlink), 
+	           it will  be used in the subroutine H_phi. If outVecFlag=.true.output the the eigenvectors return in A(2).
+	           
+	        15.A=eiger%eig(H_phi,parameterArray,info,WHICH,num_of_eig): output some eigenvalues return in A(1). H_phi is a extenal subroutine that
+	            return H*phi, where H is the eigenvalues problem matrix and phi is a vector. and the parameterArray is array of type(Tensor), 
+	           it will  be used in the subroutine H_phi. info is a Tensor use to store the information used in the subroutine of H_phi, such
+	           as the length of parameterArray
+	            
+	               subroutine H_phi(parameterArray,info,state)
+	                 type(Tensor),intent(in)::parameterArray(*)
+	                 type(Tensor),intent(in)::info
+	                 type(Tensor),intent(inout)::state
+	                 integer::lengthparameter
+	                 lengthparameter=info%ii(1)
+	                 if(.not.state%getflag())Then
+	                   call state%setType(classType)
+	                   call state%allocate(dimension)
+	                     !*** do something else ***
+	                    return
+	                 end if
+	                !*** below is the code for state=H*state ***
+	                !
+	                !  when using parameterArray, one should specify the length of parameterArray
+	                ! by  parameterArray(1:lengthparameter)
+	                ! the user can store the informtion in info
+	                 return
+	              end subroutine
+	            It contain two part, if there is no data in the input state,initial it. Else write the code of H*phi. The parameterArray is the
+	            input of H_phi. 
+	            
+	       16.A=eiger%eig(H_phi,parameterArray,info,,WHICH,num_of_eig,outVecFlag): output some eigenvalues return in A(1). H_phi is a extenal subroutine 
+	           that return H*phi, where H is the eigenvalues problem matrix and phi is a vector. and the parameterArray is array of type(Tensor), 
+	           it will  be used in the subroutine H_phi. info is a Tensor use to store the information used in the subroutine of H_phi, such
+	           as the length of parameterArray If outVecFlag=.true.output the the eigenvectors return in A(2).
+PARAMETERS
+
+   outVecFlag      - logical -
+                  if outVecFlag=.false. output Only the eigenvalue of Mat 
+	               if outVecFlag=.true.  output  the eigenvalue and the eigenvecter of Mat 
+                               
+EXAMPLT
+
+----- 1 --------
+  type(Tensor)::T,eig(2),T2
+  type(eigenvalue)::eiger
+  T=generate((/3,3/),'real*4')
+  T=(.H.T)*T
+  eig=eiger%eig(T,.true.)
+  call eig(1)%print("eigenvalue")
+  call eig(2)%print("eigenvector")
+  T2=eig(2)*eye(eig(1))*(.h.eig(2))
+  call T2%print('rebuild T',1,'(F12.8)')
+  call T%print("T",'(F12.8)')
+
+----- 2 --------
+  type(Tensor)::T,eig(2),T2
+  type(eigenvalue)::eiger
+  T=generate((/3,3/),'real*4')
+  T=(.H.T)*T
+  eig=eiger%eig(T,'SR',2)
+  call eig(1)%print("eigenvalue")
+  
+----- 3 --------
+  type(Tensor)::T,eig(2),T2
+  type(eigenvalue)::eiger
+  T=generate((/3,3/),'real*4')
+  T=(.H.T)*T
+  eig=eiger%eig(T,0.1,2)
+  call eig(1)%print("eigenvalue")

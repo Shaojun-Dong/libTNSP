@@ -1,0 +1,40 @@
+x,ix,sx,dx,cx,zx
+   dot product of Tensor. i,s,d,c,z,l,a stand for integer,real*4,real*8,complex*8,complex*16.
+   conjugating the first vector,The Tensor will be regard as a vector.
+
+SYNOPSIS
+
+
+   ?num=T1.x.T2
+   ?num=T1.?x.T2
+
+
+   type(Tensor)     T1,T2
+   
+      ?num, .?x. :? can be i,s,d,c,z,l,a stand for integer,real*4,real*8,complex*8,complex*16, specify the
+      type of output.
+
+
+NOTE
+
+
+    1. The two input Tensors will be regard as one-dimensional no matter what the rank are they.
+    2. .?x. , ? specify the form of output.
+    3. conjugating the first vector,The Tensor will be regard as a vector.
+
+
+
+example
+
+
+   type(Tensor)::T1,T2
+   real*4::rnum
+   call T1%allocate((/3/),'integer')
+   call T1%setValue(1)
+   call T2%allocate((/3/),'real*4')
+   call T2%setValue((/1,2,3/))
+   rnum=T1.sx.T2
+   call T1%print("T1")
+   call T2%print("T2")
+   call writemess('T1.sx.T2='+rnum)
+

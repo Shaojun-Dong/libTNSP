@@ -1,0 +1,844 @@
+2017.2.23
+
+
+     add a new function of  set_fermi_factor
+     
+     
+        by default fermi_factor=-1 , that means interchange two fermi operators will times -1
+        if fermi_factor= 1, it will be a symmetry tensor of parity
+
+
+2017.2.25
+
+  Add the error messages in T%ProductTensorRoutine:
+    
+          All the input and output Tensors can not be the same variable
+  
+  
+  Add new subrouteine of SymTensor:
+  
+      1.call T%contract(A,[legnames1],B,[legnames2],len): the same as T=contract(A,[legnames1],B,[legnames2],len)
+    NOTE: This routine will reorder the dimenison of both A and B, but will not change the value.
+        2.call T%contract([legnames1],B,[legnames2],len): the same as T=contract(T,[legnames1],B,[legnames2],len)
+    NOTE: This routine will reorder the dimenison of both A and B, but will not change the value.
+        3.call T%contract(A,[legnames1],[legnames2],len): the same as T=contract(A,[legnames1],T,[legnames2],len)
+    NOTE: This routine will reorder the dimenison of both A and B, but will not change the value.
+    
+ Add new subrouteine of fTensor:
+  
+      1.call T%contract(A,[legnames1],B,[legnames2],len): the same as T=contract(A,[legnames1],B,[legnames2],len)
+    NOTE: This routine will reorder the dimenison of both A and B, but will not change the value.
+        2.call T%contract([legnames1],B,[legnames2],len): the same as T=contract(T,[legnames1],B,[legnames2],len)
+    NOTE: This routine will reorder the dimenison of both A and B, but will not change the value.
+        3.call T%contract(A,[legnames1],[legnames2],len): the same as T=contract(A,[legnames1],T,[legnames2],len)
+    NOTE: This routine will reorder the dimenison of both A and B, but will not change the value.
+    
+ 
+ 
+ modify code of ProductTensorRoutine in SymTensor
+ 
+    call T%ProductTensorRoutine(A,B)
+         first empty T 
+         and then T=A*B
+ 
+
+
+2017.2.27
+
+    New function for T%contract:
+    
+      1.call T%contract(A,name1,B,name2): the same as T=contract(A,name1,B,name2)
+  NOTE: This routine will reorder the dimenison of both A and B, but will not change the value.
+      2.call T%contract(name1,B,name2): the same as T=contract(T,name1,B,name2)
+  NOTE: This routine will reorder the dimenison of both A and B, but will not change the value.
+      3.call T%contract(A,name1,name2): the same as T=contract(A,[legnames1],T,name2)
+  NOTE: This routine will reorder the dimenison of both A and B, but will not change the value.
+
+
+2017.3.13
+   
+    speed up T1*T2 by
+    
+    
+		if(rank1.ge.2) then
+			newD=D1.sub.1
+			do i=2,rank1-1
+				newD=newD+(D1.sub.i)
+			end do
+			D1=D1%fuseIndex(1,rank1-2)
+		end if
+		if(rank2.ge.2) then
+			do i=2,rank2
+				newD=newD+(D2.sub.i)
+			end do
+			D2=D2%fuseIndex(2,rank2)
+		end if
+		
+		------------->
+    
+		newD=D1.sub.[1,rank1-1]
+		D1=D1%fuseIndex(1,rank1-2)
+		newD=newD+(D2.sub.[2,rank2])
+		D2=D2%fuseIndex(2,rank2)
+
+
+2017.3.21
+
+     Add operator of SymTensor.subDim.[i1,i2],fTensor.subDim.[i1,i2]
+
+
+2017.5.5
+
+       Modify the code in SymTensor.f90 and fTensor.f90: contract_name_routine,contract_name_routine1,contract_name_routine2,contract_name_routine3,
+    contract_name_routine4,contract_name_routine5 and contract_name_routine6
+       The input and output Tensor
+       
+       
+         class(SymTensor),target,intent(inout)::T    =====>  class(SymTensor),target::T
+         class(SymTensor),target,intent(inout):: T1  =====>  class(SymTensor),target::T1
+         class(SymTensor),target,intent(inout):: T2  =====>  class(SymTensor),target::T2
+         
+         class(fTensor),target,intent(inout)::T    =====>  class(fTensor),target::T
+         class(fTensor),target,intent(inout):: T1  =====>  class(fTensor),target::T1
+         class(fTensor),target,intent(inout):: T2  =====>  class(fTensor),target::T2
+
+
+
+
+2017.7.4
+
+     Fix bug if SymTensor.f90
+        C=A*B, when both A and B are rank=1, C%totalblock=0  ---> C%totalblock=1
+        in ProductTensorRoutine
+           ProductTensor
+
+2017.7.22
+     
+     Fix bug of SymTensor.f90:
+                                  ST1=ST2
+                                  if ST1 is Static and the data type of ST1 and ST2 is not the Same
+                                  
+      do i=1,length
+			if(T2%Block(i)%getFlag())then
+				T%Block(i)=T2%Block(i)
+			else
+				call T%Block(i)%empty()
+			end if
+		end do
+		
+	Change as
+		
+		do i=1,length
+			if(T2%Block(i)%getFlag())then
+				if(notifDynamic)then
+					if(oldType.ne.T%Block(i)%getType())then
+						call T%Block(i)%setType(oldType)
+					end if
+				end if
+				T%Block(i)=T2%Block(i)
+			else
+				call T%Block(i)%empty()
+			end if
+		end do
+		
+		
+		
+		
+		
+2017.8.6
+
+    MPI_SUM_fTensor or MPI_SUM_SymTensor will go wrong when there are some empty block in the symtensor, not not Fix yet
+
+
+
+
+!******************************************************************************************************************
+
+
+2017.8.7
+
+   use usefull_function ==> 
+                               use Tools
+                               use mpi
+                               
+   because the change in Tensor-3.3
+
+
+
+
+
+
+
+
+2017.8.22
+
+
+    New element in type(QuanNum):
+              FermiArrow  
+    delete the element of MaxQN in type(QuanNum)
+    
+    
+    rewrite the data of type(QuanNum)
+
+
+
+2017.8.22
+
+
+     New function of T%getMinQN(ith), QN%getMinQN(), Symdimension%getMinQN(ith), T%getMaxQN(ith), QN%getMaxQN(), Symdimension%getMaxQN(ith)
+
+2017.8.24
+
+
+
+      New function of 
+                index=SymTensor%zeroBlockIndex:  out put the block index of the block all the elements of which is zero but it is not empty
+      New subroutine 
+                call SymTensor%emptyZeroBlock(): empty the block whose element is 0
+
+2017.8.26
+
+       New function:
+         SymT%SVD()
+         SymT2=SymT%CutSymDim()
+         call SymT%CutDim()
+         call SymT%SVDRoutine(U,s,V,num), num is a number , the routine will cut the zero deg
+         logi=QuanNum%ifzeroDeg()
+         call QuanNum%killZeroDeg()
+         QuanNum1=QuanNum%NonZeroDeg()
+         [i,j]=QuanNum%NonZeroDegIndex()
+         logi=SymDimension%ifzeroDeg()
+         fuseOrder will not save the quannum number who is 0 in FermiU1Tool
+         SVD of U1fTensor  can cut according to a integer nunber
+
+
+2017.8.29
+
+
+        call SVDSymTensor(num), if num <0 will not cut  the quantum number
+
+
+
+
+2017.9.2
+
+
+        type(fTensor) is the tensor for fermi, one should set the symmetry group before using
+
+
+
+2017.9.3
+   
+   
+       The code in SymDimnenison.f90  NameOrder(w)  change to  FindOrder(w)
+       
+          if there is no such name that has the name w, it print the error message
+
+
+2017.9.5
+
+      Rewrite SymTensor.f90  and fTensor.f90
+
+
+
+2017.11.29
+
+
+      Rewrite the procedure pointer in SymTensor.f90
+      
+2017.12.1
+   
+     Fix a bug at line 1658 of file SymDimension.f90     
+
+2017.12.2
+
+
+    Fix a bug in SymTensor.f90:
+
+            MPI_send_SymTensor:(Ten1,Ten2,ID1,ID2,ierr,MPIcommon)
+                 if the length of Ten2 is less than Ten1, gose error
+
+            modify as
+                call AllocateCheck(Ten2%block,totaldata)  
+
+
+           in QuantumNumber.f90
+
+              call MPI_BCAST(QN%QuanNum,QN%lenOfQuanNum,MPI_REAL,ID,mpi_comm,ierr) 
+
+
+            modify as
+
+              call MPI_BCAST(QN%QuanNum(1:QN%lenOfQuanNum),QN%lenOfQuanNum,MPI_REAL,ID,mpi_comm,ierr) 
+                 
+            And simular in SymTensor.f90 
+
+2017.12.6
+          
+      New operator for fTensor .sx. .dx.  .cx.  .zx.
+
+
+
+2017.12.7
+
+      Fix a bug in SymTensor.f90
+              call MPI_SUM_SymTensor(inoutT,ierr)
+                if some block in the cpus are not the same, goes error, for example the totalBlock of a
+                symTensor is not the same.
+
+              if the bug occus, the program will stop.
+
+
+
+2018.4.18
+     
+     due to the modification in Tensor.f90, if set_SVD_S_matrix_flag, the output of s matrix in svd will be a matrix
+     Fix the SVD routine in SymTensor.f90
+
+
+
+2018.4.30
+     Fix bugs in SymTensor.f90
+     if call set_SVD_S_matrix_flag() (the funciton in Tensor.f90), ERROR in SVD
+
+
+     in SVD, cutoff base on number, the SVD on every block, will keep all the single values, and the trancation will
+     do in the subroutine of set_and_cut_deg, modify the subroutine of
+
+            SVD_subroutine_S(A,U,S,V,cut,LDA1,LDA2,LDS,indexi,indexj,indexs)
+
+        to 
+
+            SVD_subroutine_S(A,U,S,V,LDA1,LDA2,LDS,indexi,indexj,indexs)
+
+
+
+
+2018.5.14
+
+     Fix a bug in SymTensor.f90:
+
+             ST%xnorm(),x=i,s,d,c,z
+
+
+
+2018.6.7
+
+    1.New function of
+            SymDimension%index2QNinfo(QNindex,Degindex,index)
+      where 
+         output:
+            QNindex is a array of real*4 or integer, length should be larger than rank of the dimension
+            Degindex is a array of integer, length should be larger than rank of the dimension
+         input:
+            index is array of integer, length  equal to rank of the dimension
+
+      Example one of the SymDimension is
+
+        The first leg:
+          QN :  0.  1.  2.  3.
+          Deg:  1   2   4   2
+        The second leg:
+          QN :  0.  1.  2.
+          Deg:  1   2   1  
+
+      if a SymTensor set to a Tensor ,say A, the Tensor will be a 9*4 tensor
+         intput the index of A, for example index=[4,3]
+         then output the quantum number information of the SymDimension,that is
+            QNindex=[3,2],Degindex=[1,2]
+         or 
+            QNindex=[2.,1.],Degindex=[1,2]
+
+
+    2.New function of 
+           SymTensor=SymTensor%symi(QNindex,Degindex)
+           SymTensor=SymTensor%symi(index)
+      where 
+          QNindex is a array of real*4 or integer
+          Degindex is a array of integer
+          index is array of integer
+
+      output the element of the SymTensor, and keep the dimension information
+
+
+    3.New function of 
+           fTensor=fTensor%fi(QNindex,Degindex)
+           fTensor=fTensor%fi(index)
+      where 
+          QNindex is a array of real*4 or integer
+          Degindex is a array of integer
+          index is array of integer
+
+      output the element of the fTensor, and keep the dimension information
+
+
+
+2018.6.15
+
+     new function of SymTensor%SymCheck(), check the data in the SymTensor, if if break the symmetry rule
+
+
+2018.6.17
+
+    constructor for type(QuanNum)
+        QN=QuanNum(1.)
+        QN=QuanNum(1.,2)
+        QN=QuanNum([1.,2.])
+        QN=QuanNum([1.,2.],[1,2])
+        
+    
+    
+    New interface for ReverseFermiArrow
+         
+         call ReverseFermiArrow(T1,name1,Te,name2)
+
+
+2018.6.18
+
+     Fix a bug in SVD on fTensor or SymTensor, if the input fTensor or SymTensor is of type complex
+         The error is:
+               The single value matrix is alway real number, but I set them as complex, this will
+               confict with the subroutine in Tensor.f90
+
+
+
+2018.6.23
+
+     Modify the codes of fT=fT%FermiFuse() and fT=fT%FermiSplit()
+         The fusing legs should have the same fermi-arrow, and 
+             if the arrow=-1
+                fuse will a sign crroction
+            if not fuse as the symmetry tensor
+
+    In this version of fermionic Tensor, one can operator the fTensors that have some legs that are fusing into on 
+
+
+
+2018.6.29
+
+    1.Fix a bug in fTensor.f90
+      fT=fT%FermiFuse()
+        ERROR:
+              The fermiArrow in the output tensor is 0
+        fix
+              The output tensor will store the fermiArrow
+
+    2. fix a bug in SymTensor.f90 and fTensor.f90
+
+         fT  =  fT%FermiFuse(ith,.false.)
+         SymT=SymT%SymFuse(ith,.false.)
+      if there are more than 2 leg to be fuse, for examle the leg to be fuse are l1,l2,l3,l4
+    then the process of fusing are:
+         l3,l4-->L1
+         l2,L1-->L2
+         l1,L2-->L3
+      this order will be conflict with the process 
+        fT  =  fT%FermiFuse(ith,.true.)
+        SymT=SymT%SymFuse(ith,.true.)
+      for example fT%forward(l1,l2,l3,l4), and then fuse these legs, then the process of fusing are:
+         l1,l2-->L1
+         l3,L1-->L2
+         l4,L2-->L3
+
+      Now modify the code of fT%FermiFuse(ith,.false.) and SymT%SymFuse(ith,.false.) as
+
+           put forward the legs to be fuesed, and then fuse with FermiFuse(ith,.true.), and
+           put the new leg to the end of the tensor.
+
+      If there are two legs or one leg to be fuse, do not change this code
+
+
+      The code of the old version will not gose wrong if one do not use the fuing tensor for contract,
+    for example, doing SVD, QR and other operation will go no wrong, becase it will split all the leg in
+    the end, the fusing process is a reversible operation.
+
+    3. Fix a bug in SymTensor.f90:
+
+         ST=ST.pf.name_vec
+         call ST%forward(name_vec)
+      if the length of name_vec larger than or equal  to 2, it will goes wrong. The bug has been fix and this bug
+     will cause error when using the function.
+
+       Fortunately, the code in fTensor.f90 will not call this subroutine, so there is no error in fTensor.f90
+   
+
+
+2018.8.8
+
+    Fix bug in SymTensor.f90
+       emptyZeroBlock
+
+2018.8.20
+
+    New function in SymTensor.f90
+
+        When doing contract, the code will check if the contraction is vaild accoding to the symmetry rule
+
+    New Function in SymTensor.f90 and fTensor.f90
+
+      Type(SymTensor):
+             call SymT%contract(name1,name2)
+             call SymT%contract(ith1,ith2)
+             SymA=contract(SymB,name1,name2)
+             SymA=contract(SymB,ith1,ith2)
+      Type(fTensor):
+             call fT%contract(name1,name2)
+             call fT%contract(ith1,ith2)
+             fA=contract(fB,name1,name2)
+             fA=contract(fB,ith1,ith2)
+      contract the legs inside one tensor
+     
+
+
+2018.9.16
+
+    1.Modify function in SymTensor.f90:
+       1).
+             SymT=SymT2%SymFuse(outDim,Order,row)
+             SymT=SymT2%SymFuse(row)
+             SymT=SymT2%SymFuse(ith,outDimen,outOrder,orderinfo,row)
+             SymT=SymT2%SymFuse(ith,row)
+
+         The legs to be fused should have the same symmetry rule, which will be the rule of the new legs
+
+       2).
+             SymT=SymT2%SymFuse(outDim,Order,row,NewRule)
+             SymT=SymT2%SymFuse(row,NewRule)
+             SymT=SymT2%SymFuse(ith,outDimen,outOrder,orderinfo,row,NewRule)
+             SymT=SymT2%SymFuse(ith,row,NewRule)
+
+         The input legs can have different value, the value of the output fusing leg will be NewRule
+
+
+    2. Modify the error casue from the modification of 1. the function have been change are:
+
+            SVD
+            QR
+            LQ
+        Something like:
+
+         T=T%SymFuse(lenLeft,dimen(1),order(1),orderinfo(1),.true.)
+         T=T%SymFuse(2,dimen(2),order(2),orderinfo(2),.false.)
+
+      ===>
+
+         T=T%SymFuse(lenLeft,dimen(1),order(1),orderinfo(1),.true.,default_Row_Rule_)
+         T=T%SymFuse(2,dimen(2),order(2),orderinfo(2),.false.,default_Col_Rule_)
+
+
+      where default_Row_Rule_=1, default_Col_Rule_=-1 are two public value define in SymTensor.f90
+
+   3.Modify function in SymTensor.f90:
+       1).
+             fT=fT2%FermiFuse(outDim,Order,row)
+             fT=fT2%FermiFuse(row)
+             fT=fT2%FermiFuse(ith,outDimen,outOrder,orderinfo,row)
+             fT=fT2%FermiFuse(ith,row)
+
+         The legs to be fused should have the same symmetry rule, which will be the rule of the new legs
+
+       2).
+             fT=fT2%FermiFuse(outDim,Order,row,NewRule)
+             fT=fT2%FermiFuse(row,NewRule)
+             fT=fT2%FermiFuse(ith,outDimen,outOrder,orderinfo,row,NewRule)
+             fT=fT2%FermiFuse(ith,row,NewRule)
+
+         The input legs can have different value, the value of the output fusing leg will be NewRule
+
+
+    4. Modify the error casue from the modification of 1. the function have been change are:
+
+            SVD
+            QR
+            LQ
+
+2018.9.17
+
+      New function of
+
+         call ReverseFermiArrow(T1,name1,T2,name2,checkT1orT2)
+         call ReverseFermiArrow(T1,ith1,T2,ith1,checkT1orT2)
+
+
+2018.10.23
+     
+
+    1.In quantumnumber.f90:
+       rename killZeroDeg as trimZeroDegQN
+       rename NonZeroDeg as trimZeroDeg
+       rename NonZeroDegIndex as trimZeroDegIndex
+      In SymTensor.f90
+       rename CutSymDim as trimSymDim
+       rename CutDim  as trimDim
+    2. Fix a bug in SymTensor.f90:
+        expm(SymT)
+        if there is quantum number with 0 deg, the code goes wrong
+
+    3. Fix a fatal in U1.f90: Do not kill the zero deg elements
+
+
+      !*********************************************************
+
+          subroutine U1fuseOrder(Res,order,Q1,Q2,newRule_)
+            type(QuanNum),intent(inout)::Res
+            type(QuanNum),intent(in)::Q1,Q2
+            type(Tensor),intent(inout)::order
+            integer,intent(in)::newRule_
+            integer::newRule
+            real*4::meanQN1,meanQN2
+            type(QuanNum)::nonZeroQ1,nonZeroQ2
+            integer::flag
+            flag=0
+            if(Q1%ifzeroDeg())then
+              nonZeroQ1=Q1%NonZeroDeg()
+              flag=flag+1
+            end if
+            if(Q2%ifzeroDeg())then
+              nonZeroQ2=Q2%NonZeroDeg()
+              flag=flag+10
+            end if
+
+      Change as:
+
+          subroutine U1fuseOrder(Res,order,Q1,Q2,newRule_)
+            type(QuanNum),intent(inout)::Res
+            type(QuanNum),intent(in)::Q1,Q2
+            type(Tensor),intent(inout)::order
+            integer,intent(in)::newRule_
+            integer::newRule
+            real*4::meanQN1,meanQN2
+            type(QuanNum)::nonZeroQ1,nonZeroQ2
+            integer::flag
+            flag=0
+            if(Q1%ifzeroDeg())then
+              nonZeroQ1=Q1
+              flag=flag+1
+            end if
+            if(Q2%ifzeroDeg())then
+              nonZeroQ2=Q2
+              flag=flag+10
+            end if
+
+
+2018.10.24
+
+        1.SymT=.H.SymT now support any rank tensor
+     
+        2. new subroutine pointer of reverseRule:
+
+           in U(1):
+
+                reverseRule=>reverseU1RuleRoutine
+
+           in Parity
+
+                reverseRule point to default function that do nothing
+
+          the code in U1.f90, SymTensor.f90 and fTensor.f90 have be modify
+
+               Htranspose
+               Htranspose2
+
+
+
+2018.10.29
+
+         1. new function or subroutine in QuantumNumber.f90:
+
+                  QuanNum%killZeroDeg
+                  QuanNum%NonZeroQNindex
+                  QuanNum%NonZeroDegQN
+         
+         2. new function or subroutine in SymTensor.f90 :
+
+
+                   call SymT%killZeroDeg(ith),ith=-1,1,2, work on rank=2 SymTensor only
+
+
+         3. delete the subroutine of QNcheck in U1.f90
+
+
+2018.11.10
+   
+
+        1.fix the function name error in SymTensor.f90
+
+             allocatefBlock   change to allocateSymBlock
+
+
+2018.11.20
+
+        fix the bug of the assignment for the fTensor and the SymTensor:
+              fT1(:)=fT2(:)
+            SymT1(:)=SymT2(:)
+        if the length of fT1 is not equal to fT2, there will be a error of Segmentation fault
+
+        write the assignment for array of the fTensor and the SymTensor
+
+
+2019.1.9
+
+      New fucntion of SumT%SVD(U,S,V,legs,ifLeft) and fT%SVD(U,S,V,legs,ifLeft)
+
+
+2019.2.14
+
+      New function of 
+          1.call fTesnsor%SVD(U,S,V,maxvalue,Vtype)
+          2.call fTesnsor%SVD(U,S,V,TensorName1,TensorName2,maxvalue,Vtype)
+          3.call fTesnsor%SVD(U,S,V,SVDname,maxValue,Vtype,leftFlag)
+          4.call SymTesnsor%SVD(U,S,V,maxvalue,Vtype)
+          5.call SymTesnsor%SVD(U,S,V,TensorName1,TensorName2,maxvalue,Vtype)
+          6.call SymTesnsor%SVD(U,S,V,SVDname,maxValue,Vtype,leftFlag)
+      Add more function in the function above of Vtype
+         the value of  Vtype are
+              'sum2'
+              '1_n'
+              '1n'
+              'sum'
+      add a new type of
+         Vtype='min': discard the single value that less than the input value of maxValue
+                      or say, all the single value will be larger than maxValue
+
+
+
+
+2019.3.20
+
+     
+     Fix a small bug in call fTesnsor%SVD(U,S,V,maxvalue,Vtype), this bug is about the number of the trucation, it will NOT cause any error in the code
+
+
+
+
+2019.5.17
+
+     1.Add new fucntion of SVDKill in SymTensor.f90, which will faster than SVD, but it WILL destroy the data in the input SymTensor 
+     2.Add new fucntion of SVDKill in fTensor.f90, which will faster than SVD, but it WILL destroy the data in the input fTensor 
+     3. In the subroutine of
+            fTesnsor%SVD(U,S,V,SVDname,minNum,NumSave_,maxValue_,Vtype,leftFlag)
+
+       The value NumSave,maxValue are intent(in) not intent(inout) now
+
+     4. In the subroutine of
+            fTesnsor%SVD(U,S,V,SVDname,minNum,NumSave_,maxValue_,Vtype,leftFlag,outNumSave,OutmaxValue)
+
+            The Number of state use in the function store in outNumSave, so is the OutmaxValue
+
+
+
+
+2019.5.21
+ 
+     1. New functions are added in SymTensor.f90
+
+               (1) SymT%LQkill(L)
+               (2) SymT%LQkill(L,LQName,left)
+               (3) SymT%LQkill(L,LName,RNames)
+               (4) SymT%QRkill(R)
+               (5) SymT%QRkill(R,QRName,left)
+               (6) SymT%QRkill(R,LName,RNames)
+
+
+
+2019.5.24
+ 
+     1. rewrite the  functions in SymTensor.f90
+
+               (1) SymT%LQkill(L)
+               (2) SymT%LQkill(L,LQName,left)
+               (3) SymT%LQkill(L,LName,RNames)
+               (4) SymT%QRkill(R)
+               (5) SymT%QRkill(R,QRName,left)
+               (6) SymT%QRkill(R,LName,RNames)
+
+            in the QR subroutine, if the input SymT is
+
+                   0  1  2    ---> these are the quantum numbers
+                  ---------  
+              -1 | 0  0  0
+               0 | A  0  0
+               1 | 0  B  0   ---> A, B and C are the non-zero blocks
+               2 | 0  0  C
+               3 | 0  0  0
+               |
+               `--> these are the quantum numbers
+
+          then output Q tensor in SymT and R tensor, they are
+             
+             Q:                  R:
+                  0  1  2              0  1  2 
+                  ---------          -----------
+              -1 | 0  0  0          0| G  0  0
+               0 | D  0  0          1| 0  H  0
+               1 | 0  E  0          2| 0  0  I
+               2 | 0  0  F
+               3 | 0  0  0
+
+          *****************************************************
+
+          if the input SymT is
+
+                  -1  0  1  2  
+                  ------------ 
+               0 | 0  A  0  0
+               1 | 0  0  B  0   
+               
+
+          then output Q tensor in SymT and R tensor, they are
+             
+             Q:                    R:
+                  -1  0  1  2             -1  0  1  2 
+                  -----------            ------------
+               0 | 0  C  0  0          -1| 0  E  0  0
+               1 | 0  0  D  0           0| 0  0  F  0
+                                        1| 0  0  0  0
+                                        2| 0  0  0  0
+
+         NOTE: the rule for the quantum number in the new bond is different with the past version!!
+
+
+
+      2. New functions are added in fTensor.f90
+
+               (1) fT%LQkill(L)
+               (2) fT%LQkill(L,LQName,left)
+               (3) fT%LQkill(L,LName,RNames)
+               (4) fT%QRkill(R)
+               (5) fT%QRkill(R,QRName,left)
+               (6) fT%QRkill(R,LName,RNames)
+
+      3. Speed up the subroutine of QR and the subroutine of LQ
+
+
+
+
+2019.8.13
+
+       speed up MPI_SUM_SymTensor1 in SymTensor.f90
+
+2019.8.31
+     
+
+       in symtensor.f90, 
+          1.call SymT%empty() will deallocate the block elements
+          2.SymT1=SymT2, will deallocate the empty elements
+          3.call SymT%allocate(T2), will deallocate the empty elements
+          4. other function, block(i)%empty()  ===>  block(i)%deallocate()
+
+
+
+2019.9.20
+
+      add new operators in fTensor.f90 and SymTensor.f90:
+            .dot. and  .?dot.    ?=s,d,c,z
+
+
+2019.12.2
+
+     new function in fTensor.f90:
+        call fT%Notfermi_permute(indices) 
+
+
+
+

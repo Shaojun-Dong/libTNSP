@@ -1,0 +1,49 @@
+cmplx
+   over write cmplx in fortran for Tensor. Change the Tensor to a complex*8 Tensor or combine 
+   two Tensor to a complex*8 Tensor
+      
+SYNOPSIS   
+    type(Tensor) function           cmplx(T)
+    type(Tensor) function           cmplx(T,imagT)
+    
+    type(Tensor)                    T,imagT
+    
+PURPOSE
+
+   over write cmplx in fortran for Tensor. Change the Tensor to a complex*8 Tensor or combine 
+   two Tensor to a complex*8 Tensor.
+   
+       1.cmplx(T): output a complex*8 Tensor, T will be the real part.
+       2.cmplx(T,imagT): output a complex*8 Tensor, T will be the real part and imagT will be 
+         the imag part
+
+PARAMETERS
+   T            - type(Tensor)-
+                input Tensor as real part
+   imagT            - type(Tensor)-
+                input Tensor as imag part
+EXAMPLT
+
+
+----- 1-----
+  type(Tensor)::T
+  T=generate((/2,2/),(/-10,10/),'integer')
+  call T%print("T is integer Tensor")
+  call TMprint(cmplx(T),"cmplx for integer Tensor")
+  T=generate((/2,2/),(/-10,10/),'complex*16')
+  call T%print("T is complex*16 Tensor")
+  call TMprint(cmplx(T),"cmplx make complex*16 to complex*8")
+  
+ ----- 2----- 
+  type(Tensor)::T,imagT
+  T=generate((/2,2/),(/-10,10/),'real*8')
+  imagT=generate((/2,2/),(/-10,10/),'integer')
+  call T%print("T is real*8 Tensor")
+  call imagT%print("imagT is integer Tensor")
+  call TMprint(cmplx(T,imagT),"cmplx(T,imagT) for integer Tensor")
+
+
+
+
+
+

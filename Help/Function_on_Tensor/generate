@@ -1,0 +1,128 @@
+generate
+    generate a  random Tensor.
+    
+SYNOPSIS   
+    type(Tensor) function      generate(dimension)
+    type(Tensor) function      generate(dimension,classtype)
+    type(Tensor) function      generate(dimension,intregion)
+    type(Tensor) function      generate(dimension,realregion)
+    type(Tensor) function      generate(dimension,dbleregion)
+    type(Tensor) function      generate(dimension,intregion,classtype)
+    type(Tensor) function      generate(dimension,realregion,classtype)
+    type(Tensor) function      generate(dimension,dbleregion,classtype)
+    
+    type(Tensor) function      generate(TypeDimension)
+    type(Tensor) function      generate(TypeDimension,classtype)
+    type(Tensor) function      generate(TypeDimension,intregion)
+    type(Tensor) function      generate(TypeDimension,realregion)
+    type(Tensor) function      generate(TypeDimension,dbleregion)
+    type(Tensor) function      generate(TypeDimension,intregion,classtype)
+    type(Tensor) function      generate(TypeDimension,realregion,classtype)
+    type(Tensor) function      generate(TypeDimension,dbleregion,classtype)
+    
+    integer                    dimension(:)
+    type(Dimension)            TypeDimension
+    integer                    intregion(:)
+    real*4                     realregion(:)
+    real*8                     dbleregion(:)
+    character(len=*)           classtype
+    
+PURPOSE
+	generate a  random Tensor. 
+	
+      1.If there is no input classtype then the Tensor is complex*16.
+      2.If there is no input intregion,intregion or dbleregion, then the region
+        will set to [0,1] by default. 
+      3.If there is no input intregion,intregion or dbleregion and the Tensor is
+        character, it will generate all the elemener of Tensor with random character of length=1
+  character is the type of Tensor, it can be
+        _________________________________________________________
+        | meanning          |      character       | intClassType |       
+        |==========================================|==============|
+	     | integer:          |    'integer'         |      1       |
+	     |==========================================|==============|
+	     | real*4:           |    'real'            |              |
+	     |                   |    'real*4'          |      2       |
+	     |                   |    'real(kind=4)'    |              |
+	     |==========================================|==============|
+	     | real*8:           |    'dble'            |              |
+	     |                   |    'real*8'          |      3       |
+	     |                   |    'real(kind=8)'    |              |
+	     |==========================================|==============|
+	     | complex*8:        |    'complex'         |              |
+	     |                   |    'complex*8'       |      4       |
+	     |                   |    'complex(kind=4)' |              |
+	     |==========================================|==============|
+	     | complex*16:       |    'complex*16'      |      5       |
+	     |                   |    'complex(kind=8)' |              |
+	     |==========================================|==============|
+	     | logical:          |    'logical'         |      6       |
+	     |==========================================|==============|
+	     | character(len=*)  |    'character'       |      7       |
+	     |___________________|______________________|______________|  
+	             
+PARAMETERS
+
+   dimension        - integer,array -
+                    specify the dimension of Tensor
+                    
+   Typedimension    - type(Dimension) -
+                    specify the dimension of Tensor
+                                       
+	intregion        - integer,array -
+	                 if the Tensor is integer,real*4,real*8,complex*8,complex*16,then
+	                 
+	                       intregion is a array with length 2. It specify the region of
+	                       the random number. intregion(1)<random number<intregion(2)
+	                
+	                if the Tensor is character,then
+	                       intregion is a array with length 1. It specify the length of
+	                       the character. The subroutine generate random character with
+	                       length intregion(1)
+	               
+	               if the Tensor is logical, intregion is useless
+	                       
+   realregion       - real*4,array -
+	                 if the Tensor is integer,real*4,real*8,complex*8,complex*16,then
+	                 
+	                       intregion is a array with length 2. It specify the region of
+	                       the random number. intregion(1)<random number<intregion(2)
+	                
+	                 if the Tensor is character,then
+	                       intregion is a array with length 1. It specify the length of
+	                       the character. The subroutine generate random character with
+	                       length intregion(1)
+	               
+	                if the Tensor is logical, intregion is useless
+	               
+	 dbleregion      - real*8,array -
+	                 if the Tensor is integer,real*4,real*8,complex*8,complex*16,then
+	                 
+	                       intregion is a array with length 2. It specify the region of
+	                       the random number. intregion(1)<random number<intregion(2)
+	                
+	                if the Tensor is character,then
+	                       intregion is a array with length 1. It specify the length of
+	                       the character. The subroutine generate random character with
+	                       length intregion(1)
+	               
+	                if the Tensor is logical, intregion is useless 
+	                
+	classtype       - character(len=*) -             
+	                specify the type of Tensor.
+
+EXAMPLT
+
+  type(Tensor)::T
+  T=generate((/2,2/),(/-1,1/),'real*4')
+  call T%print()
+
+
+
+
+
+
+
+
+
+

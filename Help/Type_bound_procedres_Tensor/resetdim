@@ -1,0 +1,37 @@
+resetdim
+    reset the dimension of a Tensor
+    
+SYNOPSIS   
+    subroutine resetdim(dimension)
+    subroutine resetdim(typeDimenison)
+    
+    integer                    dimension(:)
+    type(Dimension)            typeDimenison
+    
+PURPOSE
+	reset the dimension of a Tensor. The input data should not be conflit to the data of Tensor
+
+PARAMETERS
+   dimension           - integer array-
+                       input dimenison
+   typeDimenison       - type(Dimension) -
+                       input dimenison
+
+EXAMPLT
+
+---1------
+  type(Tensor)::T
+  T=(/1,2,3,4,5,6/) ! T is a one-dimensional Tensor
+  call T%resetdim((/2,3/)) ! T is a two-dimensional Tensor
+  
+---2------
+  type(Tensor)::T,T2
+  type(Dimension)::testDimension
+  T=generate((/2,2,2/),'real*4') !generate a 2*3*4 random number Tensor of type real*4
+  call T%setName(1,'A.one')! set a name to the first dimension of Tensor
+  call T%setName(2,'B.a')! set a name to the second dimension of Tensor
+  call T%setName(3,'aaa.test')! set a name to the thord dimension of Tensor
+  testDimension=T%dim()
+  T2=((/1,2,3,4,5,6,7,8/))
+  call T2%resetDim(testDimension)
+ 

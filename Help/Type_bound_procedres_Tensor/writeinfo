@@ -1,0 +1,35 @@
+writeinfo
+    write the infomation of the Tensor in external file, the file can be read by T%read()
+    
+SYNOPSIS   
+
+    subroutine writeinfo(words,uni,printType)
+    subroutine writeinfo(words,uni)
+    subroutine writeinfo(uni,printType)
+    subroutine writeinfo(uni)
+    
+    
+    character(len=*)           words
+    character(len=*),optional  printType
+    integer                    realpart
+    integer                    uni
+    
+PURPOSE
+	write the infomation of the Tensor in external file. The same as info.
+
+PARAMETERS
+   printType     - character(len=*),optional -
+                 specify the output format
+   words         - character(len=*),optional -
+                 the character print befor print the data of Tensor
+   uni           - integer -
+	              print on a external file, specify the unit of the file pointer
+
+EXAMPLT
+
+  type(Tensor)::T
+  open(unit=123,file="./outputdimension")!open a file named "outputdimension"
+  T=generate((/2,2/),'real*4') !generate a 2*2 random number Tensor of type real*4
+  call T%writeinfo("print the Tensor",123) ! print the Tensor in the file of "outputdimension"
+  close(123)
+ 

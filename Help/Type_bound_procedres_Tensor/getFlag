@@ -1,0 +1,28 @@
+getFlag
+    return the Flag of the Tensor. If Flag=.true., there is data in Tensor.
+    if Flag=.false., the Tensor can be regards as a empty Tensor.
+    
+SYNOPSIS   
+    
+    integer function getFlag()
+    
+PURPOSE
+	return the Flag of the Tensor. If Flag=.true., there is data in Tensor.
+    if Flag=.false., the Tensor can be regards as a empty Tensor. T%deallocate()
+    and T%empty() can make the Tensor a empty one. T%deallocate() will deallocate
+    memery but T%empty() will not. dellocate and allocate in fortran may cost time!
+
+PARAMETERS
+	 
+
+EXAMPLT
+
+---1------
+  logical::Flag
+  T=generate((/2,2/),'real*4') !generate a 2*2 random number Tensor of type real*4
+  Flag=T%getRank()
+  write(*,*)Flag
+  call T%deallocate()
+  Flag=T%getRank()
+  write(*,*)Flag
+  

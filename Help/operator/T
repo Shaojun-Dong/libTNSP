@@ -1,0 +1,28 @@
+.T.
+   short for transpose
+   return a transpose matrix
+
+
+SYNOPSIS
+    
+    Result=.H.T
+    
+    type(Tensor)          Result,T
+
+
+Note:
+
+      The rank of T should be 1 or 2
+      rank=1: No change.
+      rank=2: return a transpose Tensor. R=A^{T}
+
+
+
+EXAMPLE
+
+
+   type(Tensor)::TT,T
+   T=generate((/2,3/),'complex*8')
+   TT=.T.T
+   call T%print("T")
+   call TT%print(".T.T")

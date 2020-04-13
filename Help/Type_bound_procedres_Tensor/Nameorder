@@ -1,0 +1,39 @@
+NameOrder
+    output the order of the dimension using a TensorName.
+    
+SYNOPSIS   
+    integer function NameOrder(name)
+    integer function NameOrder(nameArray)
+    
+    character(len=*)           name
+    character(len=*)           nameArray(:)
+    
+PURPOSE
+	output the order of the dimension using a TensorName. For example a Tensor, whose dimension
+	is ('T.a','T.b','T.c'), Then T%nameOrder('T.b') return 2 as it is the second index in the 
+	dimension
+
+PARAMETERS
+	name          - character(len=*)  -
+	              output the dimension according to name
+   nameArray     - character(len=*),array -
+                 output the dimension according to nameArray, it is a array and will return
+                 a array of integer with the same length
+
+EXAMPLT
+
+  type(Tensor)::T
+  integer::order,orderarray(3)
+  character(len=20)::names(3)
+  T=generate((/2,3,4/),'real*4') !generate a 2*3*4 random number Tensor of type real*4
+  call T%setName(1,'A.one')! set a name to the first dimension of Tensor
+  call T%setName(2,'B.a')! set a name to the second dimension of Tensor
+  call T%setName(3,'aaa.test')! set a name to the thord dimension of Tensor
+  call T%diminfo()
+  order=T%NameOrder('aaa.test') !order will be equal to 3
+  names(1)='B.a'
+  names(2)='A.one'
+  names(3)='aaa.test'
+  orderarray=T%NameOrder(names)
+  ! the data of orderarray will be (2,1,3)
+ 

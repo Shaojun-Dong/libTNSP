@@ -1,0 +1,30 @@
+conjg
+   over write conjg in fortran for Tensor. output a conjugate Tensor.
+      
+SYNOPSIS   
+    type(Tensor) function           conjg(T)
+    
+    type(Tensor)                    T
+    
+PURPOSE
+
+   Output a conjugate Tensor. The dimension of the output is the same as input
+
+PARAMETERS
+   T            - type(Tensor)-
+                input Tensor
+EXAMPLT
+
+  type(Tensor)::T
+  T=generate((/2,2/),'real*4')
+  call T%print("T is real Tensor")
+  call TMprint(conjg(T),"conjg for real Tensor")
+  T=generate((/2,2/),'complex*8')
+  call T%print("T is complex Tensor")
+  call TMprint(conjg(T),"conjg for complex Tensor")
+
+
+
+
+
+

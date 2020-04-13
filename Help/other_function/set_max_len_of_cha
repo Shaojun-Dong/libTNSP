@@ -1,0 +1,20 @@
+set_max_len_of_cha
+    set the max length of character when doing "+" for character
+    
+SYNOPSIS   
+    subroutine set_max_len_of_cha(maxlen)
+    
+    integer maxlen
+    
+PURPOSE
+	set the max length of character when doing "+" for character. if a and b are both character(len=10)
+	the result of a+b will store in memery with character(len=maxlen). by default maxlen=500
+
+PARAMETERS
+	maxlen      - integer -
+	          the max length using in the mid result of "+" for character
+
+EXAMPLT
+
+
+   call set_max_len_of_cha(1000)

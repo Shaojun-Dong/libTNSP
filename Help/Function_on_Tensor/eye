@@ -1,0 +1,112 @@
+eye
+    generate a diag Tensor(rank=2).
+    
+SYNOPSIS   
+    type(Tensor) function      generate(idiagArray)
+    type(Tensor) function      generate(sdiagArray)
+    type(Tensor) function      generate(ddiagArray)
+    type(Tensor) function      generate(cdiagArray)
+    type(Tensor) function      generate(zdiagArray)
+    type(Tensor) function      generate(ldiagArray)
+    type(Tensor) function      generate(adiagArray)
+    type(Tensor) function      generate(diagT)
+    
+    type(Tensor) function      generate(idiagArray,m,n)
+    type(Tensor) function      generate(sdiagArray,m,n)
+    type(Tensor) function      generate(ddiagArray,m,n)
+    type(Tensor) function      generate(cdiagArray,m,n)
+    type(Tensor) function      generate(zdiagArray,m,n)
+    type(Tensor) function      generate(ldiagArray,m,n)
+    type(Tensor) function      generate(adiagArray,m,n)
+    type(Tensor) function      generate(diagT,m,n)
+    
+    type(Tensor) function      generate(idiag,m,n)
+    type(Tensor) function      generate(sdiag,m,n)
+    type(Tensor) function      generate(ddiag,m,n)
+    type(Tensor) function      generate(cdiag,m,n)
+    type(Tensor) function      generate(zdiag,m,n)
+    type(Tensor) function      generate(ldiag,m,n)
+    type(Tensor) function      generate(adiag,m,n)
+    
+    type(Tensor) function      generate(m,n,classType)
+    type(Tensor) function      generate(m,n)
+    
+    class(Tensor)              diagT
+    integer                    idiag,idiagArray(:)
+    real*4                     sdiag,sdiagArray(:)
+    real*8                     ddiag,ddiagArray(:)
+    complex*8                  cdiag,cdiagArray(:)
+    complex*16                 zdiag,zdiagArray(:)
+    logical                    ldiag,ldiagArray(:)
+    character(len=*)           adiag,adiagArray(:)
+    integer                    m,n
+    character(len=*)           classType
+    
+PURPOSE
+	generate a diag Tensor(rank=2). 
+	
+      1.Xdiag where X can be i,s,d,c,z,l and a, will be de diag element of the output Tensor. For example,T=eye(1.,2,3)
+        T is a 2*3 Tensor, with the diag element being 1.
+      2.XdiagArray where X can be i,s,d,c,z,l and a, will be de diag element of the output Tensor. For example,
+        T=eye((/1.,2./),2,3), T is a 2*3 Tensor, with the diag element being 1., 2.
+      3.If input diagT, diagT will be de diag element of the output Tensor. For example,diagT=(/1.,2./)
+        T=eye(diagT,2,3), T is a 2*3 Tensor, with the diag element being 1., 2.
+      4.If there is no input Xdiag, XdiagArray or diagT, it will generate all the elemener of Tensor with 1.
+      5.If input XdiagArray or diagT but no m and n, It will generate a diag Tensor using XdiagArray or diagT as diag element,
+        and the size of output is [size(XdiagArray),size(XdiagArray)]. For example T=eye((/1.,2./)),T is a 2*2 Tensor,
+        with the diag element being 1., 2.
+  classType is the type of Tensor, it can be
+        _________________________________________________________
+        | meanning          |      classType       | intClassType |       
+        |==========================================|==============|
+	     | integer:          |    'integer'         |      1       |
+	     |==========================================|==============|
+	     | real*4:           |    'real'            |              |
+	     |                   |    'real*4'          |      2       |
+	     |                   |    'real(kind=4)'    |              |
+	     |==========================================|==============|
+	     | real*8:           |    'dble'            |              |
+	     |                   |    'real*8'          |      3       |
+	     |                   |    'real(kind=8)'    |              |
+	     |==========================================|==============|
+	     | complex*8:        |    'complex'         |              |
+	     |                   |    'complex*8'       |      4       |
+	     |                   |    'complex(kind=4)' |              |
+	     |==========================================|==============|
+	     | complex*16:       |    'complex*16'      |      5       |
+	     |                   |    'complex(kind=8)' |              |
+	     |==========================================|==============|
+	     | logical:          |    'logical'         |      6       |
+	     |==========================================|==============|
+	     | character(len=*)  |    'character'       |      7       |
+	     |___________________|______________________|______________|  
+	             
+PARAMETERS
+
+   see on the part of PURPOSE
+
+EXAMPLT
+
+---- 1 ----
+  type(Tensor)::diagT,T
+  diagT=(/1.,2./)
+  T=eye(diagT,3,4)
+  call T%print("eye(diagT,3,4)")
+  T=eye(diagT)
+  call T%print("eye(diagT)")
+  T=eye(3,4)
+  call T%print("eye(3,4)")
+
+---- 2 ----
+  type(Tensor)::T
+  call T%setType('real*4')
+  T=eye(3,3)
+  call T%print("eye(3,3) return a integer Tensor, but T is Static, integer change to the Type of T")
+
+
+
+
+
+
+
+

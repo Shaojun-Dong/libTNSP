@@ -1,0 +1,30 @@
+dimag
+   over write dimag in fortran for Tensor. Output the imag part of Tensor.
+      
+SYNOPSIS   
+    type(Tensor) function           dimag(T)
+    
+    type(Tensor)                    T
+    
+PURPOSE
+
+   over write dimag in fortran for Tensor. Output the imag part of Tensor. output in a real*8 Tensor.
+
+PARAMETERS
+   T            - type(Tensor)-
+                input Tensor
+EXAMPLT
+
+  type(Tensor)::T
+  T=generate((/2,2/),(/-10,10/),'integer')
+  call T%print("T is integer Tensor")
+  call TMprint(dimag(T),"dimag for integer Tensor,there is no imag part")
+  T=generate((/2,2/),(/-10,10/),'complex*8')
+  call T%print("T is complex Tensor")
+  call TMprint(dimag(T),"dimag for complex Tensor")
+
+
+
+
+
+

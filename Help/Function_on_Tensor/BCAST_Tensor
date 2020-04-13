@@ -1,0 +1,42 @@
+BCAST_Tensor
+    BCAST Tensor in some CPU to every CPU
+    
+SYNOPSIS 
+  
+    subroutine BCAST_Tensor(Ten1,ID,ierr,MPI_COMM)
+    subroutine BCAST_Tensor(Ten1,ID,ierr)
+    
+    class(Tensor)          Ten1
+    integer                ID,ierr,MPI_COMM
+    
+PURPOSE
+	BCAST Tensor in some CPU to every CPU.
+	
+	  1. BCAST_Tensor(Ten1,ID,ierr): BCAST the Tensor in CPU of ID to every CPU in MPI_COMM_WORLD 
+     2. BCAST_Tensor(Ten1,ID,ierr,MPI_COMM): BCAST the Tensor in CPU of ID to every CPU in MPI_COMM
+      
+     
+     
+PARAMETERS
+	Ten1        - class(Tensor) -
+	            Tensor to be BCAST
+	          
+	ID          -integer-
+	            CPU id
+	          
+	ierr        -integer-
+	            mpi ierr
+	          
+	MPI_COMM   -integer-
+	           MPI_COMM,if no input, it will be de default MPI_COMM_WORLD       
+	        
+
+EXAMPLT
+
+
+   integer::ierr,proID,proNum
+   type(Tensor)::T1,T2
+   call initial_output_cpu_info(proID,proNum,ierr)
+   call sent_Tensor(T1,T2,0,1,ierr)  !T1 in cpu0 sent to cpu2 and store in T2
+   call BCAST_Tensor(T1,0,ierr) 		 !T1 in cpu 0 send to every cpus,store in T1 in other cpus
+   call stop_program()

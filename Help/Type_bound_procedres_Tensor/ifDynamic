@@ -1,0 +1,34 @@
+ifDynamic
+    return a logical value,if the Tensor is Dynamic, return .true. ,else .false.
+    
+SYNOPSIS   
+    
+    logical function ifDynamic()
+    
+PURPOSE
+	return a logical value,if the Tensor is Dynamic, return .true. ,else .false.
+	      
+
+PARAMETERS
+	 
+
+EXAMPLT
+
+  type(Tensor)::T
+  logical::ifDynamic
+  T=(/1,2,3/)
+  call T%print("T is integer")
+  ifDynamic=T%ifDynamic()
+  write(*,*)'ifDynamic',ifDynamic
+  T=(/4.56d0,7.891d0/)
+  call T%print("T is real*8 now")
+  ifDynamic=T%ifDynamic()
+  write(*,*)'ifDynamic',ifDynamic
+  T=(/1,2,3/)
+  call T%print("T is integer,before set Static")
+  call T%Static()
+  ifDynamic=T%ifDynamic()
+  write(*,*)'ifDynamic',ifDynamic
+  T=(/4.56d0,7.891d0/)
+  call T%print("T is Static, can not change its type,the input data change the type of T")
+  

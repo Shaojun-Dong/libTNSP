@@ -1,0 +1,50 @@
+2017.2.24
+
+
+    new function of 
+                    eig(H_phi,s0,num_of_eig)
+                    eig(H_phi,parameter,s0,num_of_eig)
+                    eig(H_phi,parameterArray,s0,num_of_eig)
+                    eig(H_phi,parameterArray,info,s0,num_of_eig)
+    
+    
+    Output the eigen value near s0, and output the eigen vextor
+    
+            H_phi is a outside subroutine  for H*|phi>
+            
+            
+            H_phi parameterArray info are the same as the function for min eigen value
+
+
+
+!******************************************************************************************************************
+
+
+2017.8.7
+
+   use usefull_function ==> 
+                               use Tools
+                               use mpi ! If you use the mpi routine
+                               
+   because the change in Tensor-3.3
+
+
+2018.5.15
+
+   modify the whole code
+   the subroutine of H*phi now is the type-bond procedure of type(eigenvalue), one can use call eigenvalue%set_Hphi(fun) is set the subroutine
+
+   the fun should be look like:
+
+    subroutine fun(parameter,phi)
+      import Tensor
+      type(Tensor)::parameter(:)
+      type(Tensor)::phi
+    end subroutine H_phi_subroutine
+
+2018.5.17
+
+   new function of eigenvalue%set_print_num(num),
+    if num>0, the program will print the runing time every step of num
+
+          

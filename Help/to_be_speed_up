@@ -1,0 +1,37 @@
++ - * / on Tensor with one element
+program aaa
+	use Tensor_complex
+	use GradientMethod
+	use eigen_value
+	implicit none
+	type(Tensor)::A,B,C
+	type(Tensor)::T,T2,T3
+	type(eigenvalue)::eiger
+	real*8::time1,time2,numr
+	integer::i,n
+	n=999999
+	T2=5d0
+	call cpu_time(time1)
+	do i=1,n
+		T=1d0/T2
+	end do
+	call cpu_time(time2)
+	write(*,*)time2-time1
+	
+	call cpu_time(time1)
+	do i=1,n
+		numr=T2
+		T=1d0/numr
+	end do
+	call cpu_time(time2)
+	write(*,*)time2-time1
+	
+	call cpu_time(time1)
+	do i=1,n
+		T=1d0/5.
+	end do
+	call cpu_time(time2)
+	write(*,*)time2-time1
+	stop
+end 
+

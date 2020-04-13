@@ -1,0 +1,45 @@
+printdata
+    print the data of the Tensor as one-dimensional array.
+    
+SYNOPSIS   
+    subroutine printdata()
+    
+    subroutine printdata(realflag)
+    
+    subroutine printdata(realflag,printType)
+    
+    
+    character(len=*)              printType
+    integer                       realpart
+    
+PURPOSE
+	print the data of the Tensor as one-dimensional array.
+
+PARAMETERS
+	realpart      - integer -
+	              Use when the Tensor is type of complex. If realpart=1, print the real part of the data of Tensor.
+	              If realpart=2, print the imag part of the data of Tensor. If realpart=0, print both the real and 
+	              the imag part of the data of Tensor.
+   printType     - character(len=*),optional -
+                 specify the output format
+
+EXAMPLT
+
+---1------
+  type(Tensor)::T
+  T=generate((/2,2/),'real*4') !generate a 2*2 random number Tensor of type real*4
+  call T%print("print and printdata")
+  call T%printdata()
+  
+  
+---2------
+  type(Tensor)::T
+  T=generate((/2,2/),'complex*8') !generate a 2*2 random number Tensor of type real*8
+  call T%print("print and printdata",1,'(F10.3)')
+  call T%printdata(1,'(F10.3)')
+  
+  
+  
+  
+  
+  

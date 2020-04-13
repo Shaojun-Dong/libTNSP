@@ -1,0 +1,53 @@
+Type_bound_procedres_Tensor
+
+    All the function or subroutine in this document is type bound procedres of Tensor.
+    Before using one should intial Tensor. For Example the subroutine "print" in Type_bound_procedres_Tensor
+         
+         call T%print()
+         
+    Where T is type(Tensor).No calling print directly.
+
+
+
+
+Function_on_Tensor
+
+
+   All the function or subroutine in this document can be call directly. For example the function contract
+       
+         ResultT=contrant(T1,T2)
+   
+   where ResultT, T1 and T2 are type(Tensor).
+
+
+other_function
+
+   All the function is not working on Tensor. But it may be useful in coding.
+   
+
+
+operator
+
+   All function in this document are the names of operatiors. For example the "pf"
+      
+      ResultT=T.pf.3
+      
+  where ResultT and T are type(Tensor). One should be careful that the Calculation priority of these operators
+  are lowest. For example
+  
+     ResultT=T1+T2*T3*3-1
+     The order of this code is: 1). 3-1=2
+                                2). T1+T2---->suppose it return a Tensor named T4
+                                3). T4*T3---->suppose it return a Tensor named T5
+                                4). T5*2
+    it is the same as ResultT=(T1+T2)*T3*(3-1). The +-*/ for Tensor is written by user is the lowest level, and is not
+    the ones of fortran. One Should rewrite it as ResultT=( T1+ ( (T2*T3) * 3 ) )-1 . Then the Calculation priority is
+    clear.
+    
+    
+                                
+   The file *.f90 are some test of example on this package. The package will be faster when link with MKL. If it link with lapack and blas,
+it will be faster than fortran original datatype will the Tensor is small,say the total larger than 500. The data of Tensor can replace all
+the data of fortran, however when the data is a scalar not a array, fortran original datatype will be faster.
+    
+    

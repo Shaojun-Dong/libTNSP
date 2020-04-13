@@ -1,0 +1,42 @@
+eigTensor
+  output the eigen value and eigen vecter of a matrix. output a array of type(Tensor) with length=2(or 1 if no 
+  eigenvecter)
+    
+SYNOPSIS   
+
+    type(Tensor) function eig()
+    type(Tensor) function eig(outvex)
+    
+    logical                outvex
+    
+PURPOSE
+
+	output the eigen value and eigen vecter of a matrix. output a array of type(Tensor) with length=2(or 1 if no 
+   eigenvecter). suppose Tarray is type(Tensor)::Tarray(2)
+	
+	    Tarray=T%eig():  output a Only the eigenvalue of T
+	    
+	    Tarray=T%eig(outvex):  if outvex=.false. output Only the eigenvalue of T 
+	                          if outvex=.true. output  the eigenvalue and the eigenvecter of T 
+	                              T=Tarray(2)*eye(Tarray(1))*(.h.Tarray(2))
+	Note: T should be rank-2 Tensor and should be symmetric.
+	                        
+PARAMETERS
+
+   outvex      - logical -
+               if outvex=.false. output Only the eigenvalue of T 
+	            if outvex=.true. output  the eigenvalue and the eigenvecter of T 
+                               
+EXAMPLT
+
+----- 1 --------
+  type(Tensor)::T,eig(2),T2
+  T=generate((/3,3/),'real*4')
+  T=(.H.T)*T
+  eig=T%eig(.true.)
+  call eig(1)%print("eigenvalue")
+  call eig(2)%print("eigenvector")
+  T2=eig(2)*eye(eig(1))*(.h.eig(2))
+  call T2%print('rebuild T',1,'(F12.8)')
+  call T%print("T",'(F12.8)')
+

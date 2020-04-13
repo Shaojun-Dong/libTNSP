@@ -1,0 +1,30 @@
+dble
+   over write dble in fortran for Tensor. Change the Tensor to a real*8 Tensor.
+      
+SYNOPSIS   
+    type(Tensor) function           dble(T)
+    
+    type(Tensor)                    T
+    
+PURPOSE
+
+   over write dble in fortran for Tensor. Change the Tensor to a real*8 Tensor.
+
+PARAMETERS
+   T            - type(Tensor)-
+                input Tensor
+EXAMPLT
+
+  type(Tensor)::T
+  T=generate((/2,2/),(/-10,10/),'integer')
+  call T%print("T is integer Tensor")
+  call TMprint(dble(T),"dble for integer Tensor")
+  T=generate((/2,2/),(/-10,10/),'complex*8')
+  call T%print("T is complex Tensor")
+  call TMprint(dble(T),"dble for complex Tensor")
+
+
+
+
+
+

@@ -1,0 +1,46 @@
+QRroutine
+    QR decompsion of a Tensor.
+    
+SYNOPSIS   
+    subroutine      QRroutine(Q,R)
+    
+    type(Tensor)    Q,R	
+    
+PURPOSE
+	QRroutine decompsion of a Tensor.
+	
+	    call T%QRroutine(Q,R):  rewrite Q and R, they are QRroutine of T. The input T should be a two-dimensional Tensor.
+	                    the relation is T=Q*R.
+	                        
+	                        
+	                        
+PARAMETERS
+
+   Q            - type(Tensor) -
+                output
+                Q of QR decompose of matrix
+   R            - type(Tensor) -
+                output
+                R of QR decompose of matrix
+                                               
+EXAMPLT
+
+----- 1 --------
+  type(Tensor)::T,T2,Q,R
+  T=generate((/2,4/),'real*4')
+  call T%QRroutine(Q,R)
+  call Q%print("Q")
+  call R%print("R")
+  T2=Q*R
+  call T2%print('Q*R')
+  call T%print("T")
+
+  
+
+
+
+
+
+
+
+ 

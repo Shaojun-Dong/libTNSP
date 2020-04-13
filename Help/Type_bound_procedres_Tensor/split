@@ -1,0 +1,55 @@
+split
+    split the leg that has been fuse into one.
+    
+SYNOPSIS   
+    subroutine split(fuseindex,inde)
+    subroutine split()
+    integer                    fuseindex
+    integer                    inde
+    
+PURPOSE
+   split the leg that has been fuse into one. Split the fuseindex index of the Tensor into n(1),n(2)
+   for example a Tensor whose dimension is [2,3,4,5,6],T%fuse(2,4) return a [2,60,6] Tensor. The second
+   leg of this Tensor is made up of three legs, they are [3,4,5]. fuseindex specify the leg to be split.
+   In the example fuseindex=2. And in this leg, it can be split form the first location, that is inde=1
+   split into [3] and [4,5], or form the second location, inde=2, into [3,4] and [5]. If inde is larger
+   than rank ,the function will return no change.
+	
+	If there is no input parameter, all the legs that have been fused will retrun to unfuse. For the example
+	above,T%split() will return back to its oringinal dimension, that is [2,3,4,5,6].
+
+PARAMETERS
+   fuseindex     - integer -
+                 see the PURPOSE
+   inde           - integer -
+                 see the PURPOSE
+
+EXAMPLT
+
+----1------
+  type(Tensor)::T
+  T=generate((/2,3,4,5,6/),'complex*16') !generate a 2*3*4*5 random number Tensor of type complex*16
+  call T%diminfo("dimension before fuse")
+  call T%fuse(2,4)
+  call T%diminfo("dimension after fuse")
+  call T%split(2,1)
+  call T%diminfo("split the second leg on the first location")
+ 
+----2------
+  type(Tensor)::T
+  T=generate((/2,3,4,5,6/),'complex*16') !generate a 2*3*4*5 random number Tensor of type complex*16
+  call T%diminfo("dimension before fuse")
+  call T%fuse(2,4)
+  call T%diminfo("dimension after fuse")
+  call T%split(2,2)
+  call T%diminfo("split the second leg on the second location")
+  
+----3------
+  type(Tensor)::T
+  T=generate((/2,3,4,5,6,2,3,4,5/),'complex*16') 
+  call T%diminfo("dimension before fuse")
+  call T%fuse(2,4)
+  call T%fuse(4,6)
+  call T%diminfo("dimension after fuse")
+  call T%split()
+  call T%diminfo("split all index")

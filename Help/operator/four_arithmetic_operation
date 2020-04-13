@@ -1,0 +1,145 @@
++ - * / for Tensors
+   
+SYNOPSIS
+
+
+  (+) :   T=T1+T2
+          T=T1+xnum
+          T=xnum+T2
+  (+) :   T=T1-T2
+          T=T1-xnum
+          T=xnum-T2
+  (*) :   T=T1*T2
+          T=T1*xnum
+          T=xnum*T2
+  (/) :   T=T1/xnum       
+          T=num/T2
+          T=T1/T2
+  
+  type(Tensor)         T,T1,T2
+
+PURPOSE
+
+   + - * / for Tensors. In xnum, x can be i, s, d, c, z, l and a, stands for integer, real*4, reak*8
+   complex*8, complex*16, logical and chatacter(len=*)
+    (+) :   T=T1+T2: both T1 and T2 should have the same dimension
+            T=T1+xnum: All the element + num
+            T=xnum+T2: num + All the element 
+    (+) :   T=T1-T2 : both T1 and T2 should have the same dimension
+            T=T1-xnum: All the element - num
+            T=xnum-T2: num - All the element 
+    (*) :   T=T1*T2: contract the last leg of T1 with the fitst leg of T2
+            T=T1*xnum: T1 times a number
+            T=xnum*T2: a number times Tensro
+    (/) :   T=T1/xnum
+            T=num/T2 and T=T1/T2 : only use when there is one element in T2,so T2 will regard as a scalar
+  allowing type for (+) as the list below:
+  
+  |      \   T2 or xnum     
+  | T1    \-------
+  |or xnum \Result       
+              ============================================================================================
+              !!  integer   |   real*4   |  real*8    | complex*8  | complex*16 |   logical  | character  |
+  ============!!============|============|============|============|============|============|============|
+  |integer    !!  integer   |  real*4    |  real*8    | complex*8  | complex*16 |   ERROR    | character  |
+  |-----------!!------------|------------|------------|------------|------------|------------|------------|
+  |real*4     !!   real*4   |  real*4    |  real*8    | complex*8  | complex*16 |   ERROR    | character  |
+  |-----------!!------------|------------|------------|------------|------------|------------|------------|
+  |real*8     !!   real*8   |  real*8    |  real*8    | complex*16 | complex*16 |   ERROR    | character  |
+  |-----------!!------------|------------|------------|------------|------------|------------|------------|
+  |complex*8  !! complex*8  | complex*8  | complex*16 | complex*8  | complex*16 |   ERROR    | character  |
+  |-----------!!------------|------------|------------|------------|------------|------------|------------|
+  |complex*16 !! complex*16 | complex*16 | complex*16 | complex*16 | complex*16 | complex*16 | complex*16 |
+  |-----------!!------------|------------|------------|------------|------------|------------|------------|
+  |logical    !!  ERROR     |  ERROR     |  ERROR     |  ERROR     |   ERROR    |  ERROR     | character  |
+  |-----------!!------------|------------|------------|------------|------------|------------|------------|
+  |character  !!  character |  character |  character |  character |  character |  character |  character |
+  ============!!============|============|============|============|============|============|============|
+
+  allowing type for (-) as the list below:
+  
+  |      \   T2 or xnum     
+  | T1    \-------
+  |or xnum \Result        
+              ===================================================================
+              !!  integer   |   real*4   |  real*8    | complex*8  | complex*16 | 
+  ============!!============|============|============|============|============|
+  |integer    !!  integer   |  real*4    |  real*8    | complex*8  | complex*16 | 
+  |-----------!!------------|------------|------------|------------|------------|
+  |real*4     !!   real*4   |  real*4    |  real*8    | complex*8  | complex*16 |
+  |-----------!!------------|------------|------------|------------|------------|
+  |real*8     !!   real*8   |  real*8    |  real*8    | complex*16 | complex*16 | 
+  |-----------!!------------|------------|------------|------------|------------|
+  |complex*8  !! complex*8  | complex*8  | complex*16 | complex*8  | complex*16 | 
+  |-----------!!------------|------------|------------|------------|------------|
+  |complex*16 !! complex*16 | complex*16 | complex*16 | complex*16 | complex*16 | 
+  ============!!============|============|============|============|============|
+
+  allowing type for (*) as the list below:
+  
+  |      \   T2 or xnum     
+  | T1    \-------
+  |or xnum \Result          
+              ===================================================================
+              !!  integer   |   real*4   |  real*8    | complex*8  | complex*16 | 
+  ============!!============|============|============|============|============|
+  |integer    !!  integer   |  real*4    |  real*8    | complex*8  | complex*16 | 
+  |-----------!!------------|------------|------------|------------|------------|
+  |real*4     !!   real*4   |  real*4    |  real*8    | complex*8  | complex*16 |
+  |-----------!!------------|------------|------------|------------|------------|
+  |real*8     !!   real*8   |  real*8    |  real*8    | complex*16 | complex*16 | 
+  |-----------!!------------|------------|------------|------------|------------|
+  |complex*8  !! complex*8  | complex*8  | complex*16 | complex*8  | complex*16 | 
+  |-----------!!------------|------------|------------|------------|------------|
+  |complex*16 !! complex*16 | complex*16 | complex*16 | complex*16 | complex*16 | 
+  ============!!============|============|============|============|============|
+
+  allowing type for (/) as the list below(no rule for T1/T2!!):
+  
+  |      \   T2 or xnum     
+  | T1    \-------
+  |or xnum \Result          
+              ===================================================================
+              !!  integer   |   real*4   |  real*8    | complex*8  | complex*16 | 
+  ============!!============|============|============|============|============|
+  |integer    !!  integer   |  real*4    |  real*8    | complex*8  | complex*16 | 
+  |-----------!!------------|------------|------------|------------|------------|
+  |real*4     !!   real*4   |  real*4    |  real*8    | complex*8  | complex*16 |
+  |-----------!!------------|------------|------------|------------|------------|
+  |real*8     !!   real*8   |  real*8    |  real*8    | complex*16 | complex*16 | 
+  |-----------!!------------|------------|------------|------------|------------|
+  |complex*8  !! complex*8  | complex*8  | complex*16 | complex*8  | complex*16 | 
+  |-----------!!------------|------------|------------|------------|------------|
+  |complex*16 !! complex*16 | complex*16 | complex*16 | complex*16 | complex*16 | 
+  ============!!============|============|============|============|============|
+
+
+
+EXAMPLE
+
+---  (+) ---
+
+  type(Tensor)::iT,aT,T,dT,cT
+  iT=generate((/2,3/),(/-5,5/),'integer')
+  aT=generate((/2,3/),(/5/),'character')
+  T=iT+aT
+  call iT%print("iT")
+  call aT%print("aT")
+  call T%print("T")
+  
+  cT=generate((/2,2/),(/-5,5/),'complex*8')
+  T=cT+Tensor((/1d0,2d0,3d0,4d0/),(/2,2/))
+  call cT%print("cT")
+   call T%print("cT+Tensor((/1d0,2d0,3d0,4d0/),(/2,2/))")
+
+
+---  (-) ---
+
+  type(Tensor)::cT,T
+  
+  cT=generate((/2,2/),(/-5,5/),'complex*8')
+  T=cT-Tensor((/1d0,2d0,3d0,4d0/),(/2,2/))
+  call cT%print("cT")
+   call T%print("cT-Tensor((/1d0,2d0,3d0,4d0/),(/2,2/))")
+
+

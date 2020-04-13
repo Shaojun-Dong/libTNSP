@@ -1,0 +1,29 @@
+fuse
+    fuse some continuous legs into one leg.
+    
+SYNOPSIS   
+    subroutine                 fuse(index1,index2)
+    integer                    index1
+   integer                     index2
+    
+PURPOSE
+	fuse some continuous legs into one leg. Note if there are names in dimension, the name will be no changes.
+	fuse the legs from index1 to index2 into one leg. index1 and index2 are the order of legs. For example there
+	is  a Tensor whose dimension is [2,3,4,5,6],T%fuse(2,4) will result a Tensor whose dimension is [2,60,6], the
+	second, third and firth legs are fuse into one leg. 
+
+PARAMETERS
+   index1        - integer -
+                 specify the legs being fuse, these legs are form index1 to index2
+   index2        - integer -
+                 specify the legs being fuse, these legs are form index1 to index2
+
+EXAMPLT
+
+  type(Tensor)::T
+  T=generate((/2,3,4,5,6/),'complex*16') !generate a 2*3*4*5 random number Tensor of type complex*16
+  call T%diminfo("dimension before fuse")
+  call T%fuse(2,4)
+  call T%diminfo("dimension after fuse")
+  
+ 

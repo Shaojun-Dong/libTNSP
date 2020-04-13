@@ -1,0 +1,22 @@
+outallName
+    return the TensorName or DimensionName or full of Tensor, whoes dimensionName is w
+    
+SYNOPSIS   
+    
+    type(Tensor) function outallName(w)
+    type(Tensor) function outallName(w,typ)
+    
+    
+    character(len=*)       w,typ
+    
+PURPOSE
+	
+    suppose The dimension of Tensor T is ['A.l','B.r','C'l','D'l','E.u'], then
+	
+          Names=T%outallName('l'): ouput a Tensor or character: ['A.l','C'l','D'l']
+          Names=T%outallName('l','Tensor'): ouput a Tensor or character: ['A','C','D']
+	
+
+PARAMETERS
+
+EXAMPLT

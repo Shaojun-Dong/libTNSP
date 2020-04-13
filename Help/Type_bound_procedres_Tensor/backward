@@ -1,0 +1,56 @@
+backward (add Tensor as order in 2016.6.13 to be updata)
+    put a leg(or some legs) to the end of the Tensor.
+    
+SYNOPSIS   
+    subroutine           backward(index)
+    subroutine           backward(indexArray)
+    subroutine           backward(CharIndex)
+    subroutine           backward(CharIndexArray)
+    
+    integer              index,indexArray(:)
+    character(len=*)     CharIndex,CharIndexArray(:)
+    
+PURPOSE
+	put a leg(or some legs) to the end of the Tensor.
+
+PARAMETERS
+   index                - integer -
+                        specify the leg that is to be put to the end of the Tensor
+   indexArray           - integer,array -
+                        specify the legs that is to be put to the end of the Tensor
+   CharIndex            - character -
+                        specify the leg that is to be put to the end of the Tensor
+   CharIndexArray       - character,array -
+                        specify the legs that is to be put to the end of the Tensor
+                        
+EXAMPLT
+
+ ----1------
+  type(Tensor)::T
+  T=generate((/2,3,4,5,6/),'complex*16') !generate a 2*3*4*5 random number Tensor of type complex*16
+  call T%setName(1,'Tensor.1st')
+  call T%setName(2,'Tensor.2nd')
+  call T%setName(3,'Tensor.3rd')
+  call T%setName(4,'Tensor.4th')
+  call T%setName(5,'Tensor.5th')
+  call T%diminfo('dimension before backward(2)')
+  call T%backward(2)
+  call T%diminfo('dimension after backward(2),going to backward(3,4)')
+  call T%backward((/3,4/))
+  call T%diminfo('dimension after backward(3,4),going to backward(Tensor.5st)')
+  call T%backward('Tensor.5th')
+  call T%diminfo('dimension after backward(Tensor.5st),going to backward(Tensor.4th,Tensor.2nd)')
+  call T%backward((/'Tensor.4th','Tensor.2nd'/))
+  call T%diminfo('dimension after backward(Tensor.4th,Tensor.2nd)')
+  
+ ----2------
+  type(Tensor)::T
+  T=generate((/2,3,4,5,6/),'complex*16') !generate a 2*3*4*5 random number Tensor of type complex*16
+  call T%setName(1,'A.1st')
+  call T%setName(2,'B.2nd')
+  call T%setName(3,'B.3rd')
+  call T%setName(4,'A.4th')
+  call T%setName(5,'B.5th')
+  call T%diminfo('dimension before T=T.pb."B"')
+  T=T.pb.'B'
+  call T%diminfo('dimension after T=T.pb."B"')

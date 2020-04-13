@@ -1,0 +1,57 @@
+TMprint
+    print the data of the Tensor(no dimension data).
+    
+SYNOPSIS   
+    subroutine TMprint(T,)
+    
+    subroutine TMprint(T,,words,printType)
+    
+    subroutine TMprint(T,,realpart,printType)
+    
+    subroutine TMprint(T,,words,realpart,printType)
+    
+    class(Tensor)              T
+    character(len=*)           words
+    character(len=*),optional  printType
+    integer                    realpart
+    
+PURPOSE
+	print the data of the Tensor(no dimension data). The same function as T%print()
+
+PARAMETERS
+
+   T             - class(Tensor)-
+                 The Tensor to be print
+                 
+	realpart      - integer -
+	              Use when the Tensor is type of complex. If realpart=1, print the real part of the data of Tensor.
+	              If realpart=2, print the imag part of the data of Tensor. If realpart=0, print both the real and 
+	              the imag part of the data of Tensor.
+	              
+   printType     - character(len=*),optional -
+                 specify the output format
+                 
+   words         - character(len=*),optional -
+                 the character print befor print the data of Tensor
+
+EXAMPLT
+
+---1------
+  type(Tensor)::T
+  T=generate((/2,2/),'real*4') !generate a 2*2 random number Tensor of type real*4
+  call TMprint(T)
+  
+---2------
+  type(Tensor)::T
+  T=generate((/2,2/),'real*4') !generate a 2*2 random number Tensor of type real*4
+  call TMprint(T,"print the data of Tensor")
+  
+---3------
+  type(Tensor)::T
+  T=generate((/2,2/),'real*4') !generate a 2*2 random number Tensor of type real*4
+  call TMprint(T,"print the data of Tensor",'(F10.3)')
+ 
+---4------
+  type(Tensor)::T
+  T=generate((/2,2/),'complex*8') !generate a 2*2 random number Tensor of type real*8
+  call TMprint(T,"print the real part of Tensor",1,'(F10.3)')

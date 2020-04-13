@@ -1,0 +1,87 @@
+(+) and (.equ.) for character
+   We overwrite the (+) for character with integer, real and complex.
+(.equ.) : judge if the character is the same, the input will delete the blank
+SYNOPSIS
+
+   Result=xNum
+   Result=xNum+char1
+   Result=char1+xNum
+   Result=char1+char2
+   
+   same=char1.equ.char2
+   
+   character(len=*)   Result,char1,char2
+   logical            same
+   
+   xNum: x can be i,s,d,c,z,l,which stand for integer,real*4,real*8,complex*8,complex*16 and logical
+
+
+PURPOSE
+
+   1.As the Tensor Name is character, so fuse two character or with a integer will be useful.
+   
+   2.The max length of character in the memery is 500 by default, one can modify it by calling set_max_len_of_cha(maxlen)
+   
+   3.call writemess(char1) can output the character without blank, if the char1 contains xNum, the default form of output
+     is:
+         1). real*4 or complex*8  : '(F25.8)'
+         2). real*8 or complex*16 : '(F50.16)'
+         3). integer              : '(I0)'
+         4). logical              :.true. or .false.
+     one can change the form of integer,real or complex by calling set_writing_type(form,type), for example set the real*8 as '(F10*8)',
+     call set_writing_type('(F10.8)','real*8'). It can change the form in (+) as well.
+     
+   4. The blank at the end of a character will not store throngh (+) or (=).
+   
+   5. same=char1.equ.char2: the blank in the beginnong and the end of char1,char2 will be kill.
+   
+EXAMPLE
+
+
+
+-----  ----
+   character(len=100)::char1,char2,char3
+   integer::inum
+   real*4::snum
+   real*8::dnum
+   complex*8::cnum
+   complex*16::znum
+   logical::lnum
+   char1='ab'
+   char2=' cd'
+   char3=char1+char2!there is blank at the beginning of char2
+   call writemess(char3)!writemess will not print all blank at the end of the char3
+   write(*,*)char3
+   
+   char1='ab '
+   char2='cd'
+   char3=char1+char2!there is blank at the end of char1,which will not store throgh (+)
+   call writemess(char3)
+   write(*,*)char3
+   
+   dnum=1.2345678998765413d0
+   snum=1.123456789
+   char1='ab'+dnum
+   char2='cd'+snum
+   call writemess(char1+','+char2)
+   call set_writing_type('(F5.3)','real*4')
+   call set_writing_type('(F10.6)','real*8')
+   char1='ab'+dnum!the form has changed
+   char2='cd'+snum!the form has changed
+   call writemess(char1+','+char2)
+   call writemess(' '+dcmplx(1,1)+','+char1+','+cmplx(1,-1))
+   call writemess(dcmplx(1,1)+','+char1+','+cmplx(1,-1))
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,96 @@
+SVDroutine
+    SVD of a Tensor.
+    
+SYNOPSIS   
+    subroutine      SVDroutine(U,s,V)	
+    subroutine      SVDroutine(U,s,V,UName,VName)
+    subroutine      SVDroutine(U,s,V,CutOff)	
+    subroutine      SVDroutine(U,s,V,UName,VName,CutOff)
+    
+    integer                        CutOff
+    character(len=*)               UName,VName
+    type(Tensor)                   U,s,V
+    
+PURPOSE
+	SVD of a Tensor. suppose T,U,s,V  are type(Tensor),
+	
+	    call T%SVDroutine(U,s,V):  The input T should be a two-dimensional Tensor. s is
+	                               the singular value vecter. the relation is T=U*eye(s)*V.
+	                        
+       call T%SVDroutine(U,s,V,CutOff): T should be a two-dimensional Tensor. s is the singular
+	                                     value vecter. the relation is T=U*eye(s)*V.  CutOff is
+	                                     the max dimension of s. the dimension of U is [U%dim(1),
+	                                     CutOff]. s is a vecter if [CutOff], V is [CutOff,V%dim(2)].
+	                        
+       call T%SVDroutine(U,s,V,UName,VName): T can be any shpae but should contain two different 
+                                              TensorName. UName,VName specify the two dimension to 
+                                              be a matrix to do the SVD. 
+ 
+       call T%SVDroutine(U,s,V,UName,VName,CutOff): T can be any shpae but should contain two different
+                                                    TensorName. UName,VName specify the two dimension 
+                                                    to be a matrix to do the SVD. CutOff  is  the  max
+                                                    dimension of s.
+	                        
+	example for call T%SVDroutine(U,s,V,UName,VName), suppose the dimension of T is [2,3,4,5,6,7] and the name are ['A.L','B.R','A'R','A'U','B.L','A.D'].
+	In the Name 'A' and 'B' in front of the mark '.' use to track the dimension from different Tensor and the characters after to track it
+	in one Tensor from other diemnsion, call T%SVDroutine(U,s,V,'A','B') will permute all the dimension form 'A', that is 'A.L','A.D','A.R','A.U', to
+	the beginning and 'B' to the end. after so on output, the diemnsion of U is [2,4,5,7,18] with name ['A.L','A'R','A'U','A.D','0.5'] where
+	the last diemnsion of '0.5' is the new dimension from SVD. s is a Tensor with no name [18,18]. V is [18,3,6] with name ['0.1','B.R','B.L']
+	                        
+PARAMETERS
+   CutOff        - integer -
+                 Specify the max dimension of singular value maxtix. 
+                 
+   UName         - character(len=*) -
+                 The name of U matrix or the dimension which to be the first dimension of Tensor to from the matrix to
+                 do the svd
+                 
+   UName         - character(len=*) -
+                 The name of V matrix or the dimension which to be the second dimension of Tensor to from the matrix to
+                 do the svd
+                 
+   U             -type(Tensor)-
+                 output
+                 Left SVD matrix. 
+  
+   s             -type(Tensor)-
+                 output
+                 Left singular value matrix.
+   V             -type(Tensor)-
+                 output
+                 Right SVD matrix.
+                               
+EXAMPLT
+
+----- 1 no namne--------
+  type(Tensor)::T,U,s,V,T2
+  T=generate((/3,3/),'real*4')
+  call T%SVDroutine(U,s,V)
+  call U%print("U")
+  call s%print("s")
+  call V%print("V")
+  T2=U*eye(s)*V
+  call T2%print('U*eye(s)*V')
+  call T%print("T")
+
+----- 2 namne --------
+  type(Tensor)::T,U,s,V
+  T=generate((/2,3,4,5,6/),'real*4')
+  call T%setName(1,'A.L')
+  call T%setName(2,'B.L')
+  call T%setName(3,'A.U')
+  call T%setName(4,'A.R')
+  call T%setName(5,'B.R')
+  call T%SVDroutine(U,s,V,'A','B')
+  call U%diminfo("dimension of U")
+  call s%diminfo("dimension of s")
+  call V%diminfo("dimension of V")
+  
+
+
+
+
+
+
+
+ 

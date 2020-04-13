@@ -1,0 +1,42 @@
+.pi.
+   Short for (Put the first leg to Ith)
+   put the first leg to the ith of the dimension
+   
+
+
+SYNOPSIS
+
+   Result=T.pi.ith
+   Result=T.pi.chara
+   
+   
+   integer             ith
+   character(len=*)    chara
+
+NOTE:
+
+
+     1. Result=T.pi.ith: put the first leg to ith dimension of the Tensor. For example the dimension of
+        T is [2,3,4,5], the dimension of T.pi.3 will be [3,4,2,5]. The 1st leg become the 3rd leg.
+     2. Result=T.pi.chara: put the first leg to location of chara of the Tensor. For example the dimension of
+        T is [2,3,4,5] and names are ['A.a','B.a','A.b','B.b'], the dimension of T.pi.'A.b' will be [3,4,2,5],
+        and the name will be ['B.a','A.b','A.a','B.b']. The first leg is following the leg of 'A.b'
+
+
+EXAMPLE
+
+----1------
+  type(Tensor)::T,ResultT
+  T=generate((/2,3,4,5,6/),'complex*16') !generate a 2*3*4*5 random number Tensor of type complex*16
+  call T%setName(1,'Tensor.1st')
+  call T%setName(2,'Tensor.2nd')
+  call T%setName(3,'Tensor.3rd')
+  call T%setName(4,'Tensor.4th')
+  call T%setName(5,'Tensor.5th')
+  call T%diminfo('dimension before T.pi.2')
+  ResultT=T.pi.2
+  call ResultT%diminfo('dimension after ResultT=T.pi.2,going to ResultT=ResultT.pi."Tensor.3rh"')
+  ResultT=ResultT.pi.'Tensor.3rd'
+  call ResultT%diminfo('dimension after ResultT=ResultT.pi."Tensor.3rh"')
+  
+  

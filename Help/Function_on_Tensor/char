@@ -1,0 +1,34 @@
+cmplx
+   over write char in fortran for Tensor. Change the Tensor to a character Tensor.
+      
+SYNOPSIS   
+    type(Tensor) function           char(T)
+    
+    type(Tensor)                    T
+    
+PURPOSE
+
+   over write char in fortran for Tensor. Change the Tensor to a character Tensor.
+
+PARAMETERS
+   T            - type(Tensor)-
+                input Tensor 
+                
+EXAMPLT
+
+
+----- 1-----
+  type(Tensor)::T
+  T=generate((/2,2/),(/-10,10/),'integer')
+  call T%print("T is integer Tensor")
+  call TMprint(char(T),"char for integer Tensor")
+  T=generate((/2,2/),(/-10,10/),'complex*8')
+  call T%print("T is complex*8 Tensor")
+  call TMprint(char(T),"char for  complex*8")
+  
+
+
+
+
+
+

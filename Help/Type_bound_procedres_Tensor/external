@@ -1,0 +1,242 @@
+external
+    One can write his own funciton on the data of Tensor through it.
+    
+SYNOPSIS   
+    
+   subroutine  external(routine)
+   subroutine  external(routine,Ten)
+   subroutine  external(routine,dimen)
+   subroutine  external(routine,dimen,Ten)
+   subroutine  external(routine,dimen,Ten,Dimen2)
+   
+   type(Tensor)           Ten
+   type(Dimension)        dimen
+   type(Dimension)        Dimen2
+   external subroutine    routine
+    
+PURPOSE
+	One can write his own funciton on the data of Tensor through it. One can not modify the
+	Data in Tensor because they are private. But one can modify them through this function.
+	routine is a soubroutine that act on the data of Tensors.
+	
+	the routine should be look like
+	   if use call T%external(routine), the routine should be
+	        
+	          subroutine routine(Tdata,lenT)
+               integer::lenT
+               complex*16::Tdata(lenT) ! here can not be Tdata(:) or Tdata(*)
+                                       ! the type of complex*16 should be the same as Tensor
+            !****************************************
+            !    write the code act on Tdata here
+            !***************************************
+               return
+            end subroutine
+
+	   if use call T%external(routine,T2), the routine should be
+	        
+	          subroutine routine(Tdata,lenT,T2data,lenT2)
+               integer::lenT,lenT2
+               complex*16::Tdata(lenT)  ! here can not be Tdata(:) or Tdata(*)
+                                        ! the type of complex*16 should be the same as Tensor
+               complex*16::T2data(lenT2)! here can not be T2data(:) or T2data(*)
+                                        ! the type of complex*16 should be the same as T2
+            !****************************************
+            !    write the code act on Tdata here
+            !***************************************
+               return
+            end subroutine       
+            
+      if use call T%external(routine,dimen), the routine should be
+	        
+	          subroutine routine(Tdata,lenT,dimen)
+               integer::lenT
+               complex*16::Tdata(lenT)  ! here can not be Tdata(:) or Tdata(*)
+                                        ! the type of complex*16 should be the same as Tensor
+               type(Dimension)::dimen
+            !****************************************
+            !    write the code act on Tdata here
+            !***************************************
+               return
+            end subroutine     
+
+      if use call T%external(routine,dimen,Ten), the routine should be
+	        
+	          subroutine routine(Tdata,lenT,dimen,T2data,lenT2)
+               integer::lenT
+               complex*16::Tdata(lenT)  ! here can not be Tdata(:) or Tdata(*)
+                                        ! the type of complex*16 should be the same as Tensor
+               type(Dimension)::dimen
+            !****************************************
+            !    write the code act on Tdata here
+            !***************************************
+               return
+            end subroutine    
+                     
+      if use call T%external(routine,dimen,Ten,dimen2), the routine should be
+	        
+	          subroutine routine(Tdata,lenT,dimen,T2data,lenT2,dimen2)
+               integer::lenT
+               complex*16::Tdata(lenT)  ! here can not be Tdata(:) or Tdata(*)
+                                        ! the type of complex*16 should be the same as Tensor
+               type(Dimension)::dimen,dimen2
+            !****************************************
+            !    write the code act on Tdata here
+            !***************************************
+               return
+            end subroutine     
+            
+	See more on example
+	   
+	note T and T2 may be modified!
+	      
+
+PARAMETERS
+	 
+	 routine    -subroutine, external-
+	             routine is a external subroutine that act on Tensor and change the Tensor
+	 Ten        - type(Tensor)
+	             it can be use as input parameter  or output container.
+	 dimen        - type(dimension)
+	             it can be use as input parameter  or output container, or specify the dimension of the Tensor
+EXAMPLT
+
+----1-----
+!**************************************
+!  example to solve AX=B,using external
+!***************************************
+module test_example
+	use Tensor_complex
+	implicit none
+	integer,private,save::Na,Nb
+contains
+	 type(Tensor) function invTensor(A,B) result(X)
+		type(Tensor),intent(in)::A,B
+		type(Tensor)::A1
+		A1=A!SGESV will replace A
+		X=B
+		call A1%external(invTensor_subroutine,X)
+		return
+	end function
+	subroutine invTensor_subroutine(Tdata,lenT,Bdata,lenB)! the data is one dimension
+		integer::lenT,lenB
+		real*4::Tdata(lenT),Bdata(lenB)
+		integer,allocatable::IPIV(:)
+		integer::INFO
+		allocate(IPIV(Na))
+		call SGESV(Na,Nb,Tdata,Na,IPIV,Bdata,Na,INFO)	
+		return
+	end subroutine
+	subroutine setdimension(Na_,Nb_)
+		integer,intent(in)::Na_,Nb_
+		Na=Na_
+		Nb=Nb_
+		return
+	end subroutine
+end module
+
+program aaa
+	use test_example
+	use Tensor_complex
+	implicit none
+	type(Tensor)::A,B,X,X2
+	A=generate((/3,3/),'real*4')
+	B=generate((/3,3/),'real*4')
+	call setdimension(3,3)
+	X=invTensor(A,B)
+	call X%print("result form external")
+	X2=A%linequ(B)
+	call X2%print("result form Tensor package")
+	stop
+end 
+
+
+
+----2-----
+!**************************************
+!  example to A=|X|
+!***************************************
+module test_example
+	use Tensor_complex
+	implicit none
+contains
+	subroutine absvalue(Tdata,lenT)! the data is one dimension
+		integer::lenT
+		real*4::Tdata(lenT)
+		integer::i
+		do i=1,lenT
+			if(Tdata(i).le.0)Tdata(i)=-Tdata(i)
+		end do
+		return
+	end subroutine
+end module
+program aaa
+	use test_example
+	use Tensor_complex
+	implicit none
+	type(Tensor)::A
+	A=generate((/3,3/),(/-1,1/),'real*4')
+	call A%print("Before calling external")
+	call A%external(absvalue)
+	call A%print("After calling external")
+	stop
+end 
+
+
+
+
+
+
+----3-----
+!**************************************
+!  example to solve AX=B,using external, another example
+!***************************************
+module test_example
+	use Tensor_complex
+	implicit none
+contains
+	 type(Tensor) function invTensor(A,B) result(X)
+		type(Tensor),intent(in)::A,B
+		type(Tensor)::A1
+		type(Dimension)::Dimen
+		A1=A!SGESV will replace A
+		X=B
+		Dimen=A%dimension()
+		call A1%external(invTensor_subroutine, Dimen, X )!The dimension of A will be input parameter
+		return
+	end function
+	subroutine invTensor_subroutine(Tdata,lenT,dimen1,Bdata,lenB)! the data is one dimension
+		integer::lenT,lenB
+		real*4::Tdata(lenT),Bdata(lenB)
+		type(Dimension)::dimen1
+		integer,allocatable::IPIV(:)
+		integer::INFO,Na,Nb
+		Na=dimen1%dim(1)
+		Nb=dimen1%dim(2)
+		allocate(IPIV(Na))
+		call SGESV(Na,Nb,Tdata,Na,IPIV,Bdata,Na,INFO)	
+		return
+	end subroutine
+end module
+
+program aaa
+	use test_example
+	use Tensor_complex
+	implicit none
+	type(Tensor)::A,B,X,X2
+	A=generate((/3,3/),'real*4')
+	B=generate((/3,3/),'real*4')
+	X=invTensor(A,B)
+	call X%print("result form external")
+	X2=A%linequ(B)
+	call X2%print("result form Tensor package")
+	stop
+end 
+
+
+
+
+
+
+
+
+  

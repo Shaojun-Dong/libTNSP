@@ -1,0 +1,22 @@
+i, ii, si, di, ci, zi, li, ai
+   short for "Index", i,s,d,c,z,l,a stand for integer,real*4,real*8,complex*8,complex*16,laogical,character.
+   output the element of a Tensor.
+
+
+SYNOPSIS   
+
+   xnum=T.i.ith
+   xnum=T.i.dimension
+   xnum=T.yi.ith
+   xnum=T.yi.dimension
+   array=.yi.T
+   
+   x,y can be  i,s,d,c,z,l,a standing for integer,real*4,real*8,complex*8,complex*16,laogical,character.
+   type(Tensor)      T
+   integer           ith,dimension(:)
+
+
+NOTE
+
+    it is the same as T%i(ith),T%i(dimension),T%xi(ith) and T%xi(dimension). see the example in 
+    type bound procedres of i

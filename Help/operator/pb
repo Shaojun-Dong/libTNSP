@@ -1,0 +1,74 @@
+.pb. (add Tensor as order in 2016.6.13 to be updata)
+   short for "Put Backward"
+   put one leg or some legs to the end of the Tensor.
+
+
+SYNOPSIS
+
+   Result=T.pb.ith
+   Result=T.pb.intVec
+   Result=T.pb.chara
+   Result=T.pb.charVec
+   
+   
+   integer             ith,ithVec(:)
+   character(len=*)    chara,charVec(:)
+   
+NOTE:
+
+
+     1. Result=T.pb.ith: put the ith leg to the end of the Tensor. For example the dimension of
+        T is [2,3,4,5], the dimension of T.pb.2 will be [2,4,5,3].
+        
+     2. Result=T.pb.intVec: put the legs to the end of the Tensor,intVec specify the legs. For example the dimension of
+        T is [2,3,4,5], the dimension of T.pb.(/3,1/) will be [3,5,4,2].
+    
+     3. Result=T.pb.chara: 
+         1) if chara is full dimension name, which mean it contains the mark '.' in the name such as 'A.a' or 'Tensor.dimension'
+            and so on, T.pb.chara is that put the leg with name chara to the end of the Tensor.For example the dimension of
+            T is [2,3,4,5] and name are ['A.a','B.a','A.b','B.b'], the dimension of T.pb.'B.a' will be [2,4,5,3] and the name will
+            be ['A.a','A.b','B.b','B.a'].
+         2) if chara is Tensor name,  which mean it dose not contain the mark '.' in the name such as 'A' or 'Tensor' and so on.
+            T.pb.chara is that put all the legs with the Tensor name called chara to the end of the Tensor. For example,
+            the dimension of T is [2,3,4,5] and name are ['A.a','B.a','A.b','B.b'], the dimension of T.pb.'A' will be [3,5,2,4]
+            and the name will be ['B.a','B.b','A.a','A.b'].
+            
+     4. Result=T.pb.charVec: put the legs to the end of the Tensor,charVec specify the legs, it should be full name of dimension,
+        which mean it contains the mark '.' in the name such as 'A.a' or 'Tensor.dimension' and so on, For example the dimension of T
+        is [2,3,4,5] and name are ['A.a','B.a','A.b','B.b'], the dimension of T.pb.(/'A.b','A.a'/) will be [3,5,4,2] and the name
+        will be ['B.a','B.b','A.b','A.a'].
+        
+    5. (.pb.) is the same as T%backward()
+    
+EXAMPLE
+
+
+----1------
+  type(Tensor)::T,ResultT
+  T=generate((/2,3,4,5,6/),'complex*16') !generate a 2*3*4*5 random number Tensor of type complex*16
+  call T%setName(1,'Tensor.1st')
+  call T%setName(2,'Tensor.2nd')
+  call T%setName(3,'Tensor.3rd')
+  call T%setName(4,'Tensor.4th')
+  call T%setName(5,'Tensor.5th')
+  call T%diminfo('dimension before T.pb.2')
+  ResultT=T.pb.2
+  call ResultT%diminfo('dimension after ResultT=T.pb.2,going to ResultT=ResultT.pb.(/3,4/)')
+  ResultT=ResultT.pb.(/3,4/)
+  call ResultT%diminfo('dimension after ResultT=ResultT.pb.(/3,4/),going to ResultT=ResultT.pb."Tensor.5th"')
+  ResultT=ResultT.pb.'Tensor.5th'
+  call ResultT%diminfo('dimension after ResultT=ResultT.pb."Tensor.5th",going to ResultT=ResultT.pb.(/"Tensor.4th","Tensor.2nd"/)')
+  ResultT=ResultT.pb.(/'Tensor.4th','Tensor.2nd'/)
+  call ResultT%diminfo('dimension after ResultT=ResultT.pb.(/"Tensor.4th","Tensor.2nd"/))')
+  
+ ----2------
+  type(Tensor)::T
+  T=generate((/2,3,4,5,6/),'complex*16') !generate a 2*3*4*5 random number Tensor of type complex*16
+  call T%setName(1,'A.1st')
+  call T%setName(2,'B.2nd')
+  call T%setName(3,'B.3rd')
+  call T%setName(4,'A.4th')
+  call T%setName(5,'B.5th')
+  call T%diminfo('dimension before forward("B")')
+  call T%forward('B')
+  call T%diminfo('dimension after forward("B")')

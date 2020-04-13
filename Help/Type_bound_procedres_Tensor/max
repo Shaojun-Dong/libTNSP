@@ -1,0 +1,189 @@
+max, imax, smax, dmax, cmax, zmax
+    There function can output the max element of a Tensor.
+    
+SYNOPSIS   
+
+    type(Tensor)      function     max()
+    integer           function     imax()
+    real(kin=4)       function     smax()
+    real(kin=8)       function     dmax()
+    complex(kind=4)   function     cmax()
+    complex(kind=8)   function     zmax()
+    
+    type(Tensor)      function     max(char)
+    integer           function     imax(char)
+    real(kin=4)       function     smax(char)
+    real(kin=8)       function     dmax(char)
+    complex(kind=4)   function     cmax(char)
+    complex(kind=8)   function     zmax(char)
+    
+    character(len=4)              char
+    
+    
+    
+PURPOSE
+
+   There function can output the max element of a Tensor. xmax() output the 
+   element of index of the Tensor,where x stand for "i","s","d","c",z", which 
+   means that the output is integer,real(kin=4),real(kind=4),complex(kind=4),
+   complex(kind=8).
+	
+	    imax=T%imax(), output the max element as a integer.
+	    smax=T%smax(), output the max element as a real(kin=4).
+	    dmax=T%dmax(), output the max element as a real(kind=4).
+	    cmax=T%cmax(), output the max real part element as a complex(kind=4).
+	    zmax=T%zmax(), output the max real part element as a complex(kind=8).
+	    max=T%max()  , output the max real part element as a Tensor
+	    
+	if intput char, where char can be:
+	   'maxa': max abs (if output a Tensor,real*4,real*8 or integer)
+		'mina': min abs (if output a Tensor,real*4,real*8 or integer)
+		'maxr': max real
+		'minr': min real
+		'maxi': 0(not complex data) or max imag
+		'mini': 0(not complex data) or min imag
+	    
+
+PARAMETERS
+ 
+   char     - character(len=4)  -
+            'maxa': max or max abs (complex data)
+				'mina': min or min abs (complex data)
+				'maxr': max real
+				'minr': min real
+				'maxi': 0(not complex data) or max imag
+				'mini': 0(not complex data) or min imag
+
+EXAMPLT
+
+----- integer Tensor -----
+  type(Tensor)::T
+  integer::i_max
+  real*4::s_max
+  real*8::d_max
+  complex*8::c_max
+  complex*16::z_max
+  T=generate((/3,3/),(/-10,10/),'integer') !generate a  random number Tensor of integer
+  call T%print("integer Tensor")
+  i_max=T%imax()! output the max element as a integer.
+  s_max=T%smax()! output the max element as a real(kin=4).
+  d_max=T%dmax()! output the max element as a real(kind=4).
+  c_max=T%cmax()! output the max element as a complex(kind=4).
+  z_max=T%zmax()! output the max element as a complex(kind=8).
+  write(*,*)"i_max:",i_max
+  write(*,*)"s_max:",s_max
+  write(*,*)"d_max:",d_max
+  write(*,*)"c_max:",c_max
+  write(*,*)"z_max:",z_max
+  
+  
+  
+----- real*4 Tensor -----
+  type(Tensor)::T
+  integer::i_max
+  real*4::s_max
+  real*8::d_max
+  complex*8::c_max
+  complex*16::z_max
+  T=generate((/3,3/),(/-10,10/),'real*4') !generate a  random number Tensor of integer
+  call T%print("real*4 Tensor")
+  i_max=T%imax()! output the max element as a integer.
+  s_max=T%smax()! output the max element as a real(kin=4).
+  d_max=T%dmax()! output the max element as a real(kind=4).
+  c_max=T%cmax()! output the max element as a complex(kind=4).
+  z_max=T%zmax()! output the max element as a complex(kind=8).
+  write(*,*)"i_max:",i_max
+  write(*,*)"s_max:",s_max
+  write(*,*)"d_max:",d_max
+  write(*,*)"c_max:",c_max
+  write(*,*)"z_max:",z_max
+  
+
+----- real*8 Tensor -----
+ type(Tensor)::T
+  integer::i_max
+  real*4::s_max
+  real*8::d_max
+  complex*8::c_max
+  complex*16::z_max
+  T=generate((/3,3/),(/-10,10/),'real*8 ') !generate a  random number Tensor of integer
+  call T%print("real*8  Tensor")
+  i_max=T%imax()! output the max element as a integer.
+  s_max=T%smax()! output the max element as a real(kin=4).
+  d_max=T%dmax()! output the max element as a real(kind=4).
+  c_max=T%cmax()! output the max element as a complex(kind=4).
+  z_max=T%zmax()! output the max element as a complex(kind=8).
+  write(*,*)"i_max:",i_max
+  write(*,*)"s_max:",s_max
+  write(*,*)"d_max:",d_max
+  write(*,*)"c_max:",c_max
+  write(*,*)"z_max:",z_max
+
+----- complex*8 Tensor -----
+  type(Tensor)::T
+  integer::i_max
+  real*4::s_max
+  real*8::d_max
+  complex*8::c_max
+  complex*16::z_max
+  T=generate((/3,3/),(/-10,10/),'complex*8') !generate a  random number Tensor of integer
+  call T%print("complex*8 Tensor")
+  i_max=T%imax()! output the max element as a integer.
+  s_max=T%smax()! output the max element as a real(kin=4).
+  d_max=T%dmax()! output the max element as a real(kind=4).
+  c_max=T%cmax()! output the max element as a complex(kind=4).
+  z_max=T%zmax()! output the max element as a complex(kind=8).
+  write(*,*)"i_max:",i_max
+  write(*,*)"s_max:",s_max
+  write(*,*)"d_max:",d_max
+  write(*,*)"c_max:",c_max
+  write(*,*)"z_max:",z_max
+  
+  i_max=T%imax('maxi')! output the max element as a integer.
+  s_max=T%smax('maxi')! output the max element as a real(kin=4).
+  d_max=T%dmax('maxi')! output the max element as a real(kind=4).
+  c_max=T%cmax('maxi')! output the max element as a complex(kind=4).
+  z_max=T%zmax('maxi')! output the max element as a complex(kind=8).
+  write(*,*)"i_max('maxi'):",i_max
+  write(*,*)"s_max('maxi'):",s_max
+  write(*,*)"d_max('maxi'):",d_max
+  write(*,*)"c_max('maxi'):",c_max
+  write(*,*)"z_max('maxi'):",z_max
+
+----- complex*16 Tensor -----
+  type(Tensor)::T
+  integer::i_max
+  real*4::s_max
+  real*8::d_max
+  complex*8::c_max
+  complex*16::z_max
+  T=generate((/3,3/),(/-10,10/),'complex*16') !generate a  random number Tensor of integer
+  call T%print("complex*16 Tensor")
+  i_max=T%imax()! output the max element as a integer.
+  s_max=T%smax()! output the max element as a real(kin=4).
+  d_max=T%dmax()! output the max element as a real(kind=4).
+  c_max=T%cmax()! output the max element as a complex(kind=4).
+  z_max=T%zmax()! output the max element as a complex(kind=8).
+  write(*,*)"i_max:",i_max
+  write(*,*)"s_max:",s_max
+  write(*,*)"d_max:",d_max
+  write(*,*)"c_max:",c_max
+  write(*,*)"z_max:",z_max
+ 
+ 
+  i_max=T%imax('maxa')! output the max element as a integer.
+  s_max=T%smax('maxa')! output the max element as a real(kin=4).
+  d_max=T%dmax('maxa')! output the max element as a real(kind=4).
+  c_max=T%cmax('maxa')! output the max element as a complex(kind=4).
+  z_max=T%zmax('maxa')! output the max element as a complex(kind=8).
+  write(*,*)"i_max('maxa'):",i_max
+  write(*,*)"s_max('maxa'):",s_max
+  write(*,*)"d_max('maxa'):",d_max
+  write(*,*)"c_max('maxa'):",c_max
+  write(*,*)"z_max('maxa'):",z_max
+
+ 
+ 
+ 
+ 
+

@@ -1,0 +1,80 @@
+forward   (add Tensor as order in 2016.6.13 to be updata)
+    permute a leg(or some legs) to the beginning of the Tensor.
+    
+SYNOPSIS   
+    subroutine           forward(index)
+    subroutine           forward(indexArray)
+    subroutine           forward(CharIndex)
+    subroutine           forward(CharIndexArray)
+    
+    integer              index,indexArray(:)
+    character(len=*)     CharIndex,CharIndexArray(:)
+    
+PURPOSE
+	permute a leg(or some legs) to the beginning of the Tensor.
+	
+	  1. call T%forward(index): put the ith leg to the beginning of the Tensor. For example the dimension of
+        T is [2,3,4,5], the dimension of T%forward(2) will be [3,2,4,5].
+        
+     2. call T%forward(indexArray): put the legs to the beginning of the Tensor,intVec specify the legs. For example the dimension of
+        T is [2,3,4,5], the dimension of T%forward((/2,5/)) will be [3,5,2,4].
+    
+     3. call T%forward(CharIndex): 
+         1) if CharIndex is full dimension name, which mean it contains the mark '.' in the name such as 'A.a' or 'Tensor.dimension'
+            and so on, T%forward(CharIndex) is that put the leg with name CharIndex to the beginning of the Tensor.For example the dimension of
+            T is [2,3,4,5] and name are ['A.a','B.a','A.b','B.b'], the dimension of T%forward('B.a') will be [3,2,4,5] and the name will
+            be ['B.a','A.a','A.b','B.b'].
+         2) if CharIndex is Tensor name,  which mean it dose not contain the mark '.' in the name such as 'A' or 'Tensor' and so on.
+            T%forward(CharIndex) is that put all the legs with the Tensor name called CharIndex to the beginning of the Tensor. For example,
+            the dimension of T is [2,3,4,5] and name are ['A.a','B.a','A.b','B.b'], the dimension of T%forward('B') will be [3,5,2,4]
+            and the name will be ['B.a','B.b','A.a','A.b'].
+            
+     4. call T%forward(CharIndexArray): put the legs to the beginning of the Tensor,CharIndexArray specify the legs, it should be full name of dimension,
+        which mean it contains the mark '.' in the name such as 'A.a' or 'Tensor.dimension' and so on, For example the dimension of T
+        is [2,3,4,5] and name are ['A.a','B.a','A.b','B.b'], the dimension of T%forward((/'B.b','B.a'/)) will be [5,3,2,4] and the name
+        will be ['B.b','B.a','A.a','A.b'].
+
+PARAMETERS
+   index                - integer -
+                        specify the leg that is to be put to the beginning of the Tensor
+   indexArray           - integer,array -
+                        specify the legs that is to be put to the beginning of the Tensor
+   CharIndex            - character -
+                        specify the leg that is to be put to the beginning of the Tensor
+   CharIndexArray       - character,array -
+                        specify the legs that is to be put to the beginning of the Tensor
+                        
+EXAMPLT
+
+
+----1------
+  type(Tensor)::T
+  T=generate((/2,3,4,5,6/),'complex*16') !generate a 2*3*4*5 random number Tensor of type complex*16
+  call T%setName(1,'Tensor.1st')
+  call T%setName(2,'Tensor.2nd')
+  call T%setName(3,'Tensor.3rd')
+  call T%setName(4,'Tensor.4th')
+  call T%setName(5,'Tensor.5th')
+  call T%diminfo('dimension before forward(2)')
+  call T%forward(2)
+  call T%diminfo('dimension after forward(2),going to forward(3,4)')
+  call T%forward((/3,4/))
+  call T%diminfo('dimension after forward(3,4),going to forward(Tensor.5st)')
+  call T%forward('Tensor.5th')
+  call T%diminfo('dimension after forward(Tensor.5st),going to forward(Tensor.4th,Tensor.2nd)')
+  call T%forward((/'Tensor.4th','Tensor.2nd'/))
+  call T%diminfo('dimension after forward(Tensor.4th,Tensor.2nd)')
+  
+ ----2------
+  type(Tensor)::T
+  T=generate((/2,3,4,5,6/),'complex*16') !generate a 2*3*4*5 random number Tensor of type complex*16
+  call T%setName(1,'A.1st')
+  call T%setName(2,'B.2nd')
+  call T%setName(3,'B.3rd')
+  call T%setName(4,'A.4th')
+  call T%setName(5,'B.5th')
+  call T%diminfo('dimension before forward("B")')
+  call T%forward('B')
+  call T%diminfo('dimension after forward("B")')
+
+

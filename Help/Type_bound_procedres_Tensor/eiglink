@@ -1,0 +1,45 @@
+eiglink
+  output the eigen value and eigen vecter of a matrix. output a type(Tensorlink) with length=2(or 1 if no 
+  eigenvecter)
+    
+SYNOPSIS   
+
+    type(Tensor) function eiglink()
+    type(Tensor) function eiglink(outvex)
+    
+    logical                outvex
+    
+PURPOSE
+
+	output the eigen value and eigen vecter of a matrix. output a type(Tensorlink) with length=2(or 1 if no 
+   eigenvecter). suppose link is type(Tensorlink)::link
+	
+	    link=T%eiglink():  output a Only the eigenvalue of T
+	    
+	    link=T%eiglink(outvex):  if outvex=.false. output Only the eigenvalue of T 
+	                           if outvex=.true. output  the eigenvalue and the eigenvecter of T 
+	                              T=link%i(2)*eye(link%i(1))*(.h.link%i(2))
+	Note: T should be rank-2 Tensor and should be symmetric.
+	                        
+PARAMETERS
+
+   outvex      - logical -
+               if outvex=.false. output Only the eigenvalue of T 
+	            if outvex=.true. output  the eigenvalue and the eigenvecter of T 
+                               
+EXAMPLT
+
+----- 1 --------
+  type(Tensor)::T,T2,val,vec
+  type(Tensorlink)::eig
+  T=generate((/3,3/),'real*4')
+  T=(.H.T)*T
+  eig=T%eig(.true.)
+  val=eig.i.1
+  vec=eig.i.2
+  call val%print("eigenvalue")
+  call vec%print("eigenvector")
+  T2=vec*eye(val)*(.h.vec)
+  call T2%print('rebuild T',1,'(F12.8)')
+  call T%print("T",'(F12.8)')
+

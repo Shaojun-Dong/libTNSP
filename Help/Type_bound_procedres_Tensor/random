@@ -1,0 +1,107 @@
+random
+    Set random numbers to a allocated Tensor.
+    
+SYNOPSIS   
+    subroutine      random()
+    subroutine      random(intregion)
+    subroutine      random(realregion)
+    subroutine      random(dbleregion)
+    
+    integer         intregion(:)
+    real*4          realregion(:)
+    real*8          dbleregion(:)
+    
+PURPOSE
+	Set random numbers to a allocated Tensor. Before calling, memery for the Tensor
+	should be allocate. If there is no input parameter and the Tensor is character,
+	it will generate all the elemener of Tensor with random character of length=1.
+	If there is no input parameter but the Tensor is not of character, the region
+	will set to [0,1] by default. 
+
+PARAMETERS
+
+	intregion        - integer,array -
+	                 if the Tensor is integer,real*4,real*8,complex*8,complex*16,then
+	                 
+	                       intregion is a array with length 2. It specify the region of
+	                       the random number. intregion(1)<random number<intregion(2)
+	                
+	                if the Tensor is character,then
+	                       intregion is a array with length 1. It specify the length of
+	                       the character. The subroutine generate random character with
+	                       length intregion(1)
+	               
+	               if the Tensor is logical, intregion is useless
+	                       
+   realregion       - real*4,array -
+	                 if the Tensor is integer,real*4,real*8,complex*8,complex*16,then
+	                 
+	                       intregion is a array with length 2. It specify the region of
+	                       the random number. intregion(1)<random number<intregion(2)
+	                
+	                 if the Tensor is character,then
+	                       intregion is a array with length 1. It specify the length of
+	                       the character. The subroutine generate random character with
+	                       length intregion(1)
+	               
+	                if the Tensor is logical, intregion is useless
+	               
+	 dbleregion      - real*8,array -
+	                 if the Tensor is integer,real*4,real*8,complex*8,complex*16,then
+	                 
+	                       intregion is a array with length 2. It specify the region of
+	                       the random number. intregion(1)<random number<intregion(2)
+	                
+	                if the Tensor is character,then
+	                       intregion is a array with length 1. It specify the length of
+	                       the character. The subroutine generate random character with
+	                       length intregion(1)
+	               
+	                if the Tensor is logical, intregion is useless              
+
+EXAMPLT
+
+  type(Tensor)::T
+  call T%allocate((/2,2/),'integer') ! allocate memery for integer Tensor
+  call T%random((/-10,10/)) 
+  call T%print("random integer Tensor (-10,10)")
+  
+  call T%deallocate()
+  call T%allocate((/2,2/),'real*4') ! allocate memery for integer Tensor
+  call T%random((/-10,10/))  !T%random((/-10.,10./)) is OK and it is the same
+  call T%print("random real*4 integer Tensor (-10,10)")
+ 
+  call T%deallocate()
+  call T%allocate((/2,2/),'real*8') ! allocate memery for integer Tensor
+  call T%random()  
+  call T%print("random real*8 integer Tensor")
+  
+  call T%deallocate()
+  call T%allocate((/2,2/),'complex*8') ! allocate memery for integer Tensor
+  call T%random((/-1.5,2.5/))  
+  call T%print("random complex*8 integer Tensor")
+  
+  call T%deallocate()
+  call T%allocate((/2,2/),'complex*16') ! allocate memery for integer Tensor
+  call T%random((/-1.5d0,2.5d0/))  !T%random((/-1.5,2.5/)) is OK and it is the same
+  call T%print("random complex*16 integer Tensor")
+
+  call T%deallocate()
+  call T%allocate((/2,2/),'logical') ! allocate memery for integer Tensor
+  call T%random()  
+  call T%print("random logical Tensor")
+  
+  call T%deallocate()
+  call T%allocate((/2,2/),'character') ! allocate memery for integer Tensor
+  call T%random((/5/))  
+  call T%print("random character(len=5) Tensor")
+
+
+
+
+
+
+
+
+
+

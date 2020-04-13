@@ -1,0 +1,41 @@
+.pbi.
+   put the last leg to the ith of the dimension
+   
+
+
+SYNOPSIS
+
+   Result=T.pbi.ith
+   Result=T.pbi.chara
+   
+   
+   integer             ith
+   character(len=*)    chara
+
+NOTE:
+
+
+     1. Result=T.pbi.ith: put the last leg to ith dimension of the Tensor. For example the dimension of
+        T is [2,3,4,5], the dimension of T.pbi.2 will be [2,5,3,4]. The last leg become the 2nd leg.
+     2. Result=T.pbi.chara: put the last leg to location of chara of the Tensor. For example the dimension of
+        T is [2,3,4,5] and names are ['A.a','B.a','A.b','B.b'], the dimension of T.pbi.'B.a' will be [2,5,3,4],
+        and the name will be ['A.a','B.b','B.a','A.b']. The last leg is in front of the leg of 'B.a'
+
+
+EXAMPLE
+
+----1------
+  type(Tensor)::T,ResultT
+  T=generate((/2,3,4,5,6/),'complex*16') !generate a 2*3*4*5 random number Tensor of type complex*16
+  call T%setName(1,'Tensor.1st')
+  call T%setName(2,'Tensor.2nd')
+  call T%setName(3,'Tensor.3rd')
+  call T%setName(4,'Tensor.4th')
+  call T%setName(5,'Tensor.5th')
+  call T%diminfo('dimension before T.pbi.2')
+  ResultT=T.pbi.2
+  call ResultT%diminfo('dimension after ResultT=T.pbi.2,going to ResultT=ResultT.pbi."Tensor.3rh"')
+  ResultT=ResultT.pbi.'Tensor.3rd'
+  call ResultT%diminfo('dimension after ResultT=ResultT.pbi."Tensor.3rh"')
+  
+  

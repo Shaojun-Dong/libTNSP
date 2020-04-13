@@ -1,0 +1,37 @@
+norm2, inorm2, snorm2, dnorm2, cnorm2, znorm2
+    There function can output the norm2 of a Tensor. norm2 is <phi|phi>. 
+    
+SYNOPSIS   
+
+    complex(kind=8)   function     norm2()
+    integer           function     inorm2()
+    real(kin=4)       function     snorm2()
+    real(kin=8)       function     dnorm2()
+    complex(kind=4)   function     cnorm2()
+    complex(kind=8)   function     znorm2()
+    
+    
+    
+PURPOSE
+	There function can output the norm2 of a Tensor. norm2 is sqrt(<phi|phi>)=sqrt(sum_{i}a_{i}^2).
+	The Tensor will regard as one-dimensional Tensor no metter what the rank is.
+	xnorm2, where x stands for
+	     i: integer
+	     s: real*4
+	     d: real*8
+	     c: complex*8
+	     z: complex*16
+
+PARAMETERS
+
+EXAMPLT
+
+ 
+  type(Tensor):: T,TT
+  real*4::norm2
+  T=generate((/10/),'real*4')
+  norm2=T%snorm2()
+  TT=T*T
+  call TT%print('norm2='+norm2)
+  
+

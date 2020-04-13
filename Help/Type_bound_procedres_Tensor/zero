@@ -1,0 +1,23 @@
+zero
+    Set all the element of Tensor to 0.
+    
+SYNOPSIS   
+    subroutine zero()
+     
+    
+PURPOSE
+	Set all the element of Tensor to 0. When calling, the Tensor should be 
+	allocated. If can use for integer, real*4, real*8, complex*8, complex*16
+	character.
+
+PARAMETERS
+
+EXAMPLT
+
+  type(Tensor)::T
+  T=generate((/2,3,4/),'integer') 
+  call T%zero()
+  call T%print()
+  
+  
+  

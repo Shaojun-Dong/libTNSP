@@ -1,0 +1,63 @@
+subTensor
+    output a subTensor,use for rank=2 Tensor only
+    
+SYNOPSIS   
+    type(Tensor) function      subTensor(inde)	
+    
+    integer                    inde(:)
+    
+PURPOSE
+	output a subTensor,use for rank=2 Tensor only. The subTensor can be a row or a col
+	of the Tensor. It can be any part of the Tensor accoding to operation
+
+PARAMETERS
+   inde         - integer,array -
+                 It can be the value below
+                 
+                    1. inde=(/-1,inde_min,inde_max/), output some row
+                                   :output Tensor(inde_min:inde_max,:)
+                                   
+                    2. inde=(/-2,inde_min,inde_max/), output some col
+                                   :output Tensor(:,inde_min:inde_max)
+                                   
+                    3. inde=(/-3,inde_min,inde_max/), output some col,Tensor will regard as one-dimension
+                                   :output Tensor(inde_min:inde_max)                                   
+                                   
+                    4. inde=(/-1,inde_row/)         , output a row  
+                                   :output the inde_row row of Tensor
+                                   
+                    5. inde=(/-2,inde_col/)        , output a col   
+                                   :output the inde_col col of Tensor
+                                   
+                    6. inde=(/inde1_min,inde1_max,inde2_min,inde2_max/)
+                                   :output Tensor(inde1_min:inde1_max,inde2_min:inde2_max)
+                
+                where inde_min, inde_max, inde_row, inde_col, inde1_min, inde1_max, 
+                inde2_min, inde2_max are integer. If the first element in inde is less
+                then 0, it can only be -1,output row or be -2 output col
+EXAMPLT
+
+  type(Tensor)::T,subT
+  T=(/1,2,3,4,5,6,7,8,9/)
+  call T%resetdim((/3,3/))
+  call T%print("T")
+  subT=T%subTensor((/-1,2/))
+  call subT%print("second row of T")
+  subT=T%subTensor((/-1,2,3/))
+  call subT%print("2 to 3 row of T")
+  subT=T%subTensor((/-2,2/))
+  call subT%print("second col of T")
+  subT=T%subTensor((/-2,2,3/))
+  call subT%print("2 to 3 col of T")
+  subT=T%subTensor((/2,3,2,3/))
+  call subT%print("subTensor of T")
+ 
+
+
+
+
+
+
+
+
+ 

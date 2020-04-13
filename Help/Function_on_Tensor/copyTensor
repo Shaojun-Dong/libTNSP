@@ -1,0 +1,37 @@
+copyTensor
+   copyTensor to a array integer,real,complex and so on.
+
+
+SYNOPSIS   
+
+    subroutine copyTensor(xdMat,T)
+    
+    type(Tensor)     T
+    xdMat(*):
+       1). x can be i,s,d,c,z,l,a, standing for integer,real*4,real*8,complex*8,complex*16,logical,character.
+           it specify the type of xdMat.
+       2). d can be 1,2,3,4, which specify the dimension of array
+       3). xdMat should be a allocatable array of dimension the same as the rank of T
+
+
+PURPOSE       
+
+
+    1. set the data of the Tensor to a array, the input type xdMat can be any, the type Tensor will change to 
+       the type of xdMat. But the dimension of which should be the same as the rank of T.
+    2. The routine will allocate memery for xdMat
+
+
+EXAMPLE
+
+
+---1---
+   type(Tensor)::T
+   integer,allocatable::idata(:,:)
+   integer::i,j
+   T=generate((/2,3/),(/1,20/)'real*8')
+   call copyTensor(idata,T) !T is real*8, the data will change to integer
+   call T%print("T")
+   do i=1,size(idata,1)
+      write(*,*)(idata(i,j),j=1,size(idata,2))
+   end do

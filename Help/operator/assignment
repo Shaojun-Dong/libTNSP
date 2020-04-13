@@ -1,0 +1,29 @@
+=
+
+below are the valid assignment
+
+
+   T=XDvalue
+   XDvalue=T
+   Tarray=Tensorlink
+   Tensorlink=Tarray
+   T=Tarray
+
+
+
+    type(Tensor)        T,Tarray(:)
+    type(Tensorlink)     Tensorlink
+    
+    XDvalue is a array,
+        1) X can be i,s,d,c,z,l and a, standing for integer,real*4,real*8,complex*8,complex*16,laogical,character.
+           It specify the type of XDvalue
+        2) D can be 0,1,2,3,4, specifying the dimension of XDvalue. X=0 means that it is a scalar.
+
+
+NOTE
+
+     1. T=X0value : T will be a Tensor with only one element.
+     2. X0value=T : Only use when the totalData of T is 1. Set the data of T to a scalar.
+     3. T=XDvalue : D!=0. The dimension of T will be the shape of XDvalue
+     4. XDvalue=T : D!=0. The shape of XDvalue should be the same as the dimension of T
+     5. T=Tarray  : All the data in array of Tarray will store to a Tensor

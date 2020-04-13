@@ -1,0 +1,27 @@
+read
+    read the infomation of the Tensor from external file, the file output by calling T%writeinfo()
+    
+SYNOPSIS   
+    
+    subroutine read(uni)
+    
+    
+    integer                    uni
+    
+PURPOSE
+	read the infomation of the Tensor from external file, the file output by calling T%writeinfo()
+
+PARAMETERS
+   uni           - integer -
+	              print on a external file, specify the unit of the file pointer
+
+EXAMPLT
+
+  T=generate((/2,2,3,2/),'complex*16')
+	open(unit=120,file='testoutput',STATUS='REPLACE',POSITION='APPEND')
+	call T%writeinfo(120)
+	close(120)
+	open(unit=120,file='testoutput',STATUS='old')
+	call T2%read(120)
+	call T2%info()
+ 

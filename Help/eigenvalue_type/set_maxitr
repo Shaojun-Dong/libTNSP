@@ -1,0 +1,40 @@
+set_maxitr
+	reset the parameter of set_maxitr in eigenvalue.The default parameter in eigenvalue are
+      maxitr=300
+		ncv=-1
+		maxnvc=100
+		tol=0
+    if ncv<0, the number of lonzcos vector will calculate by cpu:ncv=min((2+num_of_eig+n)/2,eiger%maxnvc),
+    where n is the size of the eigenvalue problem.
+    
+SYNOPSIS
+
+    surbroutine set_maxitr(maxitr)
+    
+    integer           maxitr
+    
+PURPOSE
+
+   reset the parameter of maxitr in eigenvalue, these values are used be arpack.
+
+PARAMETERS
+ 
+                 
+   maxitr        - integer -
+                 maximum number of Arnoldi update iterations allowed
+                 
+                                                  
+
+EXAMPLT
+
+
+----- 1 --------
+  type(Tensor)::T,eig(2)
+  type(eigenvalue)::eiger
+  
+  T=generate((/4,4/),'real*4')
+  T=(.H.T)*T
+  call eiger%set_maxitr(300)
+  eig=eiger%eig(T,'LR',1)
+  call eig(1)%print("largest real part eigenvalue")
+  eig=T%eig()

@@ -1,0 +1,37 @@
+outTensorName 
+    return the Tensor name of ith dimension
+    
+SYNOPSIS   
+    
+    CHARACTER(len=len_of_Name) function outTensorName(ith)
+    CHARACTER(len=len_of_Name) function outTensorName(w)
+    CHARACTER(len=len_of_Name) function outTensorName(w,ty)
+    integer       ith
+    character     w,ty
+    
+PURPOSE
+	return the Tensor name of ith dimension, or all the Tensor Name of the dimension
+	
+	  T%outTensorName('l')
+	  if The Dimension of T is ['A.q,'B.l',C.t'], then the output is 'B.l'
+	  T%outTensorName('l','Tensor')
+	  if The Dimension of T is ['A.q,'B.l',C.t'], then the output is 'B'
+
+PARAMETERS
+	ith     - integer -
+	        specify the dimension to output
+	w     - character -
+	        output the TensorName, whose dimensionName is w
+EXAMPLT
+
+  type(Tensor)::T
+  character(len=10)::outname,outnameArray(3)
+  T=generate((/2,3,4/),'real*4') !generate a 2*3*4 random number Tensor of type real*4
+  call T%setName(1,'A.one')! set a name to the first dimension of Tensor
+  call T%setName(2,'B.a')! set a name to the second dimension of Tensor
+  call T%setName(3,'aaa.test')! set a name to the thord dimension of Tensor
+  outname=T%outTensorName(3) !outname is 'aaa'
+  write(*,*)outname
+  outnameArray=T%outTensorName()
+  write(*,*)outnameArray
+  

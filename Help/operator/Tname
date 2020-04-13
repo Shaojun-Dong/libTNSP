@@ -1,0 +1,40 @@
+.Tname.
+   Short for Tensor Name
+   output Tensor name of dimension.
+
+SYNOPSIS
+   
+   char=T.Tname.ith
+   charArray=.Tname.T
+
+
+   character(len=*)      char,charArray(:)
+   integer               ith
+   type(Tensor)          T
+
+NOTE
+
+   1. char=T.Tname.ith: output the ith dimension's Tensor name. For example the dimension of T is 
+      [2,3,4,5] and name are ['A.a','B.a','A.b','B.b'], char=T.Tname.2, then char='B'
+   2. charArray=.Tname.T : output all the names of dimenison. The length of charArray should larger
+       than or equal to the rank of T. For example the dimension of T is  [2,3,4,5]
+       and name are ['A.a','B.a','A.b','B.b'], charArray=.Tname.T, then charArray=
+       ['A','B','A','B']
+   3. It is the same as T%outTensorName(ith) T%outTensorName( )
+
+
+
+EXAMPLE
+
+
+
+  type(Tensor)::T
+  character(len=10)::outname,outnameArray(3)
+  T=generate((/2,3,4/),'real*4') !generate a 2*3*4 random number Tensor of type real*4
+  call T%setName(1,'A.one')! set a name to the first dimension of Tensor
+  call T%setName(2,'B.a')! set a name to the second dimension of Tensor
+  call T%setName(3,'aaa.test')! set a name to the thord dimension of Tensor
+  outname=T.Tname.3 !outname is 'aaa'
+  write(*,*)outname
+  outnameArray=.Tname.T
+  write(*,*)outnameArray

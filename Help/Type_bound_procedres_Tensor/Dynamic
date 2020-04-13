@@ -1,0 +1,32 @@
+Dynamic
+    Set the Tensor as a Dynamic Tensor.
+    
+SYNOPSIS   
+    
+    subroutine Dynamic()
+    
+PURPOSE
+	Set the Tensor as a Dynamic Tensor. If the Tensor is a Dynamic, it can change its type
+	accoding to the program. If not, can not change it type. For example, suppose T is a 
+	Tensor of integer, T=(/1.1,2.3/), the result will be that the element store in T is
+	[1,2] because T is integer. But if T is a Dynamic Tensor, after the code T will change
+	its type to real*4 and then store the real*4 data.
+	      
+
+PARAMETERS
+	 
+
+EXAMPLT
+
+  type(Tensor)::T
+  call T%setType('integer')
+  T=(/1,2,3/)
+  call T%print("T is integer")
+  
+  T=(/4.56,7.891/)
+  call T%print("T is integer,the real*4 data change to integer")
+  
+  call T%Dynamic()
+  T=(/4.56,7.891/)
+  call T%print("T change its type to real*4")
+  

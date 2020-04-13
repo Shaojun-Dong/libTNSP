@@ -1,0 +1,1234 @@
+2016.5.22
+		make the name of the Type bound procedres in Dimension.f90 be the same as that in Tensor.f90
+	 		fuse , split in type(dimension)
+	 		
+	 		
+	 		
+2016.5.23
+		add some  Type bound procedres  to type(dimension), they are
+		     %dim()
+		     %outName()
+		     %outTensorName()
+		     %restDim()
+		add some operator to type(dimension), they are
+		     .fuse.
+		     .split.
+		     .dim.
+		     .subdim.
+		     .iname.
+		     .iiname.
+		     .Tname.
+
+
+
+2016.5.25
+		modify the function of dimension.f90
+			.fuse.  if input is a empty dimension, output a empty dimension
+			%fuse   if input is a empty dimension, do nothing
+		modify the function of Tensor.f90
+			.fuse.  if input is a empty Tensor, output a empty Tensor
+			%fuse   if input is a empty Tensor, do nothing
+
+
+
+2016.5.28
+      modify the code in Tensor.f90:
+      
+				if(.not.(if_original_dim(T1_%TenDim).and.if_original_dim(T2_%TenDim))) then
+						write(*,*)"ERROR in Tenproduct"
+						write(*,*)"stop"
+						call error_stop()
+				end if
+      All the permutation suppose the Tensor that is not original form, this code is useless
+      Howere if contract using name, these lines are uesful
+
+
+2016.5.31
+		 modify the code in Tensor.f90:
+		 		1.Delete the %sub
+		 		2.pasteTensor is a subroutine not a function
+		 		3.addRow and AddCol is a subroutine not a function
+		 		4. (.Rpaste.) (.CPaste.) is a operator use as pasteTensor
+		 		5. (.addRow.) (.AddCol.) is a operator use as AddRow and AddCol
+		 		
+		 		
+		 		
+
+
+
+
+2016.6.11
+      Define all the parameter and other common data at the beginning of function.f90
+
+
+
+
+2016.6.12
+		 The Type bound procedres in Tensor, SVD  change to  SVDTensor
+		 inv change to invTensor
+		 eig change to eigTensor
+
+
+2016.6.13
+		(.p.) (.pf.) (.pb.) suppose the Tensor to specify the new order
+		%forward() %permute() %backward() suppose the Tensor to specify the new order
+		The Tensor use as input parameter that specify new order can be integer Tensor or character Tensor
+		
+
+
+2016.6.15
+		SVD will out put error log in ./_SVD_ERROR_LOG.err if there is error
+		 	
+
+
+2016.6.15
+		New operator of .kron. that support the direct product for any rank Tensor. see more in help/operator/korn
+
+
+2016.7.1
+		ERROR output in contracting Tensor. If one of or both of the input Tensors are empty, then report error and error stop
+
+
+
+
+2016.7.11
+     Update %invTensor with:
+            A=B%invTensor(RCOND):
+            if B^{-1} may not exit,input RCOND, it is class(*)
+				perform SVD on B, Only keep  singular values S(i) <= RCOND*S(1) 
+				if RCONDM<0 keep the S(i)>0
+
+2016.7.14
+     Updata the error log of SVD, if the simgle value of the output is NAN, than output error log in ./_SVD_ERROR_LOG.err and stop
+
+
+2016.7.16
+       Updata the perfomace of LQ QR decomposion, but can not find the subroutine of  CORGQR or ZORGQR. The performance of complex
+    and complex*16 is unchange.
+    
+      Fix bug in send of BCAST Tensor when Using MPI with mpi_comm_split:
+         call sent_Tensor(T1,T2,ID1,ID2,ierr,MPI_COMM_T1)
+         if there is no ID1 or ID2 in MPI_COMM_T1, return
+      
+      
+
+2016.7.21
+      Speed up A*B when there is only one element in A or B. Tensor.f90 TData.f90
+      
+      
+2016.9.23
+     Speed up A*B by 
+     
+     
+         newD=D1.sub.1
+			do i=2,rank1-1
+				newD=newD+(D1.sub.i)
+			end do
+			
+    modify as
+			newD=D1.sub.[1,rank1-1]
+
+
+2016.9.24
+	sopport the function below in %setValue
+		Tdata(i1:i2)=a(i1':i2') a is a Tensor or array  --- modify_Some_Data1_*
+		Tdata(i1:i2,j1:j2)=a(i1':i2',j1':j2') a is a Tensor or array  --- modify_Some_Data2_*
+
+2016.10.30
+    speed up the assignment of Tensor T1=T2, if the totalData less than LAPACK_LENGTH, Do no use lapack
+    speed up the T1*T2, if the totalData less than LAPACK_LENGTH, Do no use lapack
+
+
+2016.11.8
+   Add subroute of Tensor  T%sort
+   
+   
+2016.11.24
+	Add the subroutine call T%pointer(p), output p will pointer to the Tdata, one can modify the private data through this subroutine
+	if T is of type character,  the pointer should be character(len=max_len_of_char_in_TData),pointer::p(:),p2(:,:)
+
+
+2016.11.25
+   Set the default value of random seed as 0
+   
+   
+2016.11.26
+    Add one more new data type named type(Parameter)
+
+
+
+2016.11.28
+    add check_same_name_flag in function.f90
+    if check_same_name_flag=.true.  the program will check every dimension, the name in the dimension cannot be the same!
+    if check_same_name_flag=.false. Do not check
+    
+    
+    change the type(Para) ==>  type(List)  , this one sound better
+
+2016.11.29
+    add function enlargerTensor(ith,newD,randomscal) and subroutine T%enlarger(ith,newD,randomscal)
+                 enlargerTensor(newDArray,randomscal) and subroutine T%enlarger(newDArrayrandomscal)
+    enlarger the dimension of the Tensor, the newelement will set to a random number
+
+
+
+
+2016.12.2
+    modify T%pointer(p,[i1,i2]), it can pointer to the sub_element of the Tensor, it support p(:),p(:,:),p(:,:,:)
+
+
+
+2016.12.3
+    call T%diminfo() will print the data to the log
+    modfy the error message of fTensor, it will output to the log
+    
+    New function of FindOrder, is the same as NameOrder but if the function can not find the name, error stop
+    
+    speed up the (*) of two type(SymTensor) By rewrite SGEMM
+    
+    speed up the (*) of two type(fTensor) by calling subroutine
+
+
+2016.12.4
+    New subroutine of killLeg,  T%killLeg(2),T%killLeg('A.b'),T%killLeg(),T%killLeg(2,'kill'),T%killLeg('A.b','kill')
+    
+        T%killLeg():  delete all the leg whose dimension is 1. example dimension of T is [2,1,1,1,1,2], output [2,2]
+        T%killLeg(2): delete all the leg whose dimension is 1, except the 2rd leg. example dimension of T is [2,1,1,1,1,2], output [2,1,2]
+        T%killLeg('A.b'): delete all the leg whose dimension is 1, except the one whose name is 'A.b'
+        T%killLeg(2,'kill') delete the 2rd leg, if its dimension is 1
+        T%killLeg(2,'kill') delete the leg whose name is 'A.b', if its dimension is 1
+
+
+
+2016.12.10
+    Add new function of SymTensor  
+                  T%inorm()
+                  T%snorm()
+                  T%dnorm()
+                  T%cnorm()
+                  T%znorm()
+                  T%inorm2()
+                  T%snorm2()
+                  T%dnorm2()
+                  T%cnorm2()
+                  T%znorm2()
+                  
+                  
+2016.12.15
+     The name of the module Tensor_complex change as Tensor_type
+
+
+
+
+2016.12.26
+     fix bug of Tensor/integer: T/i
+        old code:
+                1. i---> 1/i, change as real*4   -----> this make cause error
+                2. T---> T *(1/i)
+        new code
+                1. i---> 1/i, change as real*8
+                2. T---> T *(1/i)
+
+
+
+
+2016.12.28
+     New funciton of SymTensor:
+                   T%sum
+                   T%isum
+                   T%ssum
+                   T%dsum
+                   T%csum
+                   T%zsum
+
+
+2016.12.29
+     New fucntion of SVD:
+          suppose the Name of T is ['A.1','A.2','A.3','B.1','B.2','C.1']
+             SVD=T%SVDTensor(['B.1','B.2']) : 'B.1','B.2' will be row and other will be col and do the SVD
+             SVD=T%SVDTensor(['B.1','B.2'],'c') 'B.1','B.2' will be col and other will be row and do the SVD, 'c' can be 'r' and specify row
+             SVD=T%SVDTensor(['B.1','B.2'],['A.1','A.2','A.3','C.1'])
+             call T%SVDTensor(U,s,V,['B.1','B.2'])
+             call T%SVDTensor(U,s,V,['B.1','B.2'],'c')
+             call T%SVDTensor(U,s,V,['B.1','B.2'],['A.1','A.2','A.3','C.1']) 
+
+2016.12.31
+     new subroutine of set_output_MPI_log('notOverWrite') or set_output_MPI_log()
+     use after seting log for the program, and every cpus will write out the messages to its own log file
+
+
+2017.1.13
+     new function of T%subTensor
+       A=T%subTensor(3,1,.true.)    : output subTensor of the 3th leg, the 1st dimension, and keep the leg
+       A=T%subTensor(3,1)           : output subTensor of the 3th leg, the 1st dimension, and do not keep the leg
+       A=T%subTensor('A.3',2,.true.): output subTensor of the leg whose name is 'A.3', the 3nd dimension, and keep the leg
+       A=T%subTensor('A.3',2)       : output subTensor of the leg whose name is 'A.3', the 3nd dimension, and do not keep the leg
+       A=T%subTensor(3,[1,2])       : output subTensor of the 3th leg, the 1st to 2nd dimension.
+       A=T%subTensor('A.3',[2,3])   : output subTensor of the leg whose name is 'A.3', the 2nd to 3rd dimension.
+      NOTE: can not work on the rank-1 Tensor
+    
+     new function of QR:(to be test more )
+            suppose the Name of T is ['A.1','A.2','A.3','B.1','B.2','C.1']
+             QR=T%QRTensor(['B.1','B.2']) : 'B.1','B.2' will be row and other will be col and do the QR
+             QR=T%QRTensor(['B.1','B.2'],'c') 'B.1','B.2' will be col and other will be row and do the QR, 'c' can be 'r' and specify row
+             QR=T%QRTensor(['B.1','B.2'],['A.1','A.2','A.3','C.1'])
+             call T%QRTensor(U,s,V,['B.1','B.2'])
+             call T%QRTensor(U,s,V,['B.1','B.2'],'c')
+             call T%QRTensor(U,s,V,['B.1','B.2'],['A.1','A.2','A.3','C.1']) 
+     
+     
+     new function of LQ:(to be test more)
+            suppose the Name of T is ['A.1','A.2','A.3','B.1','B.2','C.1']
+             LQ=T%LQTensor(['B.1','B.2']) : 'B.1','B.2' will be row and other will be col and do the LQ
+             LQ=T%LQTensor(['B.1','B.2'],'c') 'B.1','B.2' will be col and other will be row and do the LQ, 'c' can be 'r' and specify row
+             LQ=T%LQTensor(['B.1','B.2'],['A.1','A.2','A.3','C.1'])
+             call T%LQTensor(U,s,V,['B.1','B.2'])
+             call T%LQTensor(U,s,V,['B.1','B.2'],'c')
+             call T%LQTensor(U,s,V,['B.1','B.2'],['A.1','A.2','A.3','C.1']) 
+             
+             
+     new operator(+) for List: combine two list
+     
+     new function for List:  suppose the data in List are [12,34,56,78,90,123,123],['A','B','C','D','E','F','G']
+              List=List2%sub(2,4) :output the 2nd to 4th sub list:[34,56,78],['B','C','D']
+              List=List2%sub('B','D'):output sub list:[34,56,78],['B','C','D']
+
+
+
+2017.1.14
+    modify QR and LQ for complex number use CUNGLQ ZUNGLQ CUNGQR ZUNGQR in TData.f90.
+
+
+2017.1.16
+    New type of memory has been written in function.f90
+    
+    modify the function in TData.f90,use the type(memory): 
+    		TData_QR
+    		TData_LQ
+    		TData_ORGQR
+    		TData_ORGLQ
+    		SVD_TData_routine
+    		permutation_data3_inout
+    		permutation_data2_inout
+
+
+2017.1.17
+    fix bug in MPI_x_Tensor when Tensor is complex*16, where x stand for MAX, MIN, SUM, send and so on. The bug report by Chao Wang(wang1329@mail.ustc.edu.cn)
+    
+        call MPI_ALLREDUCE(inTData%zdata,outTData%zdata,2*inTData%totalData,MPI_complex,MPI_SUM,mpi_comm,ierr)
+    change as 
+        call MPI_ALLREDUCE(inTData%zdata,outTData%zdata,inTData%totalData,MPI_double_complex,MPI_SUM,mpi_comm,ierr)
+        
+    fix bug in complex*16 Tensor, when call MPI_MAX_Tesnor, MPI_MIN_Tesnor, report error
+
+
+2017.1.21
+    New function in Tensor: 
+       
+     1. call T%ProductTensorRoutine(A,B,alpha,beta): T=alpha * (A * B) + Beta *T
+          if T is a empty Tensor, allocate memory for T
+  NOTE:  other while WILL NOT allocate memory or change the dimension of T !!!!!!!!!!!!!!!
+
+     2. call T%ProductTensorRoutine(A,B,alpha): T=alpha * (A * B) 
+  NOTE:  other while WILL  allocate memory or change the dimension of T !!!!!!!!!!!!!!!
+
+  
+
+     3. call T%contract(A,[legnames],B,[legnames],len): the same as T=contract(A,[legnames],B,[legnames],len)
+  NOTE: This routine will reorder the dimenison of both A and B, but will not change the value.
+
+
+2017.1.22
+
+   Modify function in Dimension.f90: the allocatable data replace by pointer that use the WorkingMemory
+   
+      1. Dimpermute_forwards:
+               integer,allocatable::order(:) ----> integer,pointer::order(:)
+      2.Dimpermute_backwards
+               integer,allocatable::order(:) ----> integer,pointer::order(:)
+      3.Dimpermute_backwards_index
+               integer,allocatable::order(:) ----> integer,pointer::order(:)
+      4.Dimpermute_forwards_index
+               integer,allocatable::order(:) ----> integer,pointer::order(:)
+      5.Dimpermute_backwards
+               integer,allocatable::order(:) ----> integer,pointer::order(:)
+               
+               
+2017.1.23
+
+   Modify function in Tensor.f90, use the workingmemory instead of allocatable array. The functions have been changed are:           
+      
+       1. contract
+       2. productTensor
+       3. productTensorRoutine
+       4. permutation
+   
+   Modify the error message, the program will use the invalid memory reference to Backtrace for the error.
+   
+   New type of extendsMemory has been written in Tensor.f90
+
+
+
+2017.1.24
+   
+   1.New function of 
+         
+         Working_memory_report,Tensor_memory_report,Tensor_memory_length
+         TData_memory_report,TData_memory_length
+         Dimension_memory_report,Dimension_memory_length
+   
+      They are used for reporting the memory used in the files. And call Working_memory_report() will report all the thing
+   
+   2. call set_deallocate_memory_flag()   :          deallocate memory for assignment and working memory
+      call unset_deallocate_memory_flag() :  DO NOT  deallocate memory for assignment or working memory
+      
+2017.1.25
+
+    New function for T%contract:
+    
+      1.call T%contract(A,[legnames1],B,[legnames2],len): the same as T=contract(A,[legnames1],B,[legnames2],len)
+  NOTE: This routine will reorder the dimenison of both A and B, but will not change the value.
+      2.call T%contract([legnames1],B,[legnames2],len): the same as T=contract(T,[legnames1],B,[legnames2],len)
+  NOTE: This routine will reorder the dimenison of both A and B, but will not change the value.
+      3.call T%contract(A,[legnames1],[legnames2],len): the same as T=contract(A,[legnames1],T,[legnames2],len)
+  NOTE: This routine will reorder the dimenison of both A and B, but will not change the value.
+
+
+
+    Fix bugs in T%contract
+
+
+2017.1.27
+
+    Fix bug of diminfo() report by Chao Wang(wang1329@mail.ustc.edu.cn). This bug will not cause the error of the program.
+    
+
+2017.2.22
+
+
+   Add the error messages in 
+              
+            1. call T%contract(A,[names1],B,[names2])
+            2. call T%contract([names1],B,[names2])
+            3. call T%contract(A,[names1],[names2])
+  where A,B and T can not be the same variable
+
+
+    code change in  T%contract(A,[names1],[names2]),T%contract([names1],B,[names2])
+
+                   the input A and B are class(Tensor)
+  
+  
+  
+  Add the error messages in T%QRroutine  T%LQroutine  T%SVDroutine:
+    
+          All the input and output Tensors can not be the same variable
+
+
+
+2017.2.25
+
+  Add the error messages in T% ProductTensorRoutine:
+    
+          All the input and output Tensors can not be the same variable
+
+
+2017.2.27
+   
+   modify error message, output the running cpu number when running the MPI
+
+
+2017.2.27
+
+    New function for T%contract:
+    
+      1.call T%contract(A,name1,B,name2): the same as T=contract(A,name1,B,name2)
+  NOTE: This routine will reorder the dimenison of both A and B, but will not change the value.
+      2.call T%contract(name1,B,name2): the same as T=contract(T,name1,B,name2)
+  NOTE: This routine will reorder the dimenison of both A and B, but will not change the value.
+      3.call T%contract(A,name1,name2): the same as T=contract(A,[legnames1],T,name2)
+  NOTE: This routine will reorder the dimenison of both A and B, but will not change the value.
+
+2017.3.5
+
+    Fix bug in call T%readData(unit)
+       read the data from outside file, and only allow for rank-2 tensor for the moment
+
+
+2017.3.9
+
+    Add now function to TData.f90:product_MM_dim1_parameter for the now subroutine in Tensor.f90:ProductTensorRoutine3. Do not OK yet
+    
+2017.3.24
+
+    Fix bug of Tensor/int Tensor/real(kind=4) when Tensor is single real of single complex type, this bug will lead to the error of expm(Tensor).
+
+
+
+2017.5.5
+
+       Modify the code in Tensor.f90: contract_name_routine,contract_name_routine1,contract_name_routine2,contract_name_routine3,contract_name_routine4
+    contract_name_routine5 and contract_name_routine6
+       The input and output Tensor
+       
+       
+         class(Tensor),target,intent(inout)::T    =====>  class(Tensor),target::T
+         class(Tensor),target,intent(inout):: T1  =====>  class(Tensor),target::T1
+         class(Tensor),target,intent(inout):: T2  =====>  class(Tensor),target::T2
+2017.5.9
+
+
+      Add new function of l=T%ifName(w,ch), return true if there is a leg named w in the dimension
+      	l=T%ifName('A','Tensor'): if there is a legs(or some legs) whoes TensorName is 'A', return .true.
+      	l=T%ifName('a')         : if there is a legs(or some legs) whoes DimensionName is 'a', return .true.
+      	l=T%ifName('A.a')       : if there is a legs(or some legs) whoes name is 'A.a', return .true.
+    
+2017.5.16
+
+      Add new function of list%findValue(inputlist)
+      and other new funciton:
+                       
+                       call list%setvalue(vector) ,list can be a empty list or a allocated list
+                       call list%setvalue(Tensor) ,list can be a empty list or a allocated list
+
+2017.5.27
+
+     Fix bug of T%max()
+                T%min()
+                
+                
+                outvalue=maxval(T%?data) --> outvalue=maxval(T%?data(1:T%totalData))
+       
+2017.6.5
+
+
+	T%enlarger and T%enlargerTensor can be call by TensorName
+	            
+	            call T%enlarger('T.dimension',1d0)
+	            A=B%%enlargerTensor('T.dimension',1d0)
+
+
+2017.6.6
+   
+     New module of OtherFunction
+           new suubroutine ALLREDUCE_Tensor(inTensor,outTensor,OP,ierr,MPIcommon)
+
+
+2017.6.7
+
+   If running MPI, call error_stop wll sleep for 1 second
+
+
+2017.6.8
+
+   New function REDUCE_Tensor added to OtherFunction 
+   
+   initial_mpi => initial_output_cpu_info
+
+
+2017.6.9
+
+   type(List)  p%getFlag()
+
+
+2017.6.10
+  
+    call writemess(mess,form):
+    
+         if form='-', there is NO enter and the output will clean the present line and write the mess. that means it will over write the present line
+         if form='+', there is An enter and the output will clean the present line and write the mess. that means it will over write the present line
+         if form='*', there is NO enter and the output will clean the present line and write the mess. that means it will over write the present line,
+                 the len of line will equal to len_trim(mess)
+         if form='/', there is An enter and the output will clean the present line and write the mess. that means it will over write the present line,
+                 the len of line will equal to len_trim(mess)
+         other case, it will write(*,form)mess
+      NOTE:
+          mess can only be character, do not finished other type yet!!!   
+     example:
+     
+		character(len=20)::cha
+		call set_output_log_address('log')
+		call writemess('aaaaaaaaaaaaaaaa','-')
+		call sleep(1)
+		call writemess('bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb','-')
+		call sleep(1)
+		call writemess('1')
+		call writemess('2')
+		call writemess('ccccc','-')
+		call sleep(1)
+		cha='ddddddd'
+		call writemess(cha,'-')
+		call sleep(1)
+		call writemess('tessssssssssssssssssssssssssssssssssssssst5','+')
+		call writemess('3')
+		call writemess('4','(a10)')
+         
+2017.7.22
+     
+     
+     Fix bug in Tensor.f90 permutation_Tensor_routine    
+     
+
+
+2017.8.6
+
+     New Function of
+     
+                 call set_error_pointer()
+                 call unset_error_pointer()
+          if set_error_pointer()                     , when there is a bugs, the program will stop and print the location of the bugs in your code
+          if do not set of call unset_error_pointer(), when there is a bugs, the program will stop and Do not print the location of the bugs in your code.
+     
+     NOTE: The function only work in linux system, can not work in Mac
+     
+
+
+
+
+
+
+
+****************************************************************************************************
+
+
+
+2017.8.7
+
+    include 'mpi.h' in function.f90  change as  use mpi
+    rename function.f90  as Tools.f90
+    
+    
+    All the old files that :
+               
+               use usefull_function
+               
+    should be change as 
+               
+               use Tools
+               use mpi ! if you use the mpi function or subroutine 
+               
+    
+    
+    New interface
+    
+    	interface initial_mpi
+			module procedure initial_output_cpu_info
+		end interface
+	
+		interface initial_log
+			module procedure set_output_log_address
+		end interface
+
+		interface set_MPI_log
+			module procedure set_output_MPI_log
+		end interface
+
+
+2017.8.26
+
+
+    New function of A=resetMatrixDim(B,m,n) is added to OtherFunction.f90
+
+
+2017.9.2
+
+    eye(Tensor), add a error message, the input tensor shoud be a rank=1 tensor
+
+
+
+2017.9.5
+
+
+    newfucnion of List=lsit(name,data)
+
+
+
+2017.9.6
+
+   in Tools.f90    
+            call CPU_TIME(time)  ===>  time= omp_get_wtime()
+
+
+    Fix bug in TData.f90
+                      
+                      subroutine TDatamultiply_number_real8_par(Res,A,num,alpha,beta)
+
+                Res%ddata=(dselect(alpha)*(A%sdata*num))+(dselect(beta)*Res%ddata) 
+
+
+                                     modify as:
+
+
+
+               Res%ddata(1:length)=(dselect(alpha)*(A%ddata(1:length)*num))+(dselect(beta)*Res%ddata(1:length))
+
+        The size(A%ddata) may be larger than Res%ddata
+
+
+
+        And fix other similar bug
+
+
+2017.9.7
+
+       new function of open_File(unit,address,status)
+		generate is define in OtherFunction.f90
+
+
+2017.9.10
+   
+
+      if call set_deallocate_memory_flag()
+         the program will deallocate the memory after using it and the %empty() is the same as %deallocate()
+
+
+
+                              
+
+
+
+
+!***********************************************************************************************************************
+!***********************************************************************************************************************
+!********                 3.5.0          
+!***********************************************************************************************************************
+!***********************************************************************************************************************
+
+2017.11.10 ~ 2017.11.?
+
+      gcc6.0 or later (gcc7.0) can not compile the Tensor-3.x, where x<=4, internal compiler error
+      
+      It tern out that where the class(*) and chatacter(len=*) and select type are use together, it gose worng. 
+      So modify the files:
+                modify_in_TData.f90
+                TData.f90
+                Tensor.f90
+      Do not use the class(*), where I 
+      
+                rewrite all the code in modify_in_TData.f90 
+                
+                modify the code of 
+                      modify_TData_class
+                      modify_Some_TData_class1
+                      modify_Some_TData_class2
+                      modify_Some_TData_class3
+                      modify_Some_TData_class4
+                in TData.f90
+                
+                and modify some code that named as *class*  and other code to make the compilition right in Tensor.f90
+
+
+
+
+
+
+!***********************************************************************************************************************
+!***********************************************************************************************************************
+!********                 3.5.1          
+!***********************************************************************************************************************
+!***********************************************************************************************************************
+
+2017.11.16
+
+      in gfortran-7.2.0  (Ubuntu 17.10)
+      
+         subroutine charset(w,inte)
+				character(len=*),intent(inout)::w
+				integer,intent(in)::inte
+				write(w,formInt)inte
+				return
+			end subroutine
+			
+		this subroutine will lead to the memory leaking. So I rewrite all the assignment(=) with the help of Chao Wang(wang1329@mail.ustc.edu.cn)
+      
+      the subroutine are:
+      
+      
+       character=number
+					charset
+					charset_array
+					charsetreal4
+					charsetreal4_array
+					charsetreal8
+					charsetreal8_array
+					charsetcom4
+					charsetcom4_array
+					charsetcom8
+					charsetcom8_array
+					charsetlogi
+					charsetlogi_array
+   
+
+        character+number
+					charAddint
+					intAddchar
+					charAddreal
+					realAddchar
+					charAddreal4
+					real4Addchar
+					charAddlogi
+					logiAddchar
+					com8Addchar
+					com4Addchar
+					charAddcom4
+					charAddcom8
+
+
+
+     change the message in  set_error_backtrace
+
+
+2017.11.17
+
+
+     1.set the function in Tools.f90 as private
+     
+     
+     2.fix a bug report by Chao Wang(wang1329@mail.ustc.edu.cn), the bug is
+     
+                call T%enlarger(legi,D,scal), when the rank of T <=2 , it gose wrong. The program will stop and
+                print that there is no data in the dimension.
+                
+      This error will not affact your code if you run without error stop.
+     
+     3. new function if_simple_dimension to output sample_dimension_flag of a dimension
+
+
+
+2017.11.19
+
+
+      modify in Tools.f90:
+                  
+                   time=omp_get_wtime --->  change to  call cpu_time(time)
+                   
+2017.12.1
+
+
+     modify in TData.f90
+        call mpi_BCAST(Ten1%idata,Ten1%totalData,MPI_integer,ID,MPI_Comm,ierr)
+
+      change to
+
+        call mpi_BCAST(Ten1%idata(1:Ten1%totalData),Ten1%totalData,MPI_integer,ID,MPI_Comm,ierr)
+   
+      and other similar
+
+
+2017.12.5
+
+      New function of P%killData(name) and logical=p%ifkillData(name) in parameter.f90
+
+
+
+2017.12.6
+    New function of 
+            P%ifName(name)
+            P%ifsetName(name)
+
+      in parameter.f90
+
+2018.2.1
+
+     Add 3 new error picture in Tool.f90
+
+2018.3.7
+
+     New function of Tensor%if_original_dim() return true if the dimension is original one( which is that no fusing on the dimension), false if not
+
+
+2018.4.9
+
+     Add a checking message in subroute of  subroutine find_same_name(inname1,inname2,SameName,lenofname) in Tensor.f90
+
+
+
+
+
+2018.4.18
+     1.   new function set_SVD_S_matrix_flag() and unset_SVD_S_matrix_flag()
+
+            set_SVD_S_matrix_flag
+                     the output S matrix(single value matrox) of SVD will be a diag matrix,that is rank=2
+            unset_SVD_S_matrix_flag 
+                      the output S matrix(single value matrox) of SVD will be a vector of all the single value, that is rank=1
+          by default, the package use unset_SVD_S_matrix_flag
+
+     2 new fucntion ifset_SVD_S_matrix_flag()
+
+
+     3.modify in SVD, QR ,LQ, if one use the tensor name to specify the legs, the output tensors will set names to the new legs
+
+        SVD: T--> U , s , V
+         
+              U the last leg's name is 'SVD.U'
+              s 'SVD.s1' and 'SVD.s2' if set_SVD_S_matrix_flag, other while S is a vector without name
+              V the first leg's name is 'SVD.V'
+
+
+          LQ:  T --> L , Q
+            L: the last leg's name is 'LQ.L'
+            Q: the first leg's name is 'LQ.Q'
+
+          QR:  T --> Q , R
+            Q: the last leg's name is 'QR.Q'
+            R: the first leg's name is 'QR.R'
+      4. new generic subroutine of SVD, QR and LQ in Tensor.f90
+
+            call T%SVD(U,s,V,LegName,Ncut,row), where if row=.true.  legName(:) will be the row other while col
+            call T%QR(Q,R,LegName,row)    , where if row=.true.  legName(:) will be the row other while col
+            call T%LQ(L,Q,LegName,row)    , where if row=.true.  legName(:) will be the row other while col
+
+
+
+2018.4.24
+
+      modify the function of open_file and ifopen_file in Tools.f90
+
+      
+          open(unit=uni,file=FileAddress,status=inSTATUS)
+        
+        Change to
+
+          if(present(inPOSITION))then
+            if(inPOSITION.equ.'end')then
+              open(unit=uni,file=FileAddress,status=inSTATUS,POSITION='APPEND')
+            else
+              open(unit=uni,file=FileAddress,status=inSTATUS,POSITION=inPOSITION)
+            end if
+          else
+            open(unit=uni,file=FileAddress,status=inSTATUS)
+          end if
+
+
+2018.5.21
+
+     fix a bug of  MPI_SUM_Tensor in Tensor.f90.
+
+        if all the tensors are empty, return a empty tensor 
+
+        if not all the tensors are empty, retrun a error message
+
+
+2018.6.8
+     
+     fix a bug if character=complex*16 in Tools.f90
+
+
+
+2018.6.10
+
+     1.support new typt of call writemess(num)
+        num can be
+              1.integer
+              2.real*4
+              3.real*8
+              4.complex*8
+              5.complex*16
+              6.logical
+              7.integer array
+              8.real*4 array
+              9.real*8 array
+             10.complex*8 array
+             11.complex*16 array
+             12.logical array
+             13.Tensor
+     They will output as the default form, that is write(uni,*) num
+     And call writemess(Tensor), will make used of this subroutine
+
+     2.support new typt of call writemess(num,form)
+        num can be
+              1.integer
+              2.real*4
+              3.real*8
+              4.complex*8
+              5.complex*16
+              6.integer array
+              7.real*4 array
+              8.real*8 array
+              9.complex*8 array
+             10.complex*16 array
+             11.Tensor
+       form is character, such as '(20F2)' to specify the output form
+
+       3.Tensor%pointer(p), support the rank=4 tensor
+
+
+
+2018.8.20
+
+
+      New function in Tensor.f90:
+
+             call T%contract(name1,name2)
+             call T%contract(ith1,ith2)
+             A=contract(B,name1,name2)
+             A=contract(B,ith1,ith2)
+      contract the legs inside one tensor
+
+
+
+2018.9.15
+
+      Modify the message when call set_error_pointer
+
+
+
+2018.9.17
+
+      Fix a bug in dimension.f90:
+
+             newDim=dim.sub.[i1,i2]
+             newDim=dim.sub.i1
+      The bug is:
+      
+      If the dim is  not original dimension(one has fuse the dimension), the result newdim is not original dimension 
+    too.However there is a situation, the result newdim is original dimensionm for example:
+
+            dim=[2,3,4,5,6,7,8,9]
+            fuse dim 1,2 :  [2,3 | ,4,5,6,7,8,9]
+            fuse dim 6.7 :  [|2,3 | ,4,5,6,7,|8,9|]
+            newDim=dim.sub.[2,4] : [4,5,6]        
+      The original code show that this is not original dimension, fix :
+            newDim=dim.sub.[2,4] : [4,5,6]        ----> it is original dimension
+            newDim=dim.sub.[1,3] : [|2,3 | ,4,5]  ----> it is not original dimension
+
+
+
+2018.11.26
+
+      Fix a bug reported by Chao Wang
+
+      Dimension=T.subDim.[i1,i2], if the legs of the input T are fused, then the code goes wrong
+      Fix the code of subroutine getSubDim3 in Dimension.f90:
+
+     ****************************************************************
+           if(Dimen%nameFlag.eq.1)then
+             allocate(getSubDim3%DimName(Dlen))
+             getSubDim3%DimName=Dimen%DimName(ith1:ith2)
+             return
+           end if
+
+      modify as :
+           if(Dimen%nameFlag.eq.1)then
+             Dlen=ith2-ith1+1
+             allocate(getSubDim3%DimName(Dlen))
+             getSubDim3%DimName=Dimen%DimName(ith1:ith2)
+             return
+           end if
+      ****************************************************************
+
+      error: the value of Dlen has been change before running the code
+
+
+      If the bug met, your code can not continuse, so it is no worry about the vality of the package if you can run you code
+
+
+
+2019.1.12
+
+      add a error message in call QRTensor()
+
+
+2019.2.21
+     
+      modify fucntion in Tensor.f90:
+           
+           T=Tensor(cha)
+           T=Tensor(cha,dimen)
+           
+       where cha is type character, if it start wih "x=",where x can be 'i','s','d','c','z','l','a',then
+          1.T=Tensor('i=1-2-3-4') output T of a Tensor of [1,2,3,4], type is integer
+          2.T=Tensor('s=1-2-3-4') output T of a Tensor of [1,2,3,4], type is real*4
+          3.T=Tensor('d=1-2-3-4') output T of a Tensor of [1,2,3,4], type is real*8
+          4.T=Tensor('a=1-2-3-4') output T of a Tensor of [1,2,3,4], type is character
+          5.T=Tensor('l=1-2-3-4') output T of a Tensor of [1,2,3,4], type is logical
+       else output T of a Tensor of [cha], type is character, example
+          6. T=Tensor('1-2-3-4') output T of a Tensor of ['1,2,3,4'], type is character
+          7. T=Tensor('aa=1-2-3-4') output T of a Tensor of ['aa=1,2,3,4'], type is character
+          
+      if present dimen, the tensor will reshape the diemnsion.
+      
+      Note
+      
+         T=Tensor(['i=1-2-3-4']) the output is a Tensor of character, which is ['i=1,2,3']
+         T=Tensor('i=1-2-3-4') the output is a Tensor of integer, which is [1,2,3]
+
+
+
+2019.4.10
+
+
+    Modify the subroutine SVD_TData_routine in TData.f90
+
+        use the ?GESDD instead of ?GESVD in the subroutine, "?" stand for Z,C,D,S
+        
+
+
+
+2019.5.4
+
+     1. newfunction of 
+           (1) SVD_TData_routine_SVD
+                   it use ?gesvd in the svd decomposition
+           (2) SVD_TData_routine_SDD
+                   it use ?gesdd in the svd decomposition
+                   
+     2.SVD_TData_routine now is a pointer of a subroutine,by default it points
+  to SVD_TData_routine_SDD.
+    
+     3. newfunction of
+          (1) set_xgesvd_subroutine
+              SVD_TData_routine => SVD_TData_routine_SVD
+          (2) set_xgesdd_subroutine
+               SVD_TData_routine => SVD_TData_routine_SDD
+  
+
+2019.5.5
+
+     by default SVD_TData_routine points to SVD_TData_routine_SVD
+
+
+2019.5.16
+   
+
+     1.New function of call in Tensor.f90
+
+         (1) T%SVDkill(U,S,V,nameA,nameB,CutOff) 
+         (2) T%SVDkill(U,S,V,CutOff) 
+         (3) T%SVDkill(U,S,V,legName,row,CutOff) 
+         (4) T%SVDkill(U,S,V,legName,CutOff) 
+         (5) T%SVDkill(U,S,V,legLeftName,legRightName,CutOff)
+
+
+            SVD on T
+            1. this subroutine WILL destroy the data in T
+            2. There are some trash data in the S%?Data and U%?Data
+
+       It run faster than call T%SVD(U,S,V,VutOff)
+
+     2. New fucntion of SVD_TData_routine_SVD_Kill_inData that use by Tensor.f90
+
+2019.5.17
+
+    New function in Tensor.f90: if_simple_dimension
+
+
+
+2019.5.20
+   
+
+     1.New function of call in Tensor.f90
+
+         (1) call Q%QRkill(R)
+         (2) call Q%QRkill(R,legName,left)
+         (3) call Q%QRkill(R,leftlegName,RightlegName)
+
+
+            QR on Q
+            1. this subroutine WILL destroy the data in Q
+            2. on output, Q is the Q matrix of QR
+
+       It run faster than call T%QR(Q,R)
+
+      2.New function of call in Tensor.f90
+
+         (1) call Q%LQkill(L)
+         (2) call Q%LQkill(L,legName,left)
+         (3) call Q%LQkill(L,leftlegName,RightlegName)
+
+
+            LQ on Q
+            1. this subroutine WILL destroy the data in Q
+            2. on output, Q is the Q matrix of LQ
+
+       It run faster than call T%LQ(L,Q)
+
+
+2019.5.21
+
+
+      1. The QRkill now support the case of a input M*N matrix that M<N 
+
+
+2019.5.22
+
+      1. The LQkill now support the case of a input M*N matrix that M>N
+
+
+2019.7.9
+       
+
+       1.Fix a bug in FindOrder and NameOrder in Tensor.f90
+       2. newfunction of call T%FastContract(A,nameA,B,nameB)
+
+
+
+2019.7.31
+
+       1.modify fucntion in Tensor.f90:
+           
+           T=Tensor(cha)
+           T=Tensor(cha,dimen)
+           
+       where cha is type character, if it start wih "x=",where x can be 'i','s','d','c','z','l','a',then
+          1.T=Tensor('i=1|2|3|4') output T of a Tensor of [1,2,3,4], type is integer
+          2.T=Tensor('s=1|2|3|4') output T of a Tensor of [1,2,3,4], type is real*4
+          3.T=Tensor('d=1|2|3|4') output T of a Tensor of [1,2,3,4], type is real*8
+          4.T=Tensor('a=1|2|3|4') output T of a Tensor of [1,2,3,4], type is character
+          5.T=Tensor('l=1|2|3|4') output T of a Tensor of [1,2,3,4], type is logical
+       else output T of a Tensor of [cha], type is character, example
+          6. T=Tensor('1|2|3|4') output T of a Tensor of ['1|2|3|4'], type is character
+          7. T=Tensor('aa=1|2|3|4') output T of a Tensor of ['aa=1|2|3|4'], type is character
+          
+      if present dimen, the tensor will reshape the diemnsion.
+      
+      Note
+      
+         T=Tensor(['i=1|2|3|4']) the output is a Tensor of character, which is ['i=1|2|3']
+         T=Tensor('i=1|2|3|4') the output is a Tensor of integer, which is [1,2,3]
+
+       2.new subroutine in Tensor.f90:
+         call set_array_character_divider(cha)
+
+         change the  character_divider in T=Tensor(cha), for example
+
+             call set_array_character_divider('!') then 
+               T=Tensor('i=1!2!3!4') output T of a Tensor of [1,2,3,4], type is integer
+         the character_divider is '|' by default
+
+
+      3. newfunction in parameter.f90
+           L=List(aname,array): store a array into a list, wiht name of aname, for example
+
+           L=List('aa',[1,2,3,4,5]), then these is element of
+                     'aa'   'i=1|2|3|4|5' 
+             in the list
+
+           if use
+
+              T=L%Ti(aa), then
+              T is a Tensor that store the array of 
+                  1 2 3 4 5 
+
+
+2020.1.7
+
+     Fix a bug in Tensor.f90, contract
+        error:
+               when contracting two tensor, dimensions are [2,1,1,1] and [1,1,1]
+               T=contrac(A,[2,3,4],B,[1,2,3])
+               return a tensor or [2,1,1,1]
+        Fixed: 
+               return a tensor or [2]
+
+
+
+
+
+
+
+
+
+
+

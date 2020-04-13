@@ -1,0 +1,21 @@
+set_output_log_address
+    specify the the output file of "writemess"
+    
+SYNOPSIS   
+    subroutine set_output_log_address(address)
+    
+    character(len=*) address
+    
+PURPOSE
+	specify the the output file of "writemess"
+
+PARAMETERS
+	address            - character(len=*) -
+	               the address of the output file
+
+EXAMPLT
+
+	call set_output_log_address('./logFile') !set the log file
+   call writemess('Holle')!the default cpu print 'Holle' on the screen and ./logFile
+   
+   

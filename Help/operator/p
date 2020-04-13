@@ -1,0 +1,60 @@
+(.p.)
+    Short for (Permutation)
+    permutation of a Tensor.
+    
+ 
+SYNOPSIS
+    
+    Result=T.p.num
+    Result=T.p.neworder
+    Result=T.p.neworderChar
+    Result=T.p.neworderTensor
+    
+    type(Tensor)          Result,T
+    integer               num,neworder(:)
+    character(len=*)      neworderChar(:)
+    type(Tensor)          neworderTensor
+    
+NOTE:
+
+  Result=T.p.num:  num=1,2 or 3 only. And only work on rank<=3 Tensor.
+                   num is the leg that DO NOT permute. For example a 
+                   reank-3 Tensor T.p.2 means permte the 1st and 3rd legs.
+                   2nd leg will not permute.
+  
+  Result=T.p.neworder:  neworder is array specify the new order, the same as
+                        call T%permute(neworder)     
+  Result=T.p.neworderChar:  neworderChar is array specify the new order, the same as
+                        call T%permute(neworderChar)     
+  Result=T.p.neworderTensor:  neworderTensor is a Tensor specify the new order,it can be
+                              a Tensor of integer or character  
+          
+
+PARAMETERS
+
+   newOrder            - integer,array -
+                       specify the new order of the dimension
+                       
+   neworderChar        - character,array -
+                       specify the new order of the dimension
+   neworderTensor     - Tensor -
+                       specify the new order of the dimension, it can be integer or character Tensor
+                       
+   num                 - integer -
+                       Only work on rank<=3 Tensor. num=1,2,3. specify the leg do not permute.
+
+EXAMPLT
+
+  type(Tensor)::T,Result
+  T=generate((/2,3,4,5,6/),'complex*16') !generate a 2*3*4*5 random number Tensor of type complex*16
+  call T%setName(1,'Tensor.1st')
+  call T%setName(2,'Tensor.2nd')
+  call T%setName(3,'Tensor.3rd')
+  call T%setName(4,'Tensor.4th')
+  call T%setName(5,'Tensor.5th')
+  call T%diminfo('dimension before permute')
+  Result=T.p.(/3,2,1,5,4/)
+  call Result%diminfo('dimension after permute')
+  Result=Result.p.(/'Tensor.5th','Tensor.2nd','Tensor.1st','Tensor.4th','Tensor.3rd'/)
+  call Result%diminfo('dimension after permute,agin')
+  

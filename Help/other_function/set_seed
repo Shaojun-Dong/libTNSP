@@ -1,0 +1,21 @@
+set_seed
+    set the random seed to the cpu
+    
+SYNOPSIS   
+    subroutine set_seed(idum)
+    
+    integer idum
+PURPOSE
+	set the random seed to the cpu. idum is the seed. If idum=0, then the seed will generate by cpu
+
+PARAMETERS
+	idum      - integer -
+	          idum=0, then the random seed will be set by cpu
+	          if idum not equal to 0, it will be the random seed
+
+EXAMPLT
+
+
+   integer::seed
+   seed=-1
+   call set_seed(seed)

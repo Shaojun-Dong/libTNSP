@@ -1,0 +1,23 @@
+cleanName
+    deallocate the memery of the Name in the Tensor.
+    
+SYNOPSIS   
+    subroutine cleanName()
+     
+    
+PURPOSE
+	deallocate the memery of the Name in the Tensor.
+
+PARAMETERS
+
+EXAMPLT
+
+  type(Tensor)::T
+  T=generate((/2,3,4/),'real*4') !generate a 2*3*4 random number Tensor of type real*4
+  call T%setName(1,'A.one')! set a name to the first dimension of Tensor
+  call T%setName(2,'B.a')! set a name to the second dimension of Tensor
+  call T%setName(3,'aaa.test')! set a name to the thord dimension of Tensor
+  call T%diminfo("before cleanName")
+  call T%cleanName()
+  call T%diminfo("After cleanName")
+  

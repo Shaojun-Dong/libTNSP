@@ -1,0 +1,30 @@
+getclassType
+    return the type of the Tensor
+    
+SYNOPSIS   
+    
+    character(len=20) function getclassType()
+    
+PURPOSE
+	return the type of Tensor.
+
+PARAMETERS
+	 
+
+EXAMPLT
+
+---1------
+  type(Tensor)::T
+  character*20::classType
+  T=generate((/2,2/),'real*4') !generate a 2*2 random number Tensor of type real*4
+  classType=T%getclassType()
+  write(*,*)classType
+  
+  T=generate((/2,2/),'complex*8') !generate a 2*2 random number Tensor of type complex*8
+  classType=T%getclassType()
+  write(*,*)classType
+  
+  T=generate((/2,2/),'character') !generate a 2*2 random number Tensor of type complex*8
+  classType=T%getclassType()
+  write(*,*)classType
+  

@@ -1,0 +1,45 @@
+set_tol
+	reset the parameter of set_tol in eigenvalue.The default parameter in eigenvalue are
+      maxitr=300
+		ncv=-1
+		maxnvc=100
+		tol=0
+    if ncv<0, the number of lonzcos vector will calculate by cpu:ncv=min((2+num_of_eig+n)/2,eiger%maxnvc),
+    where n is the size of the eigenvalue problem.
+    
+SYNOPSIS
+
+    surbroutine set_tol(tol)
+    
+    class(*)          tol
+    tol can be real*4, real*8
+    
+PURPOSE
+
+   reset the parameter of tol in eigenvalue, these values are used be arpack.
+
+PARAMETERS
+ 
+                 
+   tol          - real*4 or real*8  -
+                 Stopping criteria: the relative accuracy of the Ritz value 
+                 is considered acceptable if BOUNDS(I) .LE. TOL*ABS(RITZ(I))
+                 where ABS(RITZ(I)) is the magnitude when RITZ(I) is complex.
+                 DEFAULT = dlamch('EPS')  (machine precision as computed
+                 by the LAPACK auxiliary subroutine dlamch).
+                 
+                                                  
+
+EXAMPLT
+
+
+----- 1 --------
+  type(Tensor)::T,eig(2)
+  type(eigenvalue)::eiger
+  
+  T=generate((/4,4/),'real*4')
+  T=(.H.T)*T
+  call eiger%set_tol(0.1)
+  eig=eiger%eig(T,'LR',1)
+  call eig(1)%print("largest real part eigenvalue")
+  eig=T%eig()

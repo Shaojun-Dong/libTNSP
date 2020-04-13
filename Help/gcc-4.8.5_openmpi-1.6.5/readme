@@ -1,0 +1,98 @@
+
+#目录下有文件gcc-4.8.5.tar  mpc-0.8.1.tar.gz  openmpi-1.6.5.tar.gz gmp-4.3.2.tar  mpfr-2.4.2.tar
+
+#设定安装目录(任意)
+INSTALLPATH=/home/sjdong/mpif90lib
+INSTALLPATH=/public/udata/sjdong/mpif90lib
+INSTALLPATH=/home/dongsj/mpif90lib
+INSTALLPATH=/home/sjdong/gcc4.8.5
+
+
+#编译GMP：GNU Multiple Precision Arithmetic Library（多重精度运算库）
+tar -xvf  gmp-4.3.2.tar
+cd  gmp-4.3.2
+./configure -prefix=$INSTALLPATH/gmp-install CC=gcc CXX=g++
+make
+make check
+make install
+cd ..
+
+#编译MPFR：Multiple Precision Floating-Point Reliably Library（多重精度浮点运算库）
+tar -xvf mpfr-2.4.2.tar
+cd mpfr-2.4.2
+./configure -prefix=$INSTALLPATH/mpfr-install -with-gmp-include=$INSTALLPATH/gmp-install/include -with-gmp-lib=$INSTALLPATH/gmp-install/lib CC=gcc CXX=g++
+make
+make check
+make install
+cd ..
+
+
+#编译MPC： Multiple Precision Complex floating-point library（多重精度复数浮点运算库）
+tar -zxvf mpc-0.8.1.tar.gz
+cd mpc-0.8.1
+./configure -prefix=$INSTALLPATH/mpc-install -with-gmp-include=$INSTALLPATH/gmp-install/include -with-gmp-lib=$INSTALLPATH/gmp-install/lib -with-mpfr=$INSTALLPATH/mpfr-install CC=gcc CXX=g++
+make
+make check
+make install
+cd ..
+
+#编译GCC：
+tar -xvf gcc-4.8.5.tar
+cd gcc-4.8.5
+./configure -prefix=$INSTALLPATH/gcc-install -with-gmp-include=$INSTALLPATH/gmp-install/include -with-gmp-lib=$INSTALLPATH/gmp-install/lib -with-mpfr=$INSTALLPATH/mpfr-install -with-mpc=$INSTALLPATH/mpc-install CC=gcc CXX=g++
+export LD_LIBRARY_PATH=$INSTALLPATH/mpfr-install/lib:$INSTALLPATH/mpc-install/lib:$INSTALLPATH/gmp-install/lib:$LD_LIBRARY_PATH
+make
+make install
+cd ..
+
+#if in GCC, error of :gnu/stubs-32.h: No such file or directory
+./configure -disable-multilib -prefix=$INSTALLPATH/gcc-install -with-gmp-include=$INSTALLPATH/gmp-install/include -with-gmp-lib=$INSTALLPATH/gmp-install/lib -with-mpfr=$INSTALLPATH/mpfr-install -with-mpc=$INSTALLPATH/mpc-install CC=gcc CXX=g++
+
+
+
+#编译OpenMpi
+tar -zxvf openmpi-1.6.5.tar.gz
+cd openmpi-1.6.5
+export PATH=$INSTALLPATH//gcc-install/bin:$PATH
+./configure -prefix=$INSTALLPATH/openmpi-install CC=gcc CXX=c++ FC=gfortran F77=gfortran   !使用刚安装的gcc的编译器
+make
+make install
+
+
+#if in 编译OpenMpi, error of : no gfortran77
+INSTALLPATH=/public/udata/sjdong/mpif90lib
+export LD_LIBRARY_PATH=$INSTALLPATH/mpfr-install/lib:$INSTALLPATH/mpc-install/lib:$INSTALLPATH/gmp-install/lib:$LD_LIBRARY_PATH
+export PATH=$INSTALLPATH//gcc-install/bin:$PATH
+export LD_LIBRARY_PATH=$INSTALLPATH/gcc-install/lib64:$LD_LIBRARY_PATH
+
+
+
+
+#使用mpif90_gcc4.8.5
+INSTALLPATH=/home/sjdong/mpif90lib
+export LD_LIBRARY_PATH=$INSTALLPATH/mpfr-install/lib:$INSTALLPATH/mpc-install/lib:$INSTALLPATH/gmp-install/lib:$LD_LIBRARY_PATH
+export PATH=$INSTALLPATH//gcc-install/bin:$PATH
+export LD_LIBRARY_PATH=$INSTALLPATH/gcc-install/lib64:$INSTALLPATH/openmpi-install/lib:$LD_LIBRARY_PATH
+
+
+
+
+
+
+INSTALLPATH=/public/udata/sjdong/mpif90lib
+export LD_LIBRARY_PATH=$INSTALLPATH/mpfr-install/lib:$INSTALLPATH/mpc-install/lib:$INSTALLPATH/gmp-install/lib:$LD_LIBRARY_PATH
+export PATH=$INSTALLPATH//gcc-install/bin:$PATH
+export LD_LIBRARY_PATH=$INSTALLPATH/gcc-install/lib64:$INSTALLPATH/openmpi-install/lib:$LD_LIBRARY_PATH
+
+
+INSTALLPATH=/home/dongsj/mpif90lib
+export LD_LIBRARY_PATH=$INSTALLPATH/mpfr-install/lib:$INSTALLPATH/mpc-install/lib:$INSTALLPATH/gmp-install/lib:$LD_LIBRARY_PATH
+export PATH=$INSTALLPATH//gcc-install/bin:$PATH
+export LD_LIBRARY_PATH=$INSTALLPATH/gcc-install/lib64:$INSTALLPATH/openmpi-install/lib:$LD_LIBRARY_PATH
+
+
+
+#in TC4600 gcc is in  /opt/gcc-4.9.2/
+export MPIHOME=/opt/gcc-4.9.2
+export LD_LIBRARY_PATH=/opt/gcc-4.9.2/lib64/:$LD_LIBRARY_PATH
+export PATH=$MPIHOME/bin:$PATH

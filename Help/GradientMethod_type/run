@@ -1,0 +1,56 @@
+run  (NOT FINISH)
+    Find the min or max of a output function
+    
+SYNOPSIS   
+    type(Tensor) function           run(inoutP,max_flag,lenofinP,classtype,GMsearchFunction)
+    type(Tensor) function           run(inoutP,max_flag,lenofinP,classtype,GMsearchFunction,GradientFunction)
+    type(Tensor) function           run(inoutP,max_flag,GMsearchFunction)
+    type(Tensor) function           run(inoutP,max_flag,GMsearchFunction,GradientFunction)
+    type(Tensor) function           run(inoutP,parameter,max_flag,lenofinP,classtype,GMsearchFunction)
+    type(Tensor) function           run(inoutP,parameter,max_flag,lenofinP,classtype,GMsearchFunction,GradientFunction)
+    type(Tensor) function           run(inoutP,parameter,max_flag,GMsearchFunction)
+    type(Tensor) function           run(inoutP,parameter,max_flag,GMsearchFunction,GradientFunction)
+    
+    type(Tensor)                       inoutP
+    logical                            max_flag
+    integer                            lenofinP
+    character(len=*)                   classtype
+    type(Tensor),external function     GMsearchFunction
+    type(Tensor),external function     GradientFunction
+    type(Tensor)                       parameter
+    
+PURPOSE
+
+   Find the min or max of GMsearchFunction. where GMsearchFunction is a function to be minimum or maximum.
+   Suppose Runer is type(CGmethod),that is type(CGmethod)::runer
+   
+         1.A=Runer%run(inoutP,max_flag,lenofinP,classtype,GMsearchFunction): 
+
+PARAMETERS
+   T            - type(Tensor)-
+                The Tensor to be add as Row.
+EXAMPLT
+
+program aaa
+	use Tensor_complex
+	use GradientMethod
+	use eigen_value
+	implicit none
+	type(Tensor)::T,inoutP,para
+  type(CGmethod)::CGruner
+  para=(/-2d0,20d0/)
+  call CGruner%initial()
+   T=CGruner%CG(inoutP,para,.true.,3,'real*8',Example_searchFunction,Example_GradientFunction)
+   call T%print()
+   call inoutP%print()
+	stop
+end 
+
+
+
+
+
+
+
+
+ 

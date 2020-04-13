@@ -1,0 +1,16 @@
+out_and_set_seed
+    initial a random seed by cpu, and output the seed
+    
+SYNOPSIS   
+    integer function out_and_set_seed()
+    
+PURPOSE
+	initial a random seed by cpu, and output the seed
+
+
+
+EXAMPLT
+
+
+   integer::r
+   r=out_and_set_seed()

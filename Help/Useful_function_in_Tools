@@ -1,0 +1,265 @@
+===============================
+call writemess(mess,form)
+===============================
+
+
+
+	call writemess(w) is the same as write(*,*)trim(w)
+	and it will write to a external file in one has call initial_log(address)
+
+
+===============================
+set_seed
+===============================
+
+    set the random seed to the package, if running MPI, the package will set different seed to
+    every cpu accodfing to the seed
+    
+    out_initial_randomseed
+	out_initial_mpi_randomseed
+	out_and_set_seed
+
+===============================
+randomnumber
+===============================
+
+a=randomnumber(1,10)    : The random number of INTEGER in [ 1   , 10   ]
+a=randomnumber(1.,10.)  : The random number of REal    in ( 1.  , 10.  )
+a=randomnumber(1d0,10d0): The random number of REal    in ( 1d0 , 10d0 )
+
+===============================
+call initial_mpi(ID,Num,Ierr)
+===============================
+
+       initial the mpi information for the package, this code should be run first before you do anything when you are coding the mpi function
+
+
+===============================
+call set_check_dimension()
+===============================
+			
+        the package will check the dimenison name in every step, and 
+        
+                   it DO COST time
+        
+        usually it used to check the code.
+                   
+                   It will tell you inform you when you have a bug
+
+        By default, the code will not check the dimension name
+        
+===============================
+call unset_check_dimension()
+===============================
+
+        The package will not check the dimenison name. Usually when you are sure you code is right, run this subroutine
+        
+===============================    
+call set_error_pointer()
+===============================
+       Add the code " -g -static -ffpe-trap=invalid " when compiling your files
+               example: mpif90 -g -static -ffpe-trap=invalid test.f90 -o test
+
+       When you have a bug when running you code, the package will tell you where your bugs is, for example when there is a bug, the package will print
+
+ There is no data in the Tensor,(+)
+ The random seed is,seed=-5755
+ Tensor version is 3.3
+ Going to use the invalid memory reference to Backtrace for the error
+     
+                    _ooOoo_
+  _____________    o8888888o
+ |you have bugs|   88" . "88
+ |------------__\  (| -_- |)
+                   O\  =  /O
+                ____/`---`\\____
+              .`  \\|     |//  `.
+             /  \\|||  :  |||//  \
+            /  _||||| -:- |||||-  \
+            |   | \\\  -  /// |   |
+            | \_|  ``\---/``  |   |
+            \  .-\__  `-`  ___/-. /
+          ___`. .`  /--.--\  `. . __
+       ."" `<  `.___\_<|>_/___.`  >`"".
+      | | :  `- \`.;`\ _ /`;.`/ - ` : | |
+      \  \ `-.   \_ __\ /__ _/   .-` /  /
+ ======`-.____`-.___\_____/___.-`____.-`======
+                    `=---=`                    
+ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  Report ONLY bugs of the package to sj.dong@outlook.com 	     
+     
+
+#0  0x7F9164194E08
+#1  0x7F9164193F90
+#2  0x7F91638C54AF
+#3  0x6A0B63 in __tools_MOD_error_stop
+#4  0x616E28 in __tensor_type_MOD_add
+#5  0x4D25CC in __sampling_type_MOD_samplingeg
+#6  0x4DD440 in __gm_type_MOD_go_one_step
+#7  0x4DDD66 in __gm_type_MOD_runstep
+#8  0x4E2233 in __gm_type_MOD_rungradientupdate1
+#9  0x4EA91B in MAIN__ at runtJGM.f90:?
+
+
+        The package first tell you what the error is. And show you a picture to relax. And then use the invalid memory reference to Backtrace for the error
+        For this exanple we know that the error is in
+        
+          runtJGM.f90 (MAIN) --->  gm_type (rungradientupdate1)  ---> gm_type(runstep)  ---> gm_type(go_one_step) -->sampling_type(samplingeg)
+          
+       The error is in the function named 'samplingeg', and this function is in the  module whose name is sampling_type
+       
+        If you are running on Mac, this message will be in $HOME/Library/Logs/DiagnosticReports. You can use the code 
+        
+                     less $(ls -t ~/Library/Logs/DiagnosticReports/* |head -1)
+                     
+         to read this information
+        
+        
+        
+===============================    
+call unset_error_pointer()
+===============================    
+
+        Set the error_pointer off
+        
+
+
+
+===============================    
+call open_file(unit,address,status)
+===============================    
+
+
+      the same as open(unit=unit,file=address,status=status)
+      and if status='old', it will check if can or can not open the file
+      
+
+
+
+===============================
+call set_writing_type(form,typ)
+===============================
+
+        specify the form of the subroutine writemess
+             call set_writing_type('I10','integer')
+             call set_writing_type('F10.6','real*8')
+             
+             
+===============================
+call set_writing_type_scientific()
+===============================
+
+        specify the form of the subroutine writemess
+
+
+===============================     
+call unset_writing_type_scientific()
+===============================
+
+        specify the form of the subroutine writemess
+        
+        
+===============================
+call reset_writing_type()
+===============================
+
+        specify the form of the subroutine writemess, set to the default setting
+        
+        
+===============================
+call set_max_len_of_cha(maxlen)
+===============================
+
+        set the max length of the character used in the package
+
+
+
+===============================
+call set_deallocate_memory_flag()
+===============================
+
+        Share memory mode
+        It runs fast but cost memory. Share memory for all the function and subroutien use in the package
+
+
+===============================
+call unset_deallocate_memory_flag()
+===============================
+
+        It will save memory but run slow.
+        
+===============================
+call initial_log(address,optional(notoverwrite))
+===============================
+
+        call initial_log(address)
+        
+        call initial_log(address,'notoverwrite')! will not over write the log if it alread exit
+        
+        Set the address of log file. Then the subroutine call writemess(m) will print to the log as well as the screen
+        
+        
+===============================
+call set_MPI_log(optional(notoverwrite))
+===============================
+
+        All the cpu will write out its own log to the outside file, it use after call initial_log(address,optional(overwrite)) 
+
+
+===============================
+call set_output_log_unit(int)
+===============================
+
+
+===============================
+call set_output_cpu(cpu)
+===============================
+
+
+===============================
+call error_stop()
+===============================
+
+
+===============================
+call sortData(a,inde,realpart,increase)
+===============================
+
+
+
+===============================
+call system_time(cputime,times,timem,timeh,timed,chartime)
+call system_time(cputime,chartime)
+===============================
+
+
+
+
+
+
+
+
+
+
+===============================
+call reset_Time_calculator(totalstep,optional(numOutput))
+call Time_calculator()
+===============================
+
+
+
+
+
+
+
+
+===============================
+   + for character
+   .sub. .subL. .subR. for character
+   .equ. for character and vector
+   .nequ.  for character and vector
+===============================
+
+
+
+

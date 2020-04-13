@@ -1,0 +1,19 @@
+set_output_cpu
+    set the default output cpu
+    
+SYNOPSIS   
+   subroutine  set_output_cpu(cpunumber)
+    
+    integer cpunumber
+    
+PURPOSE
+	set the default output cpu when using "call writemess"
+
+PARAMETERS
+	cpunumber      - integer -
+	          the default cpu number. by default, the output cpu number is 0
+
+EXAMPLT
+
+
+   call set_output_cpu(1)! the cpu1 will be the output cup

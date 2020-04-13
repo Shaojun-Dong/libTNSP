@@ -1,0 +1,147 @@
+contract
+    contract for two Tensors.
+    
+SYNOPSIS   
+    type(Tensor) function contract(T1,index1,T2,index2)
+    type(Tensor) function contract(T1,index1,T2,char2)
+    type(Tensor) function contract(T1,ith1,T2,ith2)
+    type(Tensor) function contract(T1,ith1,T2,name2)
+    type(Tensor) function contract(T1,char1,T2,char2)
+    type(Tensor) function contract(T1,char1,T2,index2)
+    type(Tensor) function contract(T1,name1,T2,name2)
+    type(Tensor) function contract(T1,name1,T2,ith2)
+    type(Tensor) function contract(T1,T2)
+    
+    
+    class(Tensor)              T1
+    class(Tensor)              T2
+    character(len=*)           char1(:)
+    character(len=*)           char2(:)
+    character(len=*)           name1
+    character(len=*)           name2
+    integer                    index1(:)
+    integer                    index2(:)
+    integer                    ith1
+    integer                    ith2
+    
+PURPOSE
+	contract for two Tensors. Supose T, T1 and T2 are Tensors.
+	
+	   T=contract(T1,2,T2,4) :  contract the 2nd leg of T1 with the 4th leg of T2.
+	   T=contract(T1,2,T2,'B.L') :  contract the 2nd leg of T1 with the leg of T2 whose name is 'B.L'.
+	   T=contract(T1,(/1,2/),T2,(/3,4/)) :  contract the 1st,2nd legs of T1 with the 3rd,4th legs of T2.
+	   T=contract(T1,(/1,2/),T2,(/'B.L','B.R'/)) :  contract the 1st,2nd legs of T1 with the legs of T2 whose
+	                                                name is 'B.L','B.R'.
+	   T=contract(T1,(/'A.U','A.D'/),T2,(/'B.L','B.R'/)) :  contract the legs of 'A.U','A.D' of T1 with the
+	                                                    legs of T2 whose name is 'B.L','B.R'.
+	   T=contract(T1,(/'A.U','A.D'/),T2,(/3,4/)) :  contract the legs of 'A.U','A.D' of T1 with the 3rd,4th
+	                                                    legs of T2.
+	   T=contract(T1,'A.U',T2,'B.L') :  contract the 'A.U' leg of T1 with the leg of T2 whose name is 'B.L'.                                                 
+	   T=contract(T1,'A.U',T2,1) :  contract the 'A.U' leg of T1 with the 1st leg of T2.
+	   T=contract(T1,T2) : the legs have the same names in T1 and T2 will be contracted.
+	   
+   Note: 1. the length of char1 and char2 can be different. And so can index1 and index2.
+         2. The function will permute the legs that is to be contracted of T1 to the end of
+            the Tensor, and pemute the legs to to be contracted of T2 to the beginning of
+            T2. And then use matrix-matix product to finished the contraction. So the order
+            of the result Tensor wil be: first order the legs from T1 and then the legs from
+            T2.
+         3. in the contract if T1 has names but T2 do not. The result  will have its names.
+            The legs from T1 will keep their names but the one from T2 will name them '0.order'
+            order if the order of legs in the Tensor.
+	   
+	   
+PARAMETERS
+
+   T1            - class(Tensor)-
+                 The first Tensor to be contract
+                 
+   T2            - class(Tensor)-
+                 The second Tensor to be contract
+	              
+   char1         - character(len=*),array -
+                 specify the legs of T1 to be contract, they are the names of T1
+
+   char2         - character(len=*),array -
+                 specify the legs of T2 to be contract, they are the names of T2
+                 
+   name1         - character(len=*)-
+                 specify the leg of T1 to be contract, it is the name of T1
+
+   name2         - character(len=*)-
+                 specify the leg of T2 to be contract, it is the name of T2
+                                                 
+   index1        - integer,array -
+                 specify the legs of T1 to be contract, they are the index(order) of T1
+                 
+   index2        - integer,array -
+                 specify the legs of T2 to be contract, they are the index(order) of T2
+                 
+   ith1        - integer -
+                 specify the leg of T1 to be contract, it is the index(order) of T1
+                 
+   ith2        - integer -
+                 specify the leg of T2 to be contract, it is the index(order) of T2      
+                           
+EXAMPLT
+
+---1------
+  type(Tensor)::T,T1,T2
+  T1=generate((/2,3,4,5/),'real*4')
+  T2=generate((/4,5,2,3/),(/-10,10/),'integer')
+  T=contract(T1,(/2,3,4/),T2,(/4,1,2/))! T2 is integer,but will change to real*4 and do the contraction
+  call T%diminfo()
+  call T%print()
+
+---2------
+  type(Tensor)::T,T1,T2
+  T1=generate((/2,3,4/),'real*4')
+  T2=generate((/2,4/),'complex*8')
+  T=contract(T1,3,T2,2)
+  call T%diminfo()
+  call T%print()
+
+---3------
+  type(Tensor)::T,T1,T2
+  T1=generate((/2,3,4,5/),'real*4')
+  call T1%setName(1,'A.a')
+  call T1%setName(2,'A.b')
+  call T1%setName(3,'A.c')
+  call T1%setName(4,'A.d')
+  T2=generate((/4,5,2,3/),(/-10,10/),'integer')
+  call T2%setName(1,'B.e')
+  call T2%setName(2,'B.f')
+  call T2%setName(3,'B.g')
+  call T2%setName(4,'B.h')
+  T=contract(T1,(/'A.b','A.c','A.d'/),T2,(/'B.h','B.e','B.f'/))! T2 is integer,but will change to real*4 and do the contraction
+  call T%diminfo()
+  call T%print()
+---4------
+  type(Tensor)::T,T1,T2
+  T1=generate((/2,3,4,5/),'real*4')
+  call T1%setName(1,'A.a')
+  call T1%setName(2,'A.b')
+  call T1%setName(3,'A.c')
+  call T1%setName(4,'A.d')
+  T2=generate((/4,5,2,3/),(/-10,10/),'integer')
+  T=contract(T1,(/'A.b','A.c','A.d'/),T2,(/4,1,2/))! T2 is integer,but will change to real*4 and do the contraction
+  call T%diminfo()
+  call T%print()
+
+---5------
+  type(Tensor)::T1,T2,T
+  T1=generate((/2,3,4/),'real') 
+  T2=generate((/2,3,4/),'real') 
+  call T1%setName(1,'A.a')
+  call T1%setName(2,'Same.Name1')
+  call T1%setName(3,'Same.Name2')
+  call T2%setName(1,'B.b')
+  call T2%setName(2,'Same.Name1')
+  call T2%setName(3,'Same.Name2')
+  call T1%diminfo("dimension of T1")
+  call T2%diminfo("dimension of T2")
+  T=contract(T1,T2)
+  call T%info("contract(T1,T2),the legs with the same name will be contracted")
+  T=contract(T1,(/2,3/),T2,(/2,3/))
+  call T%info("contract(T1,(/2,3/),T2,(/2,3/))")
+

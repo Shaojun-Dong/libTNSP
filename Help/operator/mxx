@@ -1,0 +1,50 @@
+.mxx.
+   direct product of two matrix,The rank of two input Tensor should be less than or
+   equal to 2. on return, the rank of output is 2 or 1
+   
+SYNOPSIS
+
+   Result=T1.mxx.T2
+
+
+   type(Tensor)    Result,T1,T2
+
+
+NOTE:
+
+
+    1. R_{(i,j),(k,l)}=T1_{i,k}.mxx.T2_{j,l}, R is rank-2 Tensor, and the index is that: first order the
+       index from T1 and then from T2
+    2. R_{(i,j))}=T1_{i}.mxx.T2_{j}, R is rank-1 Tensor, and the index is that: first order the
+       index from T1 and then from T2
+
+
+example
+
+
+------1----------------
+   type(Tensor)::A,B,R
+   A=generate((/2,3/),(/-5,5/),'real*4')
+   call A%setName(1,'A.a')
+   call A%setName(2,'A.b')
+   B=generate((/4,5/),(/-5,5/),'real*4')
+   call B%setName(1,'B.a')
+   call B%setName(2,'B.b')
+   R=A.mxx.B
+   call R%diminfo('A.mxx.B')
+
+
+----2----------
+   type(Tensor)::A,B,R
+   A=generate((/2/),(/-5,5/),'real*4')
+   call A%setName(1,'A.a')
+   B=generate((/2/),(/-5,5/),'real*4')
+   call B%setName(1,'B.a')
+   R=A.mxx.B
+   call R%diminfo('A.mxx.B')
+   R=R.mxx.B
+   call R%diminfo('R.mxx.B')
+
+
+
+

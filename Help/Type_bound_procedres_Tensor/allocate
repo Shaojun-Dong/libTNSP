@@ -1,0 +1,65 @@
+allocate
+    allocate the memery for the Tensor
+    
+SYNOPSIS   
+    subroutine allocate(dimension,type)
+    
+    subroutine allocate(typedimension,type)
+    
+    subroutine allocate(T,type)
+    
+    subroutine allocate(dimension,charaype)
+    
+    subroutine allocate(typedimension,charaype)
+    
+    subroutine allocate(T,charaype)
+    
+    integer              type,dimension(:)
+    type(dimension)      typedimension
+    type(Tensor)         T
+    character(len=*)     charaype
+PURPOSE
+	allocate the memery for the Tensor.
+
+PARAMETERS
+   dimension      - integer array -
+                  specify the dimension of the Tensor
+                  
+   type           - integer -
+                  specify the type of Tensor
+                  type=1:   integer
+                  type=2:   real(kind=4)
+                  type=3:   real(kind=8)
+                  type=4:   complex(kind=4)
+                  type=5:   complex(kind=7)
+                  type=6:   logical
+                  type=7:   character
+                  
+  typedimension   - type(dimension) -
+                  specify the dimension of the Tensor
+                  
+  T               - type(Tensor) -
+                  allocate a Tensor with the same dimenison of T       
+                                    
+  charaype        - character(len=*) -
+                  specify the type of Tensor,charaype can be
+                  'integer':           integer
+                  'real(kind=4)':      real(kind=4)
+                  'real*4':            real(kind=4)
+                  'real':              real(kind=4)
+                  'real(kind=8)':      real(kind=8)
+                  'real*8':            real(kind=8)
+                  'dble':              real(kind=8)
+                  'complex(kind=4)':   complex(kind=4)
+                  'complex*8':         complex(kind=4)
+                  'complex':           complex(kind=4)
+                  'complex(kind=8)':   complex(kind=8)
+                  'complex*16':        complex(kind=8)
+                  'logical':           logical
+                  'character':         character
+EXAMPLT
+
+---1------
+  type(Tensor)::T
+  call T%allocate((/2,2,2/),'integer')! allocate a integer Tensor of dimension 2*2*2
+  

@@ -1,0 +1,18 @@
+split
+    split the leg that has been fuse into one.
+    
+SYNOPSIS   
+    
+    Result=T.split.(/i1,i2/)
+    Result=T.split.ith
+    Result=.split.T
+
+   type(Tensor)     Result,T
+   integer          ith,i1,i2
+
+NOTE
+
+
+    Result=T.split.(/i1,i2/) is the same as T%split(i1,i2), Result=T.split.ith is the same as T%split(ith,1)
+    and Result=.split.T is the same as T%split(). see the example in Type bound procedres of split
+   

@@ -1,0 +1,30 @@
+writemess
+    print the mess on the screen and on a log file.
+    
+SYNOPSIS   
+    subroutine writemess(mess,cpu_number)
+    
+    character(len=*) mess
+    integer,optional cpu_number
+PURPOSE
+	print the mess on the screen and on a log file(If set the log file).
+
+PARAMETERS
+	mess            - character(len=*) -
+	               the characters to be print
+	cpu_number      - integer -
+	                optional. specify the output cpu(in mpi code).By default the output cpu is 0.
+
+EXAMPLT
+
+---1------
+	call set_output_log_address('./logFile') !set the log file
+   call writemess('Holle')!the default cpu print 'Holle' on the screen and ./logFile
+   
+---2------
+	call set_output_log_address('./logFile') !set the log file
+   call writemess('Holle',2)!cpu 2 print 'Holle' on the screen and ./logFile
+
+---3------
+   call writemess('Holle')!the default cpu print 'Holle' on the screen but no log file
+   

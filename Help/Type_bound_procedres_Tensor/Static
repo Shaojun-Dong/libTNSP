@@ -1,0 +1,33 @@
+Static
+    Set the Tensor as a Static Tensor.
+    
+SYNOPSIS   
+    
+    subroutine Static()
+    
+PURPOSE
+	Set the Tensor as a Static Tensor. If the Tensor is a Dynamic, it can change its type
+	accoding to the program. If not, can not change it type. For example, suppose T is a 
+	Tensor of integer, T=(/1.1,2.3/), the result will be that the element store in T is
+	[1,2] because T is integer. But if T is a Dynamic Tensor, after the code T will change
+	its type to real*4 and then store the real*4 data.
+	      
+
+PARAMETERS
+	 
+
+EXAMPLT
+
+  type(Tensor)::T
+  T=(/1,2,3/)
+  call T%print("T is integer")
+  
+  T=(/4.56d0,7.891d0/)
+  call T%print("T is real*8 now")
+  
+  T=(/1,2,3/)
+  call T%print("T is integer,before set Static")
+  call T%Static()
+  T=(/4.56d0,7.891d0/)
+  call T%print("T is Static, can not change its type,the input data change the type of T")
+  

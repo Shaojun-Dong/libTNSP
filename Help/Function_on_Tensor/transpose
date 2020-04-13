@@ -1,0 +1,31 @@
+transpose
+   over write transpose in fortran for Tensor. Output the transpose of Tensor.
+      
+SYNOPSIS   
+    type(Tensor) function           transpose(T)
+    
+    type(Tensor)                    T
+    
+PURPOSE
+
+   over write transpose in fortran for Tensor. Output the transpose of Tensor.
+   only work on rank<=2 Tensor. rank=1,will result no change
+
+PARAMETERS
+   T            - type(Tensor)-
+                input Tensor
+EXAMPLT
+
+  type(Tensor)::T
+  T=generate((/2,2/),(/-10,10/),'integer')
+  call T%print("T is integer Tensor")
+  call TMprint(transpose(T),"transpose for integer Tensor")
+  T=generate((/2,2/),(/-10,10/),'complex*8')
+  call T%print("T is complex Tensor")
+  call TMprint(transpose(T),"transpose for complex Tensor")
+
+
+
+
+
+

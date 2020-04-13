@@ -1,0 +1,67 @@
+setName
+    set the Name to a Tensor
+    
+SYNOPSIS   
+    subroutine setName(TensorName)
+    subroutine setName(ith,fullname)
+    subroutine setName(oldName,newName)
+    
+    character(len=*)           TensorName
+    character(len=*)           fullname
+    character(len=*)           oldName
+    character(len=*)           newName
+    integer                    ith
+    
+PURPOSE
+	set the Name to a Tensor. The name contains two parts. One is to tell from different Tensor, and the other
+	so to seperate the dimension in a Tensor. for example 'Tensor_i.Dimension_i' the characters of 'Tensor_i' is 
+	to track the dimension from different Tensor, the 'Dimension_i' is to track it in a Tenor among dimension, 
+	and the mark '.' is to divided them. We call 'Tensor_i.Dimension_i' fullname and 'Tensor_i' Tensor name
+
+PARAMETERS
+	TensorName    - character(len=*)  -
+	              in setName(TensorName) 
+	              set a Tensor name to a Tensor. After so all the dimension name will be set to its order.
+   fullname      - character(len=*),optional -
+                 in setName(ith,fullname)
+                 set the fullname to the ith dimension
+   ith           - integer -
+                 in setName(ith,fullname)
+                 set the fullname to the ith dimension
+   oldName       - character(len=*),optional -
+                 in setName(oldName,newName)
+                 change the dimension whose name is oldName as newName
+   newName       - character(len=*),optional -
+                 in setName(oldName,newName)
+                 change the dimension whose name is oldName as newName     
+
+EXAMPLT
+
+---1------
+  type(Tensor)::T
+  T=generate((/2,3,4,5/),'real*4') !generate a 2*3*4*5 random number Tensor of type real*4
+  call T%setName('A')
+  call T%diminfo()
+! set a Tensor name to T, and all the dimension name will be set to as its order
+! the name of T new will be 'A.1','A.2','A.3','A.4'
+  
+---2------
+  type(Tensor)::T
+  T=generate((/2,3,4/),'real*4') !generate a 2*3*4 random number Tensor of type real*4
+  call T%setName(1,'A.one')! set a name to the first dimension of Tensor
+  call T%setName(2,'B.a')! set a name to the second dimension of Tensor
+  call T%setName(3,'aaa.test')! set a name to the thord dimension of Tensor
+  call T%diminfo()
+! the name of T new will be 'AA.one','B.a','aaa.test'
+---3------
+  type(Tensor)::T
+  T=generate((/2,3,4/),'real*4') !generate a 2*3*4 random number Tensor of type real*4
+  call T%setName(1,'A.one')! set a name to the first dimension of Tensor
+  call T%setName(2,'B.a')! set a name to the second dimension of Tensor
+  call T%setName(3,'aaa.test')! set a name to the thord dimension of Tensor
+  call T%diminfo()
+! the name of T new will be 'AA.one','B.a','aaa.test'
+
+  call T%setName('aaa.test','A,change')
+! the name of T new will be 'AA.one','B.a','A,change'
+ 

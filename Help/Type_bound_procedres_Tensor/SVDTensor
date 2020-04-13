@@ -1,0 +1,81 @@
+SVD
+    SVD of a Tensor, output a array of type(Tensor) with length 3.
+    
+SYNOPSIS   
+    type(Tensor) function      SVDTensor()	
+    type(Tensor) function      SVDTensor(UName,VName)
+    type(Tensor) function      SVDTensor(CutOff)	
+    type(Tensor) function      SVDTensor(UName,VName,CutOff)
+    
+    integer                        CutOff
+    character(len=*)               UName,VName
+    
+PURPOSE
+	SVD of a Tensor, output a array of type(Tensor) with length 3. suppose Tarray is type(Tensor)::Tarray(3)
+	
+	    Tarray=T%SVDTensor():  output a array of [U]->[s]->[V], they are SVD of T. The input T should be a two-dimensional Tensor. s is
+	                       the singular value vecter. the relation is T=U*eye(s)*V. Or T=Tarray(1)*eye(Tarray(2))*Tarray(3).
+	                        
+       Tarray=T%SVDTensor(CutOff):  output a array of [U]->[s]->[V], they a SVD of T, input T should be a two-dimensional Tensor. s is
+	                             the singular value vecter. the relation is T=U*eye(s)*V. Or T=Tarray(1)*eye(Tarray(2))*Tarray(3). 
+	                             CutOff is the max dimension of s. the dimension of U is[U%dim(1),CutOff], s is a vecter if [CutOff],
+	                             V is [CutOff,V%dim(2)].
+	                        
+       Tarray=T%SVDTensor(UName,VName): output a array of [U]->[s]->[V], they a SVD of T, input T can be any shpae but should contain two
+                         different TensorName. UName,VName specify the two dimension to be a matrix to do the SVD. 
+ 
+       Tarray=T%SVDTensor(UName,VName,CutOff): output a array of [U]->[s]->[V], they a SVD of T, input T can be any shpae but should contain two
+                          different TensorName. UName,VName specify the two dimension to be a matrix to do the SVD. CutOff is the max
+	                        dimension of s
+	                        
+	example for T%SVDTensor(UName,VName), suppose the dimension of T is [2,3,4,5,6,7] and the name are ['A.L','B.R','A'R','A'U','B.L','A.D'].
+	In the Name 'A' and 'B' in front of the mark '.' use to track the dimension from different Tensor and the characters after to track it
+	in one Tensor from other diemnsion, array=T%SVDTensor('A','B') will permute all the dimension form 'A', that is 'A.L','A.D','A.R','A.U', to
+	the beginning and 'B' to the end. after so on output, the diemnsion of U is [2,4,5,7,18] with name ['A.L','A'R','A'U','A.D','0.5'] where
+	the last diemnsion of '0.5' is the new dimension from SVD. s is a Tensor with no name [18,18]. V is [18,3,6] with name ['0.1','B.R','B.L']
+	                        
+PARAMETERS
+   CutOff        - integer -
+                 Specify the max dimension of singular value maxtix. 
+                 
+   UName         - character(len=*) -
+                 The name of U matrix or the dimension which to be the first dimension of Tensor to from the matrix to
+                 do the svd
+   UName         - character(len=*) -
+                 The name of V matrix or the dimension which to be the second dimension of Tensor to from the matrix to
+                 do the svd
+                               
+EXAMPLT
+
+----- 1 no namne--------
+  type(Tensor)::T,UsV(3),T2
+  T=generate((/3,3/),'real*4')
+  UsV=T%SVDTensor()
+  call UsV(1)%print("U")
+  call UsV(2)%print("s")
+  call UsV(3)%print("V")
+  T2=UsV(1)*eye(UsV(2))*UsV(3)
+  call T2%print('U*eye(s)*V')
+  call T%print("T")
+
+----- 2 namne --------
+  type(Tensor)::T,UsV(3),T2
+  T=generate((/2,3,4,5,6/),'real*4')
+  call T%setName(1,'A.L')
+  call T%setName(2,'B.L')
+  call T%setName(3,'A.U')
+  call T%setName(4,'A.R')
+  call T%setName(5,'B.R')
+  UsV=T%SVDTensor('A','B')
+  call UsV(1)%diminfo("dimension of U")
+  call UsV(2)%diminfo("dimension of s")
+  call UsV(3)%diminfo("dimension of V")
+  
+
+
+
+
+
+
+
+ 

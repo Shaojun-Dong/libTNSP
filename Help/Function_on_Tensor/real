@@ -1,0 +1,30 @@
+real
+   over write real in fortran for Tensor. Change the Tensor to a real*4 Tensor.
+      
+SYNOPSIS   
+    type(Tensor) function           real(T)
+    
+    type(Tensor)                    T
+    
+PURPOSE
+
+   over write real in fortran for Tensor. Change the Tensor to a real*4 Tensor.
+
+PARAMETERS
+   T            - type(Tensor)-
+                input Tensor
+EXAMPLT
+
+  type(Tensor)::T
+  T=generate((/2,2/),(/-10,10/),'integer')
+  call T%print("T is integer Tensor")
+  call TMprint(real(T),"real for integer Tensor)
+  T=generate((/2,2/),(/-10,10/),'complex*8')
+  call T%print("T is complex Tensor")
+  call TMprint(real(T),"real for complex Tensor")
+
+
+
+
+
+

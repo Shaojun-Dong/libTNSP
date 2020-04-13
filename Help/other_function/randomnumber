@@ -1,0 +1,16 @@
+randomnumber
+    output a random number
+    
+SYNOPSIS   
+    real*8 function randomnumber()
+    
+PURPOSE
+	output a random number (0,1)
+
+
+
+EXAMPLT
+
+
+   real*8::r
+   r=randomnumber()
