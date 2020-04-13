@@ -45,10 +45,10 @@ libTNSP INSTALLATION:
         make cleanAll : clean all the files of *.o, *.mod and the package
 
         make cleanlib : clean the package according to the file make.inc
+        
+       make cleanAlllib : clean All the packages
 
-     make cleanAlllib : clean All the packages
-
-     make cleanAllMod : clean All the file of *.mod *.o
+       make cleanAllMod : clean All the file of *.mod *.o
    
    
  - Use the code 
