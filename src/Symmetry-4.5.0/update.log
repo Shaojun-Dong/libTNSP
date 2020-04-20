@@ -841,4 +841,9 @@
 
 
 
+2020.4.19
+
+     fix a small bug in U1.f90. The bug shows up when fusing two legs with the Quantum Numbers are 0.5 and 1. If the bug met, the code will show error message.
+   So the codes that link to the old version of U1.f90 are still OK if they  can run without error message.
+
 
