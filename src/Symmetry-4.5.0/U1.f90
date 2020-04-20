@@ -28,6 +28,7 @@ module U1Tool
 	use Tensor_type
 	implicit none
 	private
+	real*4,private::delta_QN=1.
 
 
 	public::checkU1Rule
@@ -370,14 +371,16 @@ contains
 			call error_stop()
 		end if
 
-		maxi=int(anint(maxQN))-int(anint(minQN))+1
+		!maxi=int(anint(maxQN))-int(anint(minQN))+1
+		maxi=(maxQN-minQN)/delta_QN+1
 		allocate(newQN(maxi))
 		allocate(deg(maxi))
 		do i=1,maxi
-			newQN(i)=minQN+(i-1)
+			newQN(i)=minQN+(i-1)*delta_QN
 		end do
 		if(newQN(maxi).nequ.maxQN)then
-			call writemess('ERROR in QuanFuseOrder,1')
+			call writemess('ERROR in QuanFuseOrder,1',-1)
+			call writemess(' Maybe you should overwrite the subroutine of QuanFuseOrder',-1)
 			call error_stop
 		end if
 
