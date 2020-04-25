@@ -150,6 +150,7 @@ module SymTensor_type
 	contains
 		generic,public::getTotalData =>getTotalData0,getTotalData_vec,getTotalData_val
 		procedure,public::getTotalblock
+		procedure,public::getTotalElement!get The number of the non-zero elements
 		procedure,public::getRank => DimSize !overwrite the function of type(Dimension)
 		generic,public::getFlag =>getFlag0,getFlag_vec,getFlag_val
 		procedure,public::getclassType
@@ -885,6 +886,20 @@ contains
 	integer function getTotalblock(ST)
 		class(SymTensor),intent(in)::ST
 		getTotalblock=ST%totalblock
+		return
+	end function
+
+	function getTotalElement(ST)
+		integer::getTotalElement
+		class(SymTensor),intent(in)::ST
+		integer::i
+		getTotalElement=0
+		if(.not.ST%getFlag())return
+		do i=1,ST%getTotalData()
+			if(ST%getFlag(i))then
+				getTotalElement=getTotalElement+ST%Block(i)%getTotalData()
+			end if
+		end do
 		return
 	end function
 	
