@@ -854,3 +854,8 @@
     Num is the number of the non-zero elements in the SymTensor
 
 
+2020.4.29
+
+      Midify the code in SymTensor.f90 about the SVD when there is one element in the block. Due to the bug fixed 
+  in TData.f90, the SVD can run on this case without any modification!
+

@@ -6906,22 +6906,22 @@ contains
 		type(Tensor),intent(in)::A(LDA1,LDA2)
 		type(Tensor),intent(inout)::U(LDA1,LDS),S(LDS,LDS),V(LDS,LDA2)
 		type(Tensor)::SS
-		if(A(indexi,indexj)%getTotalData().eq.1)then
-			call U(indexi,indexs)%setType(A(indexi,indexj)%getType())
-			call V(indexs,indexj)%setType(A(indexi,indexj)%getType())
-			if(A(indexi,indexj).gt.0)then
-				S(indexs,indexs)=A(indexi,indexj)
-				U(indexi,indexs)=1
-				V(indexs,indexj)=1
-			else
-				S(indexs,indexs)=(-1)*A(indexi,indexj)
-				U(indexi,indexs)=-1
-				V(indexs,indexj)=1
-			end if
-			call S(indexs,indexs)%resetdim((/1,1/))
-			call U(indexi,indexs)%resetdim((/1,1/))
-			call V(indexs,indexj)%resetdim((/1,1/))
-		else
+		!if(A(indexi,indexj)%getTotalData().eq.1)then
+		!	call U(indexi,indexs)%setType(A(indexi,indexj)%getType())
+		!	call V(indexs,indexj)%setType(A(indexi,indexj)%getType())
+		!	if(A(indexi,indexj).gt.0)then
+		!		S(indexs,indexs)=A(indexi,indexj)
+		!		U(indexi,indexs)=1
+		!		V(indexs,indexj)=1
+		!	else
+		!		S(indexs,indexs)=(-1)*A(indexi,indexj)
+		!		U(indexi,indexs)=-1
+		!		V(indexs,indexj)=1
+		!	end if
+		!	call S(indexs,indexs)%resetdim((/1,1/))
+		!	call U(indexi,indexs)%resetdim((/1,1/))
+		!	call V(indexs,indexj)%resetdim((/1,1/))
+		!else
 			call A(indexi,indexj)%SVDroutine(U(indexi,indexs),ss,V(indexs,indexj),cut)
 			if(.not.ifset_SVD_S_matrix_flag())then
 				S(indexs,indexs)=eye(ss)
@@ -6929,7 +6929,7 @@ contains
 				S(indexs,indexs)=ss
 			end if
 			
-		end if
+		!end if
 		if(S(indexs,indexs)%dim(1).ne.cut)then
 			call writemess("ERROR in SVD on SymTensor",-1)
 			call writemess("The degeneracy error",-1)
@@ -6943,29 +6943,29 @@ contains
 		type(Tensor),intent(inout)::A(LDA1,LDA2)
 		type(Tensor),intent(inout)::U(LDA1,LDS),S(LDS,LDS),V(LDS,LDA2)
 		type(Tensor)::SS
-		if(A(indexi,indexj)%getTotalData().eq.1)then
-			call U(indexi,indexs)%setType(A(indexi,indexj)%getType())
-			call V(indexs,indexj)%setType(A(indexi,indexj)%getType())
-			if(A(indexi,indexj).gt.0)then
-				S(indexs,indexs)=A(indexi,indexj)
-				U(indexi,indexs)=1
-				V(indexs,indexj)=1
-			else
-				S(indexs,indexs)=(-1)*A(indexi,indexj)
-				U(indexi,indexs)=-1
-				V(indexs,indexj)=1
-			end if
-			call S(indexs,indexs)%resetdim((/1,1/))
-			call U(indexi,indexs)%resetdim((/1,1/))
-			call V(indexs,indexj)%resetdim((/1,1/))
-		else
+		!if(A(indexi,indexj)%getTotalData().eq.1)then
+		!	call U(indexi,indexs)%setType(A(indexi,indexj)%getType())
+		!	call V(indexs,indexj)%setType(A(indexi,indexj)%getType())
+		!	if(A(indexi,indexj).gt.0)then
+		!		S(indexs,indexs)=A(indexi,indexj)
+		!		U(indexi,indexs)=1
+		!		V(indexs,indexj)=1
+		!	else
+		!		S(indexs,indexs)=(-1)*A(indexi,indexj)
+		!		U(indexi,indexs)=-1
+		!		V(indexs,indexj)=1
+		!	end if
+		!	call S(indexs,indexs)%resetdim((/1,1/))
+		!	call U(indexi,indexs)%resetdim((/1,1/))
+		!	call V(indexs,indexj)%resetdim((/1,1/))
+		!else
 			call A(indexi,indexj)%SVDKill(U(indexi,indexs),ss,V(indexs,indexj),cut)
 			if(.not.ifset_SVD_S_matrix_flag())then
 				S(indexs,indexs)=eye(ss)
 			else
 				S(indexs,indexs)=ss
 			end if
-		end if
+		!end if
 		if(S(indexs,indexs)%dim(1).ne.cut)then
 			call writemess("ERROR in SVD on SymTensor",-1)
 			call writemess("The degeneracy error",-1)
@@ -7199,24 +7199,24 @@ contains
 		type(Tensor),intent(in)::A(LDA1,LDA2)
 		type(Tensor),intent(inout)::U(LDA1,LDS),S(LDS,LDS),V(LDS,LDA2)
 		type(Tensor)::SS
-		if(A(indexi,indexj)%getTotalData().eq.1)then
-			call U(indexi,indexs)%setType(A(indexi,indexj)%getType())
-			call V(indexs,indexj)%setType(A(indexi,indexj)%getType())
-			if(A(indexi,indexj).gt.0)then
-				S(indexs,indexs)=A(indexi,indexj)
-				U(indexi,indexs)=1
-				V(indexs,indexj)=1
-			else
-				S(indexs,indexs)=(-1)*A(indexi,indexj)
-				U(indexi,indexs)=-1
-				V(indexs,indexj)=1
-			end if
-			call U(indexi,indexs)%resetdim((/1,1/))
-			call V(indexs,indexj)%resetdim((/1,1/))
-			call S(indexs,indexs)%resetdim([1])
-		else
+		!if(A(indexi,indexj)%getTotalData().eq.1)then
+		!	call U(indexi,indexs)%setType(A(indexi,indexj)%getType())
+		!	call V(indexs,indexj)%setType(A(indexi,indexj)%getType())
+		!	if(A(indexi,indexj).gt.0)then
+		!		S(indexs,indexs)=A(indexi,indexj)
+		!		U(indexi,indexs)=1
+		!		V(indexs,indexj)=1
+		!	else
+		!		S(indexs,indexs)=(-1)*A(indexi,indexj)
+		!		U(indexi,indexs)=-1
+		!		V(indexs,indexj)=1
+		!	end if
+		!	call U(indexi,indexs)%resetdim((/1,1/))
+		!	call V(indexs,indexj)%resetdim((/1,1/))
+		!	call S(indexs,indexs)%resetdim([1])
+		!else
 			call A(indexi,indexj)%SVDroutine(U(indexi,indexs),S(indexs,indexs),V(indexs,indexj))
-		end if
+		!end if
 		return
 	end subroutine
 	subroutine SVD_subroutine_S_kill_inData(A,U,S,V,LDA1,LDA2,LDS,indexi,indexj,indexs)
@@ -7224,24 +7224,24 @@ contains
 		type(Tensor),intent(inout)::A(LDA1,LDA2)
 		type(Tensor),intent(inout)::U(LDA1,LDS),S(LDS,LDS),V(LDS,LDA2)
 		type(Tensor)::SS
-		if(A(indexi,indexj)%getTotalData().eq.1)then
-			call U(indexi,indexs)%setType(A(indexi,indexj)%getType())
-			call V(indexs,indexj)%setType(A(indexi,indexj)%getType())
-			if(A(indexi,indexj).gt.0)then
-				S(indexs,indexs)=A(indexi,indexj)
-				U(indexi,indexs)=1
-				V(indexs,indexj)=1
-			else
-				S(indexs,indexs)=(-1)*A(indexi,indexj)
-				U(indexi,indexs)=-1
-				V(indexs,indexj)=1
-			end if
-			call U(indexi,indexs)%resetdim((/1,1/))
-			call V(indexs,indexj)%resetdim((/1,1/))
-			call S(indexs,indexs)%resetdim([1])
-		else
+		!if(A(indexi,indexj)%getTotalData().eq.1)then
+		!	call U(indexi,indexs)%setType(A(indexi,indexj)%getType())
+		!	call V(indexs,indexj)%setType(A(indexi,indexj)%getType())
+		!	if(A(indexi,indexj).gt.0)then
+		!		S(indexs,indexs)=A(indexi,indexj)
+		!		U(indexi,indexs)=1
+		!		V(indexs,indexj)=1
+		!	else
+		!		S(indexs,indexs)=(-1)*A(indexi,indexj)
+		!		U(indexi,indexs)=-1
+		!		V(indexs,indexj)=1
+		!	end if
+		!	call U(indexi,indexs)%resetdim((/1,1/))
+		!	call V(indexs,indexj)%resetdim((/1,1/))
+		!	call S(indexs,indexs)%resetdim([1])
+		!else
 			call A(indexi,indexj)%SVDKill(U(indexi,indexs),S(indexs,indexs),V(indexs,indexj))
-		end if
+		!end if
 		return
 	end subroutine
 
