@@ -11374,8 +11374,8 @@ contains
 		call WorkingMemory%check()
 		length=indata%TotalData
 		max_MN=max(M,N)
-		lw=min_MN*min_MN+2*min_MN+max_MN
-		rwdim=min_MN*max(5*min_MN+7,2*max_MN+2*min_MN+1)
+		lw=min_MN*min_MN+2*min_MN+max_MN+1
+		rwdim=min_MN*max(5*min_MN+7,2*max_MN+2*min_MN+1)+1
 		select case(indata%classType)
 			case (5)
 				if(WorkingMemory%ifDynamic())then
@@ -11557,8 +11557,8 @@ contains
 		max_MN=max(M,N)
 		select case(indata%classType)
 			case (5)
-				rwdim=5*min_MN*min_MN+7*min_MN
-				lw=min_MN*min_MN+2*min_MN+max_MN
+				rwdim=5*min_MN*min_MN+7*min_MN+1
+				lw=min_MN*min_MN+2*min_MN+max_MN+1
 				if(WorkingMemory%ifDynamic())then
 					totallengthofmemory=length+lw+m*min_MN+min_MN*n
 					call WorkingMemory%allocate(5,totallengthofmemory)
@@ -11591,8 +11591,8 @@ contains
 					call ZGESDD('S',m,n,zdata,m,S%ddata,U%zdata,m,V%zdata,min_MN,zWORK,lw,drw,iwork,INFO)
 				end if
 			case(4)
-				rwdim=max(5*min_MN*min_MN+8*min_MN,2*max_MN*min_MN+2*min_MN*min_MN+min_MN)
-				lw=min_MN*min_MN+4*min_MN
+				rwdim=max(5*min_MN*min_MN+8*min_MN,2*max_MN*min_MN+2*min_MN*min_MN+min_MN)+1
+				lw=min_MN*min_MN+4*min_MN+1
 				if(WorkingMemory%ifDynamic())then
 					totallengthofmemory=length+lw+m*min_MN+min_MN*n
 					call WorkingMemory%allocate(4,totallengthofmemory)
@@ -11654,7 +11654,7 @@ contains
 					call DGESDD('S',m,n,ddata,m,S%dData,U%dData,m,V%dData,min_MN,dWORK,lw,iwork,INFO)
 				end if
 			case(2)
-				lw=4*min_MN*min_MN+max(max(M,N),4*min(M,N)*min(M,N)+4*min(M,N))
+				lw=4*min_MN*min_MN+max(max(M,N),4*min(M,N)*min(M,N)+4*min(M,N))+1
 				if(WorkingMemory%ifDynamic())then
 					totallengthofmemory=length+lw+m*min_MN+min_MN*n+min_MN
 					call WorkingMemory%allocate(2,totallengthofmemory)
@@ -11684,7 +11684,7 @@ contains
 					call SGESDD('S',m,n,sdata,m,S%sdata,U%sdata,m,V%sdata,min_MN,sWORK,lw,iwork,INFO)
 				end if
 			case(1)
-				lw=4*min_MN*min_MN+max(max(M,N),4*min(M,N)*min(M,N)+4*min(M,N))
+				lw=4*min_MN*min_MN+max(max(M,N),4*min(M,N)*min(M,N)+4*min(M,N))+1
 				if(WorkingMemory%ifDynamic())then
 					totallengthofmemory=length+lw+m*min_MN+min_MN*n+min_MN
 					call WorkingMemory%allocate(2,totallengthofmemory)
@@ -11744,8 +11744,8 @@ contains
 		call WorkingMemory%check()
 		length=indata%TotalData
 		max_MN=max(M,N)
-		lw=min_MN*min_MN+2*min_MN+max_MN
-		rwdim=min_MN*max(5*min_MN+7,2*max_MN+2*min_MN+1)
+		lw=min_MN*min_MN+2*min_MN+max_MN+1
+		rwdim=min_MN*max(5*min_MN+7,2*max_MN+2*min_MN+1)+1
 		select case(indata%classType)
 			case (5)
 				if(WorkingMemory%ifDynamic())then

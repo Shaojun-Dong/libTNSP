@@ -1224,6 +1224,23 @@
 
 
 
+2020.4.29
+
+
+     Fix a bug in TData.f90, when calling SVD, with there is only one element in the matrix, the lapack with report an
+  error message:
+
+              ** On entry to DGESVD parameter number 13 had an illegal value
+              
+     modify the "lw":
+
+        lw=min_MN*min_MN+2*min_MN+max_MN
+
+    as
+
+        lw=min_MN*min_MN+2*min_MN+max_MN+1
+
+
 
 
 
