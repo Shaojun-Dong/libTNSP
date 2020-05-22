@@ -1244,6 +1244,29 @@
 
 
 
+2020.5.22
+
+    Fix a bug in TData.f90, input parameter error in SGEES(subroutine eigenvalue_TData_routine)
+
+
+       call SGEES('V','N',1,N,sHdata,N,SDIM,seigValR,seigValI,seigVec,N,swork,LWORK,sRWORK,BWORK,INFO)
+
+    modify as
+
+       call SGEES('V','N',1,N,sHdata,N,SDIM,seigValR,seigValI,seigVec,N,swork,LWORK,BWORK,INFO)
+
+
+    Fix a bug in TData.f90, subroutine SVD_TData_routine_SDD
+
+       call SGESVD('S',m,n,sdata,m,sdata4,usdata,m,vsdata,min_MN,sWORK,lw,iwork,INFO)
+
+    modify as
+
+       call SGESDD('S',m,n,sdata,m,sdata4,usdata,m,vsdata,min_MN,sWORK,lw,iwork,INFO)
+
+
+    These two subroutine will not call in most case, because they work  on integer
+
 
 
 

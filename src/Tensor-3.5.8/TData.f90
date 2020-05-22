@@ -11706,12 +11706,12 @@ contains
 					!allocate(usdata(m,min_MN))
 					!allocate(vsdata(min_MN,n))
 					!allocate(sdata4(min_MN)) 
-					call SGESVD('S',m,n,sdata,m,sdata4,usdata,m,vsdata,min_MN,sWORK,lw,iwork,INFO)
+					call SGESDD('S',m,n,sdata,m,sdata4,usdata,m,vsdata,min_MN,sWORK,lw,iwork,INFO)
 					s%sdata=sdata4(1:cut2)
 					call cut_off_routine_real4(u%sdata,m,cut2,usdata,m,min_MN)
 					call cut_off_routine_real4(V%sdata,cut2,n,Vsdata,min_MN,n)
 				else
-					call SGESVD('S',m,n,sdata,m,S%sdata,U%sdata,m,V%sdata,min_MN,sWORK,lw,iwork,INFO)
+					call SGESDD('S',m,n,sdata,m,S%sdata,U%sdata,m,V%sdata,min_MN,sWORK,lw,iwork,INFO)
 				end if
 		end select
 		call WorkingMemory%free()
@@ -12101,10 +12101,10 @@ contains
 				if(present(eigvector))then
 					allocate(seigVec(T%TotalData))
 					sHdata=T%idata(1:T%TotalData)
-					call SGEES('V','N',1,N,sHdata,N,SDIM,seigValR,seigValI,seigVec,N,swork,LWORK,sRWORK,BWORK,INFO)
+					call SGEES('V','N',1,N,sHdata,N,SDIM,seigValR,seigValI,seigVec,N,swork,LWORK,BWORK,INFO)
 				else
 					sHdata=T%idata(1:T%TotalData)
-					call SGEES('N','N',1,N,sHdata,N,SDIM,seigValR,seigValI,seigVec,N,swork,LWORK,sRWORK,BWORK,INFO)
+					call SGEES('N','N',1,N,sHdata,N,SDIM,seigValR,seigValI,seigVec,N,swork,LWORK,BWORK,INFO)
 				end if
 				if(info.ne.0) then
 					write (*,*) "Error in sig ,info=",info
