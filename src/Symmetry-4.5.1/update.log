@@ -847,3 +847,25 @@
    So the codes that link to the old version of U1.f90 are still OK if they  can run without error message.
 
 
+2020.4.25
+
+    Add a new function of SymTensor(or fTensor)
+         Num=SymT%getTotalElement()
+    Num is the number of the non-zero elements in the SymTensor
+
+
+2020.4.29
+
+      Midify the code in SymTensor.f90 about the SVD when there is one element in the block. Due to the bug fixed 
+  in TData.f90, the SVD can run on this case without any modification!
+
+2020.5.22
+
+
+     delete the subroutine of SymTensor%external(subroutine)
+     gfortran 10.1 can run the package
+
+
+
+
+

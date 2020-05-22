@@ -629,7 +629,7 @@ contains
 		class(fTensor),intent(inout)::T
 		integer,intent(in)::inde
 		call T%SymTensor%forward(inde)
-		call T%external(externalForWard,Tensor(inde))
+		call ForWardDataRoutine(T,inde)
 		return
 	end subroutine
 	
@@ -642,7 +642,7 @@ contains
 		if(long_Name_logi(indechar))then
 			ith=T%FindOrder(indechar)
 			call T%SymTensor%forward(indechar)
-			call T%external(externalForWard,Tensor(ith))
+			call ForWardDataRoutine(T,ith)
 		else
 			sizeindechar=T%getRank()
 			allocate(charToInt(sizeindechar))
@@ -691,7 +691,7 @@ contains
 		Type(fTensor),intent(in)::T
 		integer,intent(in)::ith
 		Res%SymTensor=T%SymTensor.pf.ith
-		call Res%external(externalForWard,Tensor(ith))
+		call ForWardDataRoutine(Res,ith)
 		return
 	end function
 	
@@ -760,16 +760,18 @@ contains
 		return
 	end subroutine
 	
-	subroutine externalForWard(block,lenofblock,dimen,info)
-		integer::lenofblock
-		type(Tensor)::block(lenofblock)
-		Type(Tensor)::info
-		Type(SymDimension)::dimen
+	
+	subroutine ForWardDataRoutine(T,indexEnd)
+		type(fTensor),target,intent(inout)::T
+		integer,intent(in)::indexEnd
 		integer,allocatable::indices(:),maxinde(:),mininde(:)
 		logical::goon,ifp
-		integer::i,indexEnd,rank,iQN
-		indexEnd=info%ii(1)
+		integer::i,rank,iQN
+		type(Tensor),pointer::Block(:)
+		type(SymDimension),pointer::dimen
 		if(indexEnd.eq.1)return
+		call T%pointer(Block)
+		dimen=>T%SymDimension
 		rank=dimen%getRank()
 		allocate(indices(rank))
 		allocate(mininde(rank))
@@ -796,12 +798,11 @@ contains
 	end subroutine
 	
 	
-	
 	subroutine permuteback_routine(T,inde)
 		class(fTensor),intent(inout)::T
 		integer,intent(in)::inde
 		call T%SymTensor%Backward(inde)
-		call T%external(externalBackWard,Tensor(inde))
+		call BackWardRoutine(T,inde)
 		return
 	end subroutine
 	
@@ -814,7 +815,7 @@ contains
 		if(long_Name_logi(indechar))then
 			inde=T%FindOrder(indechar)
 			call T%SymTensor%Backward(inde)
-			call T%external(externalBackWard,Tensor(inde))
+			call BackWardRoutine(T,inde)
 		else
 			sizeinde=T%getRank()
 			allocate(indes(sizeinde))
@@ -862,7 +863,7 @@ contains
 		type(fTensor),intent(in)::T
 		integer,intent(in)::ith
 		Res%SymTensor=T%SymTensor.pb.ith
-		call Res%external(externalBackWard,Tensor(ith))
+		call BackWardRoutine(Res,ith)
 		return
 	end function
 	Type(fTensor) function FermiPermuteBackWard_name(T,a)Result(Res)
@@ -930,16 +931,18 @@ contains
 		end select
 		return
 	end subroutine
-	subroutine externalBackWard(block,lenofblock,dimen,info)
-		integer::lenofblock
-		type(Tensor)::block(lenofblock),info
-		Type(SymDimension)::dimen
+	subroutine BackWardRoutine(T,indexStart)
+		integer,intent(in)::indexStart
+		type(fTensor),target,intent(inout)::T
 		integer,allocatable::indices(:),maxinde(:),mininde(:)
 		logical::goon,ifp
-		integer::i,rank,indexStart,iQN
-		indexStart=info%ii(1)
+		integer::i,rank,iQN
+		type(Tensor),pointer::block(:)
+		type(SymDimension),pointer::dimen
+		dimen=>T%SymDimension
 		rank=dimen%getRank()
 		if(indexStart.eq.rank)return
+		call T%pointer(block)
 		allocate(indices(rank))
 		allocate(mininde(rank))
 		allocate(maxinde(rank))
@@ -1122,11 +1125,13 @@ contains
 ! T(:,col)=P(col)*T(:,col) ,input fTensor
 !where P(col)=+-1 , the parity of col
 
-	subroutine externalContractSginOrder(block,lenofblock,dimen)
-		integer::lenofblock
-		type(Tensor)::block(lenofblock)
-		Type(SymDimension)::dimen
+	subroutine ContractSginOrderRoutine(T)!(block,lenofblock,dimen)
+		type(fTensor),target,intent(inout)::T
+		type(Tensor),pointer::block(:)
+		Type(SymDimension),pointer::dimen
 		integer::col,LD1,LD2,i,rank,iQN
+		dimen=>T%SymDimension
+		call T%pointer(Block)
 		rank=dimen%getRank()
 		LD2=dimen%dim(rank)
 		LD1=1
@@ -1144,11 +1149,13 @@ contains
 ! T(row,:)=P(row)*T(row,:) ,input fTensor
 !where P(row)=+-1 , the parity of row
 
-	subroutine externalContractSginOrderRow(block,lenofblock,dimen)
-		integer::lenofblock
-		type(Tensor)::block(lenofblock)
-		Type(SymDimension)::dimen
+	subroutine ContractSginOrderRowRoutine(T)!(block,lenofblock,dimen)
+		type(fTensor),target,intent(inout)::T
+		type(Tensor),pointer::block(:)
+		Type(SymDimension),pointer::dimen
 		integer::row,LD1,LD2,i,rank,iQN
+		dimen=>T%SymDimension
+		call T%pointer(Block)
 		rank=dimen%getRank()
 		LD1=dimen%dim(1)
 		LD2=1
@@ -1168,20 +1175,22 @@ contains
 !where P(ith)=+-1 , the parity of ith
 !routine(T%Block,T%getTotalData(),T%SymDimension,T2)
 
-	subroutine externalContractSginOrderDim(block,lenofblock,dimen,Info)
-		integer::lenofblock
-		type(Tensor)::block(lenofblock)
-		Type(SymDimension)::dimen
-		type(Tensor)::Info
-		integer::ith,LD1,LD2,LD3,i,rank,ithleg,iQN
-		ithleg=Info%ii(1)
+
+	subroutine ContractSginOrderDimRoutine(T,ithleg)!(block,lenofblock,dimen,Info)
+		type(fTensor),target,intent(inout)::T
+		integer,intent(in)::ithleg
+		type(Tensor),pointer::block(:)
+		Type(SymDimension),pointer::dimen
+		integer::ith,LD1,LD2,LD3,i,rank,iQN
+		dimen=>T%SymDimension
+		call T%pointer(Block)
 		rank=dimen%getRank()
 		if(ithleg.eq.1)then
-			call externalContractSginOrderRow(block,lenofblock,dimen)
+			call ContractSginOrderRowRoutine(T)
 			return
 		end if
 		if(ithleg.eq.rank)then
-			call externalContractSginOrder(block,lenofblock,dimen)
+			call ContractSginOrderRoutine(T)
 			return
 		end if
 		LD1=dimen%dim(1)
@@ -1215,9 +1224,9 @@ contains
 		type(fTensor),intent(inout)::T1,T2
 		integer::rank1
 		if(T1%getTotalBlock().gt.T2%getTotalBlock())then
-			call T2%external(externalContractSginOrderRow)
+			call ContractSginOrderRowRoutine(T2)
 		else
-			call T1%external(externalContractSginOrder)
+			call ContractSginOrderRoutine(T1)
 		end if
 		rank1=T1%getRank()
 		call T1%setFermiArrow(rank1,-1*T1%getFermiArrow(rank1))
@@ -1230,9 +1239,9 @@ contains
 		type(fTensor),intent(inout)::T1,T2
 		integer::rank1
 		if(row.eq.'r')then
-			call T2%external(externalContractSginOrderRow)
+			call ContractSginOrderRowRoutine(T2)
 		else if(row.eq.'c')then
-			call T1%external(externalContractSginOrder)
+			call ContractSginOrderRoutine(T1)
 		else
 			call writemess('ERROR in Reverse_Fermi_Rule, input parameter,row='+row,-1)
 			call writemess('row="r", change the row of T2',-1)
@@ -1249,9 +1258,9 @@ contains
 		integer,intent(in)::ith1,ith2
 		type(fTensor),intent(inout)::T1,T2
 		if(T1%getTotalBlock().gt.T2%getTotalBlock())then
-			call T2%external(externalContractSginOrderDim,Tensor((/ith2/)))
+			call ContractSginOrderDimRoutine(T2,ith2)
 		else
-			call T1%external(externalContractSginOrderDim,Tensor((/ith1/)))
+			call ContractSginOrderDimRoutine(T1,ith1)
 		end if
 		call T1%setFermiArrow(ith1,-1*T1%getFermiArrow(ith1))
 		call T2%setFermiArrow(ith2,-1*T2%getFermiArrow(ith2))
@@ -1260,7 +1269,7 @@ contains
 	subroutine Reverse_Fermi_Rule_specify3(T1,ith1)
 		integer,intent(in)::ith1
 		class(fTensor),intent(inout)::T1
-		call T1%external(externalContractSginOrderDim,Tensor((/ith1/)))
+		call ContractSginOrderDimRoutine(T1,ith1)
 		call T1%setFermiArrow(ith1,-1*T1%getFermiArrow(ith1))
 		return
 	end subroutine
@@ -1272,9 +1281,9 @@ contains
 		ith1=T1%FindOrder(name1)
 		ith2=T2%FindOrder(name2)
 		if(T1%getTotalBlock().gt.T2%getTotalBlock())then
-			call T2%external(externalContractSginOrderDim,Tensor((/ith2/)))
+			call ContractSginOrderDimRoutine(T2,ith2)
 		else
-			call T1%external(externalContractSginOrderDim,Tensor((/ith1/)))
+			call ContractSginOrderDimRoutine(T1,ith1)
 		end if
 		call T1%setFermiArrow(ith1,-1*T1%getFermiArrow(ith1))
 		call T2%setFermiArrow(ith2,-1*T2%getFermiArrow(ith2))
@@ -1286,7 +1295,7 @@ contains
 		class(fTensor),intent(inout)::T1
 		integer::ith1
 		ith1=T1%FindOrder(name1)
-		call T1%external(externalContractSginOrderDim,Tensor((/ith1/)))
+		call ContractSginOrderDimRoutine(T1,ith1)
 		call T1%setFermiArrow(ith1,-1*T1%getFermiArrow(ith1))
 		return
 	end subroutine
@@ -1299,9 +1308,9 @@ contains
 		ith1=T1%FindOrder(name1)
 		ith2=T2%FindOrder(name2)
 		if(T1orT2)then
-			call T1%external(externalContractSginOrderDim,Tensor((/ith1/)))
+			call ContractSginOrderDimRoutine(T1,ith1)
 		else
-			call T2%external(externalContractSginOrderDim,Tensor((/ith2/)))
+			call ContractSginOrderDimRoutine(T2,ith2)
 		end if
 		call T1%setFermiArrow(ith1,-1*T1%getFermiArrow(ith1))
 		call T2%setFermiArrow(ith2,-1*T2%getFermiArrow(ith2))
@@ -1313,9 +1322,9 @@ contains
 		type(fTensor),intent(inout)::T1,T2
 		logical,intent(in)::T1orT2
 		if(T1orT2)then
-			call T1%external(externalContractSginOrderDim,Tensor((/ith1/)))
+			call ContractSginOrderDimRoutine(T1,ith1)
 		else
-			call T2%external(externalContractSginOrderDim,Tensor((/ith2/)))
+			call ContractSginOrderDimRoutine(T2,ith2)
 		end if
 		call T1%setFermiArrow(ith1,-1*T1%getFermiArrow(ith1))
 		call T2%setFermiArrow(ith2,-1*T2%getFermiArrow(ith2))
@@ -1391,7 +1400,7 @@ contains
 			SymRule2=T2%getRule(i)
 			call checkSymmetryRule(SymRule1,SymRule2,T1%getName(rank),T2%getName(i))
 			if((rule2.lt.0).and.(rule1.gt.0))then
-				call T1%external(externalContractSginOrder)
+				call ContractSginOrderRoutine(T1)
 			end if
 		end do
 		call T1%SymTensor%backWard(T1Name(1:lenName))
@@ -1420,7 +1429,7 @@ contains
 			SymRule2=T2%getRule(i)
 			call checkSymmetryRule(SymRule1,SymRule2,T1%getName(rank),T2%getName(i))
 			if((rule2.lt.0).and.(rule1.gt.0))then
-				call T1%external(externalContractSginOrder)
+				call ContractSginOrderRoutine(T1)
 			end if
 		end do
 		call T1%SymTensor%backWard(T1Name(1:lenName))
@@ -1443,7 +1452,7 @@ contains
 			SymRule2=T2%getRule(i)
 			call checkSymmetryRule(SymRule1,SymRule2,T1%getName(rank),T2%getName(i))
 			if((rule2.lt.0).and.(rule1.gt.0))then
-				call T1%external(externalContractSginOrder)
+				call ContractSginOrderRoutine(T1)
 			end if
 		end do
 		call T1%SymTensor%backWard(T1Name(1:lenName))
@@ -1467,7 +1476,7 @@ contains
 			SymRule2=T2%getRule(1)
 			call checkSymmetryRule(SymRule1,SymRule2,T1%getName(firsti+i),T2%getName(1))
 			if((rule2.lt.0).and.(rule1.gt.0))then
-				call T2%external(externalContractSginOrderRow)
+				call ContractSginOrderRowRoutine(T2)
 			end if
 		end do
 		call T2%SymTensor%forWard(T2Name(1:lenName))
@@ -1505,7 +1514,7 @@ contains
 			SymRule2=T2%getRule(i)
 			call checkSymmetryRule(SymRule1,SymRule2,T1%getName(rank),T2%getName(i))
 			if((rule2.lt.0).and.(rule1.gt.0))then
-				call T1%external(externalContractSginOrder)
+				call ContractSginOrderRoutine(T1)
 			end if
 		end do
 		call T1%SymTensor%backWard(indices)
@@ -1527,7 +1536,7 @@ contains
 		SymRule2=T2%getRule(1)
 		call checkSymmetryRule(SymRule1,SymRule2,T1%getName(T1%getrank()),T2%getName(1))
 		if((rule2.lt.0).and.(rule1.gt.0))then
-			call T1%external(externalContractSginOrder)
+			call ContractSginOrderRoutine(T1)
 		end if
 		return
 	end subroutine
@@ -1547,7 +1556,7 @@ contains
 		SymRule2=T2%getRule(1)
 		call checkSymmetryRule(SymRule1,SymRule2,T1%getName(T1%getrank()),T2%getName(1))
 		if((rule2.lt.0).and.(rule1.gt.0))then
-			call T1%external(externalContractSginOrder)
+			call ContractSginOrderRoutine(T1)
 		end if
 		return
 	end subroutine

@@ -150,6 +150,7 @@ module SymTensor_type
 	contains
 		generic,public::getTotalData =>getTotalData0,getTotalData_vec,getTotalData_val
 		procedure,public::getTotalblock
+		procedure,public::getTotalElement!get The number of the non-zero elements
 		procedure,public::getRank => DimSize !overwrite the function of type(Dimension)
 		generic,public::getFlag =>getFlag0,getFlag_vec,getFlag_val
 		procedure,public::getclassType
@@ -251,7 +252,6 @@ module SymTensor_type
 											permuteback_Tensor_routine
 
 
-		generic,public::external=>operation_on_SymTensor1,operation_on_SymTensor2,operation_on_SymTensor3
 		generic,public::pointer=>Tpointer,Tpointer2,Tpointer3,Tpointer_,Tpointer2_
 		procedure::Tpointer,Tpointer2,Tpointer3,Tpointer_,Tpointer2_
 		procedure,public::point2TotalBlock,point2TotalData
@@ -409,9 +409,6 @@ module SymTensor_type
 		procedure::permuteback_vec_routine
 		procedure::permuteback_vec_name_routine
 		procedure::permuteback_Tensor_routine
-		procedure::operation_on_SymTensor1
-		procedure::operation_on_SymTensor2
-		procedure::operation_on_SymTensor3
 		procedure::eye_Tensor2
 		procedure::eye_Tensor6
 		procedure::dmaxElement
@@ -885,6 +882,20 @@ contains
 	integer function getTotalblock(ST)
 		class(SymTensor),intent(in)::ST
 		getTotalblock=ST%totalblock
+		return
+	end function
+
+	function getTotalElement(ST)
+		integer::getTotalElement
+		class(SymTensor),intent(in)::ST
+		integer::i
+		getTotalElement=0
+		if(.not.ST%getFlag())return
+		do i=1,ST%getTotalData()
+			if(ST%getFlag(i))then
+				getTotalElement=getTotalElement+ST%Block(i)%getTotalData()
+			end if
+		end do
 		return
 	end function
 	
@@ -6490,34 +6501,6 @@ contains
 
 
 
-
-
-
-	subroutine operation_on_SymTensor1(T,routine,T2)
-		class(SymTensor),intent(inout)::T
-		class(SymDimension),optional,intent(inout)::T2
-		external::routine
-		if(Present(T2))then
-			call routine(T%Block,T%getTotalData(),T%SymDimension,T2)
-		else
-			call routine(T%Block,T%getTotalData(),T%SymDimension)
-		end if
-		return
-	end subroutine
-	subroutine operation_on_SymTensor2(T,routine,T2)
-		class(SymTensor),intent(inout)::T
-		Type(Tensor),intent(in)::T2
-		external::routine
-		call routine(T%Block,T%getTotalData(),T%SymDimension,T2)
-		return
-	end subroutine
-	subroutine operation_on_SymTensor3(T,routine,T2)
-		class(SymTensor),intent(inout)::T
-		class(Tensor),intent(in)::T2(:)
-		external::routine
-		call routine(T%Block,T%getTotalData(),T%SymDimension,T2,size(T2))
-		return
-	end subroutine
 	
 	subroutine TpointerToDataSubroutine(p,indata,lenData)
 		integer,intent(in)::lenData
@@ -6891,22 +6874,22 @@ contains
 		type(Tensor),intent(in)::A(LDA1,LDA2)
 		type(Tensor),intent(inout)::U(LDA1,LDS),S(LDS,LDS),V(LDS,LDA2)
 		type(Tensor)::SS
-		if(A(indexi,indexj)%getTotalData().eq.1)then
-			call U(indexi,indexs)%setType(A(indexi,indexj)%getType())
-			call V(indexs,indexj)%setType(A(indexi,indexj)%getType())
-			if(A(indexi,indexj).gt.0)then
-				S(indexs,indexs)=A(indexi,indexj)
-				U(indexi,indexs)=1
-				V(indexs,indexj)=1
-			else
-				S(indexs,indexs)=(-1)*A(indexi,indexj)
-				U(indexi,indexs)=-1
-				V(indexs,indexj)=1
-			end if
-			call S(indexs,indexs)%resetdim((/1,1/))
-			call U(indexi,indexs)%resetdim((/1,1/))
-			call V(indexs,indexj)%resetdim((/1,1/))
-		else
+		!if(A(indexi,indexj)%getTotalData().eq.1)then
+		!	call U(indexi,indexs)%setType(A(indexi,indexj)%getType())
+		!	call V(indexs,indexj)%setType(A(indexi,indexj)%getType())
+		!	if(A(indexi,indexj).gt.0)then
+		!		S(indexs,indexs)=A(indexi,indexj)
+		!		U(indexi,indexs)=1
+		!		V(indexs,indexj)=1
+		!	else
+		!		S(indexs,indexs)=(-1)*A(indexi,indexj)
+		!		U(indexi,indexs)=-1
+		!		V(indexs,indexj)=1
+		!	end if
+		!	call S(indexs,indexs)%resetdim((/1,1/))
+		!	call U(indexi,indexs)%resetdim((/1,1/))
+		!	call V(indexs,indexj)%resetdim((/1,1/))
+		!else
 			call A(indexi,indexj)%SVDroutine(U(indexi,indexs),ss,V(indexs,indexj),cut)
 			if(.not.ifset_SVD_S_matrix_flag())then
 				S(indexs,indexs)=eye(ss)
@@ -6914,7 +6897,7 @@ contains
 				S(indexs,indexs)=ss
 			end if
 			
-		end if
+		!end if
 		if(S(indexs,indexs)%dim(1).ne.cut)then
 			call writemess("ERROR in SVD on SymTensor",-1)
 			call writemess("The degeneracy error",-1)
@@ -6928,29 +6911,29 @@ contains
 		type(Tensor),intent(inout)::A(LDA1,LDA2)
 		type(Tensor),intent(inout)::U(LDA1,LDS),S(LDS,LDS),V(LDS,LDA2)
 		type(Tensor)::SS
-		if(A(indexi,indexj)%getTotalData().eq.1)then
-			call U(indexi,indexs)%setType(A(indexi,indexj)%getType())
-			call V(indexs,indexj)%setType(A(indexi,indexj)%getType())
-			if(A(indexi,indexj).gt.0)then
-				S(indexs,indexs)=A(indexi,indexj)
-				U(indexi,indexs)=1
-				V(indexs,indexj)=1
-			else
-				S(indexs,indexs)=(-1)*A(indexi,indexj)
-				U(indexi,indexs)=-1
-				V(indexs,indexj)=1
-			end if
-			call S(indexs,indexs)%resetdim((/1,1/))
-			call U(indexi,indexs)%resetdim((/1,1/))
-			call V(indexs,indexj)%resetdim((/1,1/))
-		else
+		!if(A(indexi,indexj)%getTotalData().eq.1)then
+		!	call U(indexi,indexs)%setType(A(indexi,indexj)%getType())
+		!	call V(indexs,indexj)%setType(A(indexi,indexj)%getType())
+		!	if(A(indexi,indexj).gt.0)then
+		!		S(indexs,indexs)=A(indexi,indexj)
+		!		U(indexi,indexs)=1
+		!		V(indexs,indexj)=1
+		!	else
+		!		S(indexs,indexs)=(-1)*A(indexi,indexj)
+		!		U(indexi,indexs)=-1
+		!		V(indexs,indexj)=1
+		!	end if
+		!	call S(indexs,indexs)%resetdim((/1,1/))
+		!	call U(indexi,indexs)%resetdim((/1,1/))
+		!	call V(indexs,indexj)%resetdim((/1,1/))
+		!else
 			call A(indexi,indexj)%SVDKill(U(indexi,indexs),ss,V(indexs,indexj),cut)
 			if(.not.ifset_SVD_S_matrix_flag())then
 				S(indexs,indexs)=eye(ss)
 			else
 				S(indexs,indexs)=ss
 			end if
-		end if
+		!end if
 		if(S(indexs,indexs)%dim(1).ne.cut)then
 			call writemess("ERROR in SVD on SymTensor",-1)
 			call writemess("The degeneracy error",-1)
@@ -7184,24 +7167,24 @@ contains
 		type(Tensor),intent(in)::A(LDA1,LDA2)
 		type(Tensor),intent(inout)::U(LDA1,LDS),S(LDS,LDS),V(LDS,LDA2)
 		type(Tensor)::SS
-		if(A(indexi,indexj)%getTotalData().eq.1)then
-			call U(indexi,indexs)%setType(A(indexi,indexj)%getType())
-			call V(indexs,indexj)%setType(A(indexi,indexj)%getType())
-			if(A(indexi,indexj).gt.0)then
-				S(indexs,indexs)=A(indexi,indexj)
-				U(indexi,indexs)=1
-				V(indexs,indexj)=1
-			else
-				S(indexs,indexs)=(-1)*A(indexi,indexj)
-				U(indexi,indexs)=-1
-				V(indexs,indexj)=1
-			end if
-			call U(indexi,indexs)%resetdim((/1,1/))
-			call V(indexs,indexj)%resetdim((/1,1/))
-			call S(indexs,indexs)%resetdim([1])
-		else
+		!if(A(indexi,indexj)%getTotalData().eq.1)then
+		!	call U(indexi,indexs)%setType(A(indexi,indexj)%getType())
+		!	call V(indexs,indexj)%setType(A(indexi,indexj)%getType())
+		!	if(A(indexi,indexj).gt.0)then
+		!		S(indexs,indexs)=A(indexi,indexj)
+		!		U(indexi,indexs)=1
+		!		V(indexs,indexj)=1
+		!	else
+		!		S(indexs,indexs)=(-1)*A(indexi,indexj)
+		!		U(indexi,indexs)=-1
+		!		V(indexs,indexj)=1
+		!	end if
+		!	call U(indexi,indexs)%resetdim((/1,1/))
+		!	call V(indexs,indexj)%resetdim((/1,1/))
+		!	call S(indexs,indexs)%resetdim([1])
+		!else
 			call A(indexi,indexj)%SVDroutine(U(indexi,indexs),S(indexs,indexs),V(indexs,indexj))
-		end if
+		!end if
 		return
 	end subroutine
 	subroutine SVD_subroutine_S_kill_inData(A,U,S,V,LDA1,LDA2,LDS,indexi,indexj,indexs)
@@ -7209,24 +7192,24 @@ contains
 		type(Tensor),intent(inout)::A(LDA1,LDA2)
 		type(Tensor),intent(inout)::U(LDA1,LDS),S(LDS,LDS),V(LDS,LDA2)
 		type(Tensor)::SS
-		if(A(indexi,indexj)%getTotalData().eq.1)then
-			call U(indexi,indexs)%setType(A(indexi,indexj)%getType())
-			call V(indexs,indexj)%setType(A(indexi,indexj)%getType())
-			if(A(indexi,indexj).gt.0)then
-				S(indexs,indexs)=A(indexi,indexj)
-				U(indexi,indexs)=1
-				V(indexs,indexj)=1
-			else
-				S(indexs,indexs)=(-1)*A(indexi,indexj)
-				U(indexi,indexs)=-1
-				V(indexs,indexj)=1
-			end if
-			call U(indexi,indexs)%resetdim((/1,1/))
-			call V(indexs,indexj)%resetdim((/1,1/))
-			call S(indexs,indexs)%resetdim([1])
-		else
+		!if(A(indexi,indexj)%getTotalData().eq.1)then
+		!	call U(indexi,indexs)%setType(A(indexi,indexj)%getType())
+		!	call V(indexs,indexj)%setType(A(indexi,indexj)%getType())
+		!	if(A(indexi,indexj).gt.0)then
+		!		S(indexs,indexs)=A(indexi,indexj)
+		!		U(indexi,indexs)=1
+		!		V(indexs,indexj)=1
+		!	else
+		!		S(indexs,indexs)=(-1)*A(indexi,indexj)
+		!		U(indexi,indexs)=-1
+		!		V(indexs,indexj)=1
+		!	end if
+		!	call U(indexi,indexs)%resetdim((/1,1/))
+		!	call V(indexs,indexj)%resetdim((/1,1/))
+		!	call S(indexs,indexs)%resetdim([1])
+		!else
 			call A(indexi,indexj)%SVDKill(U(indexi,indexs),S(indexs,indexs),V(indexs,indexj))
-		end if
+		!end if
 		return
 	end subroutine
 
