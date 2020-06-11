@@ -4,7 +4,7 @@ libTNSP README FILE
 
 VERSION:
   Tensor       3.5.8
-  Symmetry     4.5.0
+  Symmetry     4.5.1
   eigvalue     4.0
   optimization 1.0.0
 
