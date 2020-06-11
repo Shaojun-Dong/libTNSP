@@ -480,6 +480,8 @@ module SymTensor_type
 		module procedure multiply_number_com4_
 		module procedure multiply_number_com8_
 		module procedure multiply_number_real4_
+		module procedure multiply_Tensor_of_length_1
+		module procedure multiply_Tensor_of_length_1_
 	end interface
 	
 	public::operator(.con.)
@@ -4735,6 +4737,57 @@ contains
 		return
 	end function
 
+	type(SymTensor) function multiply_Tensor_of_length_1(T1,num) result(Res)
+		type(SymTensor),intent(in) :: T1
+		type(Tensor),intent(in) ::   num
+		integer::i,classtype
+		if(.not.T1%getflag())then
+			call writemess('There is no data in SymTensor, (*) ', -1)
+			call error_stop
+		end if
+		if(.not.num%getflag())then
+			call writemess('There is no data in (*) ', -1)
+			call error_stop
+		end if
+		if(num%getTotalData().ne.1)then
+			call writemess('ERROR in (*) ', -1)
+			call error_stop
+		end if
+		classtype=select_type_in_add_minu(T1%getType(),3)
+		call Res%allocate(T1,classtype)
+		do i=1,T1%getTotalData()
+			if(T1%block(i)%getFlag())then
+				Res%block(i)=T1%block(i)*num
+			end if
+		end do
+		return
+	end function
+	type(SymTensor) function multiply_Tensor_of_length_1_(num,T1) result(Res)
+		type(SymTensor),intent(in) :: T1
+		type(Tensor),intent(in) ::   num
+		integer::i,classtype
+		if(.not.T1%getflag())then
+			call writemess('There is no data in SymTensor, (*) ', -1)
+			call error_stop
+		end if
+		if(.not.num%getflag())then
+			call writemess('There is no data in (*) ', -1)
+			call error_stop
+		end if
+		if(num%getTotalData().ne.1)then
+			call writemess('ERROR in (*) ', -1)
+			call error_stop
+		end if
+		classtype=select_type_in_add_minu(T1%getType(),3)
+		call Res%allocate(T1,classtype)
+		do i=1,T1%getTotalData()
+			if(T1%block(i)%getFlag())then
+				Res%block(i)=T1%block(i)*num
+			end if
+		end do
+		return
+	end function
+
 
 	type(SymTensor) function multiply_number_com4(T1,num) result(Res)
 		type(SymTensor),intent(in) :: T1
@@ -5329,7 +5382,13 @@ contains
 			call error_stop()
 		end if
 		if(SymT%getTotalData().eq.1)then
-			Res=SymT%Block(1)
+			if(SymT%Block(1)%getFlag())then
+				Res=SymT%Block(1)
+			else
+				call Res%empty()
+				call Res%setType(SymT%getType())
+				Res=0
+			end if
 			return
 		end if
 		rank=SymT%getRank()

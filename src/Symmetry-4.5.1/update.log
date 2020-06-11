@@ -866,6 +866,47 @@
      gfortran 10.1 can run the package
 
 
+2020.6.7
 
+     Add the operators of (*) for fTensor in fTensor.f90:
+        fT1=fT2*z
+        fT1=z*fT2
+        fT1=c*fT2
+        fT1=d*fT2
+        fT1=s*fT2
+     where z is complex*16,c is complex*8, d is real*8 and s is real*4
+
+
+
+2020.6.7
+
+    Fix a fatal bug in fTensor.f90:
+       fT=fT2.fi(index)
+    it gose wrong when fTensor is complex*16, the output data in fT is real*8,although fT is complex*16.
+    The program will NOT stop when you meet this bug!
+
+
+    Please Check if this function is uesed!
+
+2020.6.8
+
+   1. New operator for (*)
+        SymT=SymT1*T2
+        SymT=T1*SymT2
+        fT=fT1*T2
+        gT=T1*fT2
+     where T1 T2 are tensors with length = 1, it will be regard as a number
+
+
+    2. fix  bugs of assignment
+        T=fT
+        T=SymT
+       when the totalData of fT is 1 but there is no block in fT, the result
+
+         T is empty
+
+       change as
+
+         T=0 with the data type the same as fT
 
 

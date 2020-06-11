@@ -1269,6 +1269,18 @@
 
 
 
+2020.6.7
+
+    Fix a Bug in Tensor.f90
+      call T%setValue(ith,T2),when the totalData of T2 is 1
+
+
+2020.6.9
+
+    Fix the assignment of charactor=complex in Tools.f90
+    
+
+
 
 
 

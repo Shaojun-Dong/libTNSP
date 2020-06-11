@@ -230,10 +230,16 @@ module fermiTensor
 	public::operator(*)
 	interface operator(*)
 		module procedure ProductTensor
-		module procedure multiply_number_real8
+		module procedure multiply_number_com8
 		module procedure multiply_number_com4
+		module procedure multiply_number_real8
 		module procedure multiply_number_real4
-		
+		module procedure multiply_number_com8_
+		module procedure multiply_number_com4_
+		module procedure multiply_number_real8_
+		module procedure multiply_number_real4_
+		module procedure multiply_Tensor_of_length_1
+		module procedure multiply_Tensor_of_length_1_
 	end interface
 	public::operator(/)
 	interface operator(/)
@@ -481,7 +487,7 @@ contains
 		integer,intent(in)::QNindex(:),Degindex(:)
 		type(Tensor)::Hi
 		integer::rank,i
-		real*8::Hdata
+		type(Tensor)::Hdata
 		type(QuanNum),allocatable::QN(:)
 		Hi=fH%i(QNindex)
 		Hdata=Hi%i(Degindex)
@@ -494,7 +500,7 @@ contains
 			call QN(i)%setFermiArrow(fH%getFermiArrow(i))
 		end do
 		call subfH%allocate(QN,fH%getType())
-		call subfH%setValue(1,Tensor([Hdata]))
+		call subfH%setValue(1,Hdata)
 		do i=1,rank
 			call subfH%setName(i,fH%getName(i))
 		end do
@@ -507,7 +513,7 @@ contains
 		integer,allocatable::QNindex(:),Degindex(:)
 		type(Tensor)::Hi
 		integer::rank,i
-		real*8::Hdata
+		type(Tensor)::Hdata
 		type(QuanNum),allocatable::QN(:)
 		rank=fH%getRank()
 		allocate(QNindex(rank))
@@ -524,7 +530,7 @@ contains
 			call QN(i)%setFermiArrow(fH%getFermiArrow(i))
 		end do
 		call subfH%allocate(QN,fH%getType())
-		call subfH%setValue(1,Tensor([Hdata]))
+		call subfH%setValue(1,Hdata)
 		do i=1,rank
 			call subfH%setName(i,fH%getName(i))
 		end do
@@ -537,7 +543,7 @@ contains
 		real*4,intent(in)::QNindex(:)
 		type(Tensor)::Hi
 		integer::rank,i
-		real*8::Hdata
+		type(Tensor)::Hdata
 		type(QuanNum),allocatable::QN(:)
 		Hi=fH%i(QNindex)
 		Hdata=Hi%i(Degindex)
@@ -550,7 +556,7 @@ contains
 			call QN(i)%setFermiArrow(fH%getFermiArrow(i))
 		end do
 		call subfH%allocate(QN,fH%getType())
-		call subfH%setValue(1,Tensor([Hdata]))
+		call subfH%setValue(1,Hdata)
 		do i=1,rank
 			call subfH%setName(i,fH%getName(i))
 		end do
@@ -1056,16 +1062,58 @@ contains
 		Res%SymTensor=T1%SymTensor*num
 		return
 	end function
+	type(fTensor) function multiply_number_real8_(num,T1) result(Res)
+		type(fTensor),intent(in) :: T1
+		real(kind=8),intent(in) ::   num
+		Res%SymTensor=num*T1%SymTensor
+		return
+	end function
 	type(fTensor) function multiply_number_real4(T1,num) result(Res)
 		type(fTensor),intent(in) :: T1
 		real(kind=4),intent(in) ::   num
 		Res%SymTensor=T1%SymTensor*num
 		return
 	end function
+	type(fTensor) function multiply_number_real4_(num,T1) result(Res)
+		type(fTensor),intent(in) :: T1
+		real(kind=4),intent(in) ::   num
+		Res%SymTensor=num*T1%SymTensor
+		return
+	end function
 	type(fTensor) function multiply_number_com4(T1,num) result(Res)
 		type(fTensor),intent(in) :: T1
 		complex(kind=4),intent(in) ::   num
 		Res%SymTensor=T1%SymTensor*num
+		return
+	end function
+	type(fTensor) function multiply_number_com4_(num,T1) result(Res)
+		type(fTensor),intent(in) :: T1
+		complex(kind=4),intent(in) ::   num
+		Res%SymTensor=num*T1%SymTensor
+		return
+	end function
+	type(fTensor) function multiply_number_com8(T1,num) result(Res)
+		type(fTensor),intent(in) :: T1
+		complex(kind=8),intent(in) ::   num
+		Res%SymTensor=T1%SymTensor*num
+		return
+	end function
+	type(fTensor) function multiply_number_com8_(num,T1) result(Res)
+		type(fTensor),intent(in) :: T1
+		complex(kind=8),intent(in) ::   num
+		Res%SymTensor=num*T1%SymTensor
+		return
+	end function
+	type(fTensor) function multiply_Tensor_of_length_1(T1,num) result(Res)
+		type(fTensor),intent(in) :: T1
+		type(Tensor),intent(in) ::   num
+		Res%SymTensor=T1%SymTensor*num
+		return
+	end function
+	type(fTensor) function multiply_Tensor_of_length_1_(num,T1) result(Res)
+		type(fTensor),intent(in) :: T1
+		type(Tensor),intent(in) ::   num
+		Res%SymTensor=num*T1%SymTensor
 		return
 	end function
 

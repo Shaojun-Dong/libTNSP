@@ -1584,7 +1584,7 @@ contains
 		character*100::tempR,tempI
 		real*4::inum
 		tempR=real(inte)
-		tempI=aimag(inte)
+		tempI=abs(aimag(inte))
 		inum=aimag(inte)
 		if(inum.ge.0.)then
 			w=(trim(adjustl(tempR)))//'+i'//(trim(adjustl(tempI)))
@@ -1625,7 +1625,7 @@ contains
 		character*100::tempR,tempI
 		real*8::inum
 		tempR=real(inte)
-		tempI=aimag(inte)
+		tempI=abs(aimag(inte))
 		inum=aimag(inte)
 		if(inum.ge.0d0)then
 			w=(trim(adjustl(tempR)))//'+i'//(trim(adjustl(tempI)))
