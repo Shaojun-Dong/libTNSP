@@ -910,3 +910,31 @@
          T=0 with the data type the same as fT
 
 
+2020.6.17
+
+     New function in SymDimension.f90
+        index=SymDim%QNinfo2index(QN,Deg)
+
+2020.6.18
+  
+    1.New function in SymDimension.f90
+        iarray=SymDim%getDeg(legname)
+
+    2. Fix a bug in SymTensor.f90, the subroutint of SVDSavingSingleValueDegValue
+
+        When do the SVD with a cutoff, if the program keep all the single value,
+
+           the output error will not be 0
+
+        change to
+
+           the output error will set to  0
+
+       This bug will not affact the validity of the code!
+
+
+
+
+
+
+

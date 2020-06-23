@@ -63,7 +63,7 @@ module SymDimension_typede
 		! example input [-1,5.,1] output [1,0,2]
 		
 		generic,public::GetDeg =>getSymSymDimensionDeg,outAllSymDimDegFun,getSymSymDimensionDegVec,getSymSymDimensionDegQVec,&
-		         getSymSymDimensionDegQN
+		         getSymSymDimensionDegQN,outAllSymDimDegfunName
 		procedure,public::outDegeneracy =>outAllSymDimQN!The same as GetDeg, but it is a subroutine
 		!GetDeg(i,j):output the dimension%QN(i)%degeneracy(j)
 		!GetDeg(i):output the dimension%QN(i)%degeneracy
@@ -101,6 +101,8 @@ module SymDimension_typede
 		procedure,public::ifzeroDeg
 		procedure::index2QNinfo1,index2QNinfo2
 		generic,public::index2QNinfo=>index2QNinfo1,index2QNinfo2
+		procedure::QNinfo2index1,QNinfo2index2
+		generic,public::QNinfo2index=>QNinfo2index1,QNinfo2index2
 		procedure::getSymSymDimensionDegVec
 		procedure::getSymSymDimensionDegQN
 		procedure::setSymDimensionQN
@@ -115,6 +117,7 @@ module SymDimension_typede
 		procedure::outSymDimALLIndex
 		procedure::getSymSymDimensionDeg
 		procedure::outAllSymDimDegFun
+		procedure::outAllSymDimDegfunName
 		procedure::getSymSymDimensionQN
 		procedure::outAllSymDimQNFun
 		procedure::getSymSymDimensionQuanNum
@@ -318,6 +321,78 @@ contains
 		end do
 		return
 	end subroutine
+
+	subroutine QNinfo2index_ith(maxDeg,outindex,inQN,inDeg)
+		integer,intent(in)::maxDeg(:)
+		integer,intent(in)::inQN,inDeg
+		integer,intent(inout)::outindex
+		integer::i,lenQN
+		lenQN=size(maxDeg)
+		if(inQN.gt.lenQN)then
+			call writemess('ERROR in QNinfo2index_ith',-1)
+			call error_stop
+		end if
+		outindex=0
+		do i=1,inQN-1
+			outindex=outindex+maxDeg(i)
+		end do
+		outindex=outindex+inDeg
+		return
+	end subroutine
+
+	function QNinfo2index1(Dimen,QN,Deg)result(outindex)
+		integer,allocatable::outindex(:)
+		class(SymDimension),intent(in)::Dimen
+		integer,intent(in)::QN(:),Deg(:)
+		integer::i,rank
+		rank=Dimen%getRank()
+		if(size(QN).lt.rank)then
+			call writemess('ERROR in the length of input QN array')
+			call writemess('size(QN)='+size(QN))
+			call writemess('the rank of the dimension='+rank)
+			call error_stop
+		end if
+		if(size(Deg).lt.rank)then
+			call writemess('ERROR in the length of input Deg array')
+			call writemess('size(Deg)='+size(Deg))
+			call writemess('the rank of the dimension='+rank)
+			call error_stop
+		end if
+		allocate(outindex(rank))
+		do i=1,rank
+			call QNinfo2index_ith(Dimen%getDeg(i),outindex(i),QN(i),Deg(i))
+		end do
+		return
+	end function
+
+	function QNinfo2index2(Dimen,QN,Deg)result(outindex)
+		integer,allocatable::outindex(:)
+		class(SymDimension),intent(in)::Dimen
+		integer,intent(in)::Deg(:)
+		real*4,intent(in)::QN(:)
+		integer,allocatable::inQNindex(:)
+		integer::i,rank
+		rank=Dimen%getRank()
+		if(size(QN).lt.rank)then
+			call writemess('ERROR in the length of input QN array')
+			call writemess('size(QN)='+size(QN))
+			call writemess('the rank of the dimension='+rank)
+			call error_stop
+		end if
+		if(size(Deg).lt.rank)then
+			call writemess('ERROR in the length of input Deg array')
+			call writemess('size(Deg)='+size(Deg))
+			call writemess('the rank of the dimension='+rank)
+			call error_stop
+		end if
+		allocate(outindex(rank))
+		allocate(inQNindex(rank))
+		inQNindex=Dimen%getIndex(QN)
+		do i=1,rank
+			call QNinfo2index_ith(Dimen%getDeg(i),outindex(i),inQNindex(i),Deg(i))
+		end do
+		return
+	end function
 
 	
 	
@@ -976,6 +1051,31 @@ contains
 			call writemess("There is no Quantum Number")
 			call error_stop()
 		end if
+		if(ith.gt.QN%outlenDimData())then	
+			if(QN%outlenDimData().eq.0)then
+				call writemess('There is no Data in the Symdimension')
+				call error_stop()
+			end if
+			call writemess("The input index is larger then the length of the dimension")
+			call writemess("in getting the degeneracyof Quantum Number of the dimension")
+			call error_stop()
+		end if
+		leng=QN%getQNlength(ith)
+		allocate(outAllSymDimDeg(leng))
+		call QN%QN(ith)%outDegeneracy(outAllSymDimDeg)
+		return
+	end function
+	function outAllSymDimDegfunName(QN,iname)result(outAllSymDimDeg)
+		integer,allocatable::outAllSymDimDeg(:)
+		class(SymDimension),intent(in)::QN
+		character(len=*),intent(in)::iname
+		integer::ith
+		integer::leng
+		if(.not.QN%getQNflag())then
+			call writemess("There is no Quantum Number")
+			call error_stop()
+		end if
+		ith=QN%FindOrder(iname)
 		if(ith.gt.QN%outlenDimData())then	
 			if(QN%outlenDimData().eq.0)then
 				call writemess('There is no Data in the Symdimension')

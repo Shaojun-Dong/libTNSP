@@ -7878,6 +7878,7 @@ contains
 		integer,allocatable::AllSindex(:)
 		real*8::sumValue,tempr
 		real*8,pointer::dp(:),AllSdatapointer(:)
+		integer::AllData
 		Total=0
 		do i=1,LD1
 			if(S(i,i)%getFlag())Total=Total+S(i,i)%getTotalData()
@@ -7903,6 +7904,7 @@ contains
 				end do
 			end if
 		end do
+		AllData=Total
 		call sortDataReal8(AllSdata,AllSindex)
 		Newdeg=0
 		sumValue=0
@@ -7962,8 +7964,12 @@ contains
 				call error_stop
 			end if
 		end do
+		if(Total.eq.AllData)then
+			maxValue=0d0
+		else
+			maxValue=sumValue
+		end if
 		NumSave=Total
-		maxValue=sumValue
 		return
 	end subroutine
 
